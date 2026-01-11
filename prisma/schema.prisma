@@ -1,0 +1,161 @@
+// ==============================
+// Generator & Datasource
+// ==============================
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==============================
+// ENUMS
+// ==============================
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+// ==============================
+// MODELS
+// ==============================
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  phone       String?
+  logo        String?
+  heroImage   String?
+  tagline     String?  @default("")
+  storyAr     String?
+  storyFr     String?
+  description String?
+
+  // ✅ FIXED SCHEDULE
+  schedules   Schedule[]
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categories  Category[]
+  menuItems   MenuItem[]
+  storyCards  StoryCard[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("restaurants")
+}
+
+model Schedule {
+  id           String    @id @default(cuid())
+  restaurantId String
+
+  dayOfWeek    DayOfWeek
+  opensAt      String    // "08:00"
+  closesAt     String    // "23:00"
+  isClosed     Boolean   @default(false)
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, dayOfWeek])
+  @@index([restaurantId])
+  @@map("schedules")
+}
+
+// ==============================
+// OTHER MODELS (UNCHANGED)
+// ==============================
+
+model Category {
+  id           String    @id @default(cuid())
+  restaurantId String
+
+  nameAr       String
+  nameFr       String
+
+  visible      Boolean   @default(true)
+  order        Int       @default(0)
+
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime?
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  menuItems    MenuItem[]
+
+  @@unique([restaurantId, nameAr])
+  @@unique([restaurantId, nameFr])
+  @@index([restaurantId, visible, isActive])
+  @@index([restaurantId, order])
+  @@map("categories")
+}
+
+model MenuItem {
+  id            String    @id @default(cuid())
+  restaurantId  String
+  categoryId    String
+
+  nameAr        String
+  nameFr        String
+  descriptionAr String    @default("")
+  descriptionFr String    @default("")
+
+  price         Decimal   @db.Decimal(10, 2)
+  image         String?
+  available     Boolean   @default(true)
+
+  isActive      Boolean   @default(true)
+  deletedAt     DateTime?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  category      Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([restaurantId, categoryId, available, isActive])
+  @@index([categoryId])
+  @@map("menu_items")
+}
+
+model StoryCard {
+  id           String    @id @default(cuid())
+  restaurantId String
+
+  titleAr      String
+  titleFr      String
+  subtitleAr   String
+  subtitleFr   String
+
+  image        String?
+
+  visible      Boolean   @default(true)
+  order        Int       @default(0)
+
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime?
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, titleAr])
+  @@unique([restaurantId, titleFr])
+  @@index([restaurantId, visible, isActive])
+  @@index([restaurantId, order])
+  @@map("story_cards")
+}
