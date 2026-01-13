@@ -1,15 +1,11 @@
-export type StoryCard = {
-  id: string
+import { BaseModel } from "./base"
+
+export interface StoryCard extends BaseModel {
   restaurantId: string
-  titleAr: string
-  titleFr: string
-  subtitleAr: string
-  subtitleFr: string
+  title: string
+  subtitle: string
   image: string | null
   visible: boolean
   order: number
   isActive: boolean
-  deletedAt: string | null
-  createdAt: string
-  updatedAt: string
 }

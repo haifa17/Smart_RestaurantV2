@@ -6,6 +6,5 @@ export const restaurantUpdateSchema = z.object({
   logo: z.string().url().optional().nullable(),
   heroImage: z.string().url().optional().nullable(),
   tagline: z.string().max(500).optional(),
-  storyAr: z.string().max(2000).optional().nullable(),
-  storyFr: z.string().max(2000).optional().nullable(),
+  story: z.string().max(2000).optional().nullable(),
 })

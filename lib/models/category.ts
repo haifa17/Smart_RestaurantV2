@@ -1,13 +1,9 @@
+import { BaseModel } from "./base"
 
-export type Category = {
-  id: string
+export interface Category extends BaseModel {
   restaurantId: string
-  nameAr: string
-  nameFr: string
+  name: string;
   visible: boolean
   order: number
   isActive: boolean
-  deletedAt: string | null
-  createdAt: string
-  updatedAt: string
 }

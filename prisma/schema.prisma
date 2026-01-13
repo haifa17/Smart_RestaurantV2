@@ -3,6 +3,8 @@
 // ==============================
 generator client {
   provider = "prisma-client-js"
+    output   = "../generated/prisma"
+
 }
 
 datasource db {
@@ -27,27 +29,26 @@ enum DayOfWeek {
 // ==============================
 
 model Restaurant {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String  @id @default(cuid())
+  slug        String  @unique
   name        String
   phone       String?
   logo        String?
   heroImage   String?
-  tagline     String?  @default("")
-  storyAr     String?
-  storyFr     String?
+  tagline     String? @default("")
+  story     String?
   description String?
 
   // ✅ FIXED SCHEDULE
-  schedules   Schedule[]
+  schedules Schedule[]
 
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  categories  Category[]
-  menuItems   MenuItem[]
-  storyCards  StoryCard[]
+  categories Category[]
+  menuItems  MenuItem[]
+  storyCards StoryCard[]
 
   @@index([slug])
   @@index([isActive])
@@ -55,18 +56,18 @@ model Restaurant {
 }
 
 model Schedule {
-  id           String    @id @default(cuid())
+  id           String @id @default(cuid())
   restaurantId String
 
-  dayOfWeek    DayOfWeek
-  opensAt      String    // "08:00"
-  closesAt     String    // "23:00"
-  isClosed     Boolean   @default(false)
+  dayOfWeek DayOfWeek
+  opensAt   String // "08:00"
+  closesAt  String // "23:00"
+  isClosed  Boolean   @default(false)
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
   @@unique([restaurantId, dayOfWeek])
   @@index([restaurantId])
@@ -78,53 +79,48 @@ model Schedule {
 // ==============================
 
 model Category {
-  id           String    @id @default(cuid())
+  id           String @id @default(cuid())
   restaurantId String
 
-  nameAr       String
-  nameFr       String
+  name   String
 
-  visible      Boolean   @default(true)
-  order        Int       @default(0)
+  visible Boolean @default(true)
+  order   Int     @default(0)
 
-  isActive     Boolean   @default(true)
-  deletedAt    DateTime?
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  menuItems    MenuItem[]
-
-  @@unique([restaurantId, nameAr])
-  @@unique([restaurantId, nameFr])
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  menuItems  MenuItem[]
+  @@unique([restaurantId, name])
   @@index([restaurantId, visible, isActive])
   @@index([restaurantId, order])
   @@map("categories")
 }
 
 model MenuItem {
-  id            String    @id @default(cuid())
-  restaurantId  String
-  categoryId    String
+  id           String @id @default(cuid())
+  restaurantId String
+  categoryId   String
 
-  nameAr        String
-  nameFr        String
-  descriptionAr String    @default("")
-  descriptionFr String    @default("")
+  name          String
+  description String @default("")
 
-  price         Decimal   @db.Decimal(10, 2)
-  image         String?
-  available     Boolean   @default(true)
+  price     Decimal @db.Decimal(10, 2)
+  image     String?
+  available Boolean @default(true)
 
-  isActive      Boolean   @default(true)
-  deletedAt     DateTime?
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  category      Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([restaurantId, categoryId, available, isActive])
   @@index([categoryId])
@@ -132,29 +128,26 @@ model MenuItem {
 }
 
 model StoryCard {
-  id           String    @id @default(cuid())
+  id           String @id @default(cuid())
   restaurantId String
 
-  titleAr      String
-  titleFr      String
-  subtitleAr   String
-  subtitleFr   String
+  title   String
+  subtitle String
 
-  image        String?
+  image String?
 
-  visible      Boolean   @default(true)
-  order        Int       @default(0)
+  visible Boolean @default(true)
+  order   Int     @default(0)
 
-  isActive     Boolean   @default(true)
-  deletedAt    DateTime?
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
-  @@unique([restaurantId, titleAr])
-  @@unique([restaurantId, titleFr])
+  @@unique([restaurantId, title])
   @@index([restaurantId, visible, isActive])
   @@index([restaurantId, order])
   @@map("story_cards")
