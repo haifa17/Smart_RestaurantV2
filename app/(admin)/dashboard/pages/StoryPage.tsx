@@ -1,9 +1,9 @@
 "use client";
 
-import { useImageUpload } from "../hooks/mutations/useImageUpload";
-import { useStoryCardMutations } from "../hooks/mutations/useStoryCardMutations";
-import { useStoryCards } from "../hooks/queries/useStoryCards";
-import StoryManagement from "../components/StoryManagement";
+import { useImageUpload } from "../../hooks/mutations/useImageUpload";
+import { useStoryCardMutations } from "../../hooks/mutations/useStoryCardMutations";
+import { useStoryCards } from "../../hooks/queries/useStoryCards";
+import StoryManagement from "../StoryManagement";
 
 interface StoryPageProps {
   restaurantId: string;

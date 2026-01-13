@@ -1,9 +1,9 @@
 "use client";
 
-import { MenuPage } from "../pages/MenuPage";
-import { StoryPage } from "../pages/StoryPage";
-import { QRCodePage } from "../pages/QRCodePage";
-import { RestaurantInfoPage } from "../pages/RestaurantInfoPage";
+import { MenuPage } from "./pages/MenuPage";
+import { StoryPage } from "./pages/StoryPage";
+import { QRCodePage } from "./pages/QRCodePage";
+import { RestaurantInfoPage } from "./pages/RestaurantInfoPage";
 
 interface Props {
   activeTab: "menu" | "qr" | "info" | "story";

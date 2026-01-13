@@ -1,10 +1,10 @@
 "use client";
 
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useImageUpload } from "../hooks/mutations/useImageUpload";
-import { useRestaurantMutations } from "../hooks/mutations/useRestaurantMutations";
-import { useRestaurant } from "../hooks/queries/useRestaurant";
-import RestaurantInfo from "../components/RestaurantInfo";
+import { useImageUpload } from "../../hooks/mutations/useImageUpload";
+import { useRestaurantMutations } from "../../hooks/mutations/useRestaurantMutations";
+import { useRestaurant } from "../../hooks/queries/useRestaurant";
+import RestaurantInfo from "../RestaurantInfo";
 
 interface RestaurantInfoPageProps {
   restaurantId: string;

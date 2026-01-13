@@ -1,11 +1,11 @@
 "use client";
 
-import { MenuManagement } from "../components/MenuManagement";
-import { useCategoryMutations } from "../hooks/mutations/useCategoryMutations";
-import { useImageUpload } from "../hooks/mutations/useImageUpload";
-import { useMenuItemMutations } from "../hooks/mutations/useMenuItemMutations";
-import { useCategories } from "../hooks/queries/useCategories";
-import { useMenuItems } from "../hooks/queries/useMenuItems";
+import { MenuManagement } from "../MenuManagement";
+import { useCategoryMutations } from "../../hooks/mutations/useCategoryMutations";
+import { useImageUpload } from "../../hooks/mutations/useImageUpload";
+import { useMenuItemMutations } from "../../hooks/mutations/useMenuItemMutations";
+import { useCategories } from "../../hooks/queries/useCategories";
+import { useMenuItems } from "../../hooks/queries/useMenuItems";
 
 interface MenuPageProps {
   restaurantId: string;
