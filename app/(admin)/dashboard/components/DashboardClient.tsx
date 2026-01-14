@@ -6,7 +6,7 @@ import DashContent from "./DashContent";
 import { useState } from "react";
 
 export default function DashboardClient() {
-  // Create query client on first render
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
