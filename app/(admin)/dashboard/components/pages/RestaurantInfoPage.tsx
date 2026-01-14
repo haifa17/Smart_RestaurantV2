@@ -4,7 +4,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useImageUpload } from "../../hooks/mutations/useImageUpload";
 import { useRestaurantMutations } from "../../hooks/mutations/useRestaurantMutations";
 import { useRestaurant } from "../../hooks/queries/useRestaurant";
-import RestaurantInfo from "../RestaurantInfo";
+import { RestaurantInfo } from "../restaurant-info/RestaurantInfo";
 
 interface RestaurantInfoPageProps {
   restaurantId: string;

@@ -1,29 +1,28 @@
-import { Download, Copy, Check, AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { QRCodePlaceholder } from "./QRCodePlaceholder"
-import { QRCodeDisplayProps } from "../lib/types"
-import { DOWNLOAD_FORMATS, MESSAGES } from "../lib/constants"
+import { Download, Copy, Check, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { QRCodePlaceholder } from "./QRCodePlaceholder";
+import { QRCodeDisplayProps } from "../../lib/types";
+import { DOWNLOAD_FORMATS, MESSAGES } from "../../lib/constants";
 
-
-export function QRCodeDisplay({ 
-  menuUrl, 
-  qrCodeDataUrl, 
-  onCopyLink, 
-  onDownload, 
+export function QRCodeDisplay({
+  menuUrl,
+  qrCodeDataUrl,
+  onCopyLink,
+  onDownload,
   onRetry,
   copied,
   isGenerating,
-  hasError
+  hasError,
 }: QRCodeDisplayProps) {
   return (
     <Card className="p-8">
       <div className="flex flex-col items-center">
         {/* QR Code Display */}
-        <div 
-          className="w-64 h-64 bg-white border-2 border-border rounded-xl p-4 mb-6 flex items-center justify-center shadow-sm" 
-          role="img" 
+        <div
+          className="w-64 h-64 bg-white border-2 border-border rounded-xl p-4 mb-6 flex items-center justify-center shadow-sm"
+          role="img"
           aria-label="Restaurant menu QR code"
         >
           {hasError ? (
@@ -39,9 +38,9 @@ export function QRCodeDisplay({
           ) : isGenerating || !qrCodeDataUrl ? (
             <QRCodePlaceholder />
           ) : (
-            <img 
-              src={qrCodeDataUrl} 
-              alt="QR Code for restaurant menu" 
+            <img
+              src={qrCodeDataUrl}
+              alt="QR Code for restaurant menu"
               className="w-full h-full object-contain"
             />
           )}
@@ -52,7 +51,11 @@ export function QRCodeDisplay({
         </p>
 
         {/* Menu URL Display */}
-        <div className="w-full p-3 bg-muted rounded-lg mb-6" role="region" aria-label="Menu URL">
+        <div
+          className="w-full p-3 bg-muted rounded-lg mb-6"
+          role="region"
+          aria-label="Menu URL"
+        >
           <p className="text-xs text-center text-muted-foreground break-all font-mono">
             {menuUrl}
           </p>
@@ -62,7 +65,9 @@ export function QRCodeDisplay({
         {!hasError && !isGenerating && (
           <Alert className="mb-4">
             <AlertDescription className="text-xs">
-              <strong>PNG:</strong> Best for digital use • <strong>SVG:</strong> Perfect for large prints • <strong>PDF:</strong> Ready to print with instructions
+              <strong>PNG:</strong> Best for digital use • <strong>SVG:</strong>{" "}
+              Perfect for large prints • <strong>PDF:</strong> Ready to print
+              with instructions
             </AlertDescription>
           </Alert>
         )}
@@ -108,5 +113,5 @@ export function QRCodeDisplay({
         </div>
       </div>
     </Card>
-  )
+  );
 }

@@ -1,36 +1,36 @@
-"use client"
-import { QRCodeScreenProps } from '../lib/types'
-import { MESSAGES } from '../lib/constants'
-import { generateMenuUrl } from '../lib/utils'
-import { QRCodeDisplay } from './QRCodeDisplay'
-import { Card } from '@/components/ui/card'
-import { useQRCodeGeneration } from '../hooks/useQRCodeGeneration'
-import { useQRCodeActions } from '../hooks/useQRCodeActions'
+"use client";
+import { QRCodeScreenProps } from "../../lib/types";
+import { MESSAGES } from "../../lib/constants";
+import { generateMenuUrl } from "../../lib/utils";
+import { Card } from "@/components/ui/card";
+import { useQRCodeGeneration } from "../../hooks/useQRCodeGeneration";
+import { useQRCodeActions } from "../../hooks/useQRCodeActions";
+import { QRCodeDisplay } from "./QRCodeDisplay";
 
 export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
-  let menuUrl: string
-  
+  let menuUrl: string;
+
   try {
-    menuUrl = generateMenuUrl(restaurant.slug, baseUrl)
+    menuUrl = generateMenuUrl(restaurant.slug, baseUrl);
   } catch (error) {
     return (
       <div className="max-w-md mx-auto">
         <Card className="p-6 text-center border-destructive">
-          <p className="text-destructive font-medium">Invalid restaurant configuration</p>
+          <p className="text-destructive font-medium">
+            Invalid restaurant configuration
+          </p>
           <p className="text-sm text-muted-foreground mt-2">
             Please check the restaurant slug
           </p>
         </Card>
       </div>
-    )
+    );
   }
 
-  const { qrCodeDataUrl, isGenerating, error, retry } = useQRCodeGeneration(menuUrl)
-  const { copied, isDownloading, handleCopyLink, handleDownloadQR } = useQRCodeActions(
-    menuUrl,
-    qrCodeDataUrl,
-    restaurant.name
-  )
+  const { qrCodeDataUrl, isGenerating, error, retry } =
+    useQRCodeGeneration(menuUrl);
+  const { copied, isDownloading, handleCopyLink, handleDownloadQR } =
+    useQRCodeActions(menuUrl, qrCodeDataUrl, restaurant.name);
 
   return (
     <div className="max-w-lg mx-auto space-y-6">
@@ -58,7 +58,9 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
       {/* Print Guidelines */}
       <Card className="p-4 bg-primary/5 border-primary/20">
         <h3 className="font-semibold text-foreground text-sm mb-2 flex items-center gap-2">
-          <span role="img" aria-label="Tip">💡</span>
+          <span role="img" aria-label="Tip">
+            💡
+          </span>
           {MESSAGES.TIP_TITLE}
         </h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -66,5 +68,5 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
         </p>
       </Card>
     </div>
-  )
+  );
 }

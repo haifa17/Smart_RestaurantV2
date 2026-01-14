@@ -2,7 +2,7 @@
 
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useRestaurant } from "../../hooks/queries/useRestaurant";
-import { QRCodeScreen } from "../QRCodeScreen";
+import { QRCodeScreen } from "../qrcode/QRCodeScreen";
 
 interface QRCodePageProps {
   restaurantId: string;
