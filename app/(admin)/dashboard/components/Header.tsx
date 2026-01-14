@@ -9,6 +9,9 @@ import {
 } from "@clerk/nextjs";
 import { useRestaurant } from "../hooks/queries/useRestaurant";
 import { RESTAURANT_ID } from "../lib/constants";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 const Header = () => {
   const { userId } = useAuth();
@@ -17,12 +20,23 @@ const Header = () => {
   console.log("restaurant", restaurant);
   return (
     <header className="flex flex-col md:flex-row justify-between items-center p-4 gap-4 ">
-      <div className="w-16 h-10 shadow-xl  rounded-full">
+      <div className="w-16 h-10 shadow-xl flex gap-2 items-center  rounded-full">
         <img
           src={restaurant?.logo || "/H2A.png"}
           alt="Restaurant logo"
           className=" object-cover"
         />
+        <Button className="hover:underline" size="sm" asChild disabled={!restaurant}>
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gap-2"
+          >
+            <ExternalLink className="h-4 w-4" />
+            View Menu
+          </Link>
+        </Button>
       </div>
       <SignedOut>
         <SignInButton />
