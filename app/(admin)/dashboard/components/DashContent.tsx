@@ -14,7 +14,7 @@ const DashContent = () => {
       {" "}
       <TabNav activeTab={activeTab} setActiveTab={setActiveTab} />
       <main className="py-8">
-        <TabsMangement activeTab={activeTab} restaurantId={RESTAURANT_ID} />
+        <TabsMangement activeTab={activeTab} restaurantId={RESTAURANT_ID!} />
       </main>
     </div>
   );

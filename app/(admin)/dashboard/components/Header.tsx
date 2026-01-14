@@ -13,7 +13,7 @@ import { RESTAURANT_ID } from "../lib/constants";
 const Header = () => {
   const { userId } = useAuth();
   console.log("userId", userId);
-  const { data: restaurant } = useRestaurant(RESTAURANT_ID);
+  const { data: restaurant } = useRestaurant(RESTAURANT_ID!);
   console.log("restaurant", restaurant);
   return (
     <header className="flex flex-col md:flex-row justify-between items-center p-4 gap-4 ">
