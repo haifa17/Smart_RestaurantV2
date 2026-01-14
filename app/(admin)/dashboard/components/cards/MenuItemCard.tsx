@@ -1,5 +1,10 @@
 import { MenuItem } from "@/lib/models/menuItem";
 import { Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -15,7 +20,7 @@ export function MenuItemCard({
   onDelete,
 }: MenuItemCardProps) {
   return (
-    <div className="flex items-center gap-4 p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+    <div className="flex items-center gap-4 p-3 text-white rounded-lg border transition-colors">
       {item.image ? (
         <img src={item.image} className="w-14 h-14 rounded-md object-cover" />
       ) : (
@@ -25,9 +30,7 @@ export function MenuItemCard({
       <div className="flex-1 min-w-0">
         <h4 className="font-medium truncate">{item.name || "Unnamed"}</h4>
         {item.description && (
-          <p className="text-sm text-muted-foreground truncate">
-            {item.description}
-          </p>
+          <p className="text-sm text-white/80 truncate">{item.description}</p>
         )}
         <p className="text-sm font-medium mt-0.5">
           {Number(item.price).toFixed(2)} TND
@@ -35,31 +38,52 @@ export function MenuItemCard({
       </div>
 
       <div className="flex gap-2">
-        <button
-          onClick={() => onToggle(item.id)}
-          className="p-2 hover:text-foreground"
-          aria-label="Toggle availability"
-        >
-          {item.available ? (
-            <Eye className="h-4 w-4" />
-          ) : (
-            <EyeOff className="h-4 w-4" />
-          )}
-        </button>
-        <button
-          onClick={() => onEdit(item)}
-          className="p-2 hover:text-foreground"
-          aria-label="Edit item"
-        >
-          <Pencil className="h-4 w-4" />
-        </button>
-        <button
-          onClick={() => onDelete(item.id)}
-          className="p-2 hover:text-destructive"
-          aria-label="Delete item"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => onToggle(item.id)}
+              className="p-2 hover:scale-110 cursor-pointer"
+              aria-label="Toggle availability"
+            >
+              {item.available ? (
+                <Eye className="h-4 w-4" />
+              ) : (
+                <EyeOff className="h-4 w-4" />
+              )}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{item.available ? "Hide item" : "Show item"}</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => onEdit(item)}
+              className="p-2 hover:scale-110  cursor-pointer"
+              aria-label="Edit item"
+            >
+              <Pencil className="h-4 w-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Edit item</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => onDelete(item.id)}
+              className="p-2 hover:scale-110 hover:text-destructive cursor-pointer"
+              aria-label="Delete item"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Delete item</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

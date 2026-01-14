@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
@@ -11,7 +12,9 @@ export default function AdminLayout({
 }) {
   return (
     <ClerkProvider>
-      <div className="">{children}</div>
+      <TooltipProvider>
+        <div className="bg-[#1A1A1A] text-white min-h-screen">{children}</div>
+      </TooltipProvider>
     </ClerkProvider>
   );
 }

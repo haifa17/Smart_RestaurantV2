@@ -105,7 +105,7 @@ export function StoryCardEditor({ open, onClose, storyCard, onSave, onUploadImag
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={!isFormValid}>
+            <Button className="cursor-pointer bg-orange-700/80 hover:bg-orange-700" type="submit" disabled={!isFormValid}>
               {storyCard ? "Save Changes" : "Add Story Card"}
             </Button>
           </DialogFooter>

@@ -12,7 +12,7 @@ interface HeroBannerProps {
 export function HeroBanner({ restaurant }: HeroBannerProps) {
   // const { t, isRTL } = useLanguage()
   return (
-    <section className="relative h-[70vh] sm:h-[75vh] min-h-[500px] sm:min-h-[550px] overflow-hidden">
+    <section className="relative h-[70vh] sm:h-[75vh]  sm:min-h-[550px] overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image

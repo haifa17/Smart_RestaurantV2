@@ -7,12 +7,23 @@ import {
   useAuth,
   UserButton,
 } from "@clerk/nextjs";
+import { useRestaurant } from "../hooks/queries/useRestaurant";
+import { RESTAURANT_ID } from "../lib/constants";
 
 const Header = () => {
   const { userId } = useAuth();
   console.log("userId", userId);
+  const { data: restaurant } = useRestaurant(RESTAURANT_ID);
+  console.log("restaurant", restaurant);
   return (
-    <header className="flex justify-end items-center p-4 gap-4 h-16">
+    <header className="flex flex-col md:flex-row justify-between items-center p-4 gap-4 ">
+      <div className="w-16 h-10 shadow-xl  rounded-full">
+        <img
+          src={restaurant?.logo || "/H2A.png"}
+          alt="Restaurant logo"
+          className=" object-cover"
+        />
+      </div>
       <SignedOut>
         <SignInButton />
         <SignUpButton>

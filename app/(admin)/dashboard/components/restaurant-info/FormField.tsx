@@ -1,40 +1,39 @@
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FormFieldProps {
-  id: string
-  label: string
-  optional?: boolean
-  type?: string
-  value: string
-  onChange: (value: string) => void
-  placeholder?: string
-  rows?: number
-  dir?: "ltr" | "rtl"
-  className?: string
+  id: string;
+  label: string;
+  optional?: boolean;
+  type?: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  rows?: number;
+  dir?: "ltr" | "rtl";
+  className?: string;
 }
 
-export function FormField({ 
-  id, 
-  label, 
-  optional, 
-  type, 
-  value, 
-  onChange, 
-  placeholder, 
+export function FormField({
+  id,
+  label,
+  optional,
+  type,
+  value,
+  onChange,
+  placeholder,
   rows,
   dir,
-  className 
+  className,
 }: FormFieldProps) {
-  const isTextarea = rows !== undefined
+  const isTextarea = rows !== undefined;
 
   return (
-    <div className="flex flex-col gap-2 lg:gap-4">
+    <div className="flex flex-col gap-2 lg:gap-4 text-white">
       <label htmlFor={id}>
-        {label} {optional && <span className="text-muted-foreground">(optional)</span>}
+        {label} {optional && <span className="text-white/80">(optional)</span>}
       </label>
-      
+
       {isTextarea ? (
         <Textarea
           id={id}
@@ -43,7 +42,6 @@ export function FormField({
           onChange={(e) => onChange(e.target.value)}
           rows={rows}
           dir={dir}
-          className={className}
         />
       ) : (
         <Input
@@ -55,5 +53,5 @@ export function FormField({
         />
       )}
     </div>
-  )
+  );
 }

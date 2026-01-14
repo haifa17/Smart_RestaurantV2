@@ -128,26 +128,31 @@ export function MenuManagement({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Menu</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-white/80 mt-1">
             Manage categories and items
           </p>
         </div>
         <Button
-          className="cursor-pointer border"
+          className="cursor-pointer bg-orange-700/90 text-white hover:bg-orange-700 flex items-center"
           onClick={() => setIsCreatingCategory(true)}
         >
-          <Plus className="h-4 w-4 mr-1" />
+          <Plus size={15} />
           Add Category
         </Button>
       </div>
 
       {sorted.length === 0 ? (
-        <Card className="p-12 text-center">
-          <h3 className="font-medium mb-1">No categories yet</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+        <Card className="p-12 bg-transparent text-center">
+          <h3 className="font-medium text-white mb-1">No categories yet</h3>
+          <p className="text-sm text-white/80 mb-4">
             Create your first category
           </p>
-          <Button onClick={() => setIsCreatingCategory(true)} variant="outline">
+          <Button
+          className="cursor-pointer bg-orange-700/90 text-white hover:bg-orange-700 flex items-center w-full mt-4"
+            onClick={() => setIsCreatingCategory(true)}
+            variant="outline"
+          >
+            <Plus size={15} />
             Add Category
           </Button>
         </Card>

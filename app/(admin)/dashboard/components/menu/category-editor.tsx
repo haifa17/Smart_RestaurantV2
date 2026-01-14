@@ -51,7 +51,7 @@ export function CategoryEditor({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="category-name">Category Name</label>
+            <label htmlFor="category-name" className="text-sm">Category Name</label>
             <Input
               id="category-name"
               placeholder="e.g., Entrées, Plats principaux"

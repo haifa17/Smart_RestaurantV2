@@ -16,7 +16,7 @@ export function EmptyState({ onAddCard }: EmptyStateProps) {
       <p className="text-sm text-muted-foreground mb-4">
         Create your first story card to showcase your restaurant's story
       </p>
-      <Button onClick={onAddCard} variant="outline">
+      <Button className="cursor-pointer" onClick={onAddCard} variant="outline">
         Add Story Card
       </Button>
     </Card>

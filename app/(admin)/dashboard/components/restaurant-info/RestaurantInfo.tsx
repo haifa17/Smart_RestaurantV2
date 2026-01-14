@@ -7,6 +7,7 @@ import { RestaurantHeader } from "./RestaurantHeader";
 import { HeroImageSection } from "./HeroImageSection";
 import { FormField } from "./FormField";
 import { SaveButton } from "@/components/buttons/SaveButton";
+import { LogoImageSection } from "./LogoImageSection";
 
 interface RestaurantInfoProps {
   restaurant: Restaurant;
@@ -44,6 +45,10 @@ export function RestaurantInfo({
   const [heroImage, setHeroImage] = useState<string | null>(
     restaurant.heroImage || null
   );
+  const [logoImage, setLogoImage] = useState<string | null>(
+    restaurant.logo || null
+  );
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
 
   useEffect(() => {
     setHeroImage(restaurant.heroImage || null);
@@ -72,6 +77,30 @@ export function RestaurantInfo({
     },
     [onUpdate, onUploadImage]
   );
+  const handleLogoUpload = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setIsUploadingLogo(true);
+      try {
+        const { url } = await onUploadImage(file, "logos"); 
+        setLogoImage(url);
+        onUpdate({ logo: url });
+        toast.success("Logo uploaded successfully");
+      } catch (error) {
+        console.error("Error uploading logo:", error);
+        toast.error("Failed to upload logo");
+      } finally {
+        setIsUploadingLogo(false);
+      }
+    },
+    [onUpdate, onUploadImage]
+  );
+  const handleRemoveLogo = useCallback(() => {
+    setLogoImage(null);
+    onUpdate({ logo: null });
+  }, [onUpdate]);
 
   const handleRemoveHeroImage = useCallback(() => {
     setHeroImage(null);
@@ -95,7 +124,13 @@ export function RestaurantInfo({
     <div className="w-full mx-auto space-y-6">
       <RestaurantHeader />
 
-      <Card className="p-6 space-y-6">
+      <Card className="p-6 space-y-6 bg-transparent border-none">
+        <LogoImageSection
+          logoImage={logoImage}
+          isUploading={isUploadingLogo}
+          onUpload={handleLogoUpload}
+          onRemove={handleRemoveLogo}
+        />
         <HeroImageSection
           heroImage={heroImage}
           isUploading={isUploadingHero}

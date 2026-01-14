@@ -17,7 +17,7 @@ export function QRCodeDisplay({
   hasError,
 }: QRCodeDisplayProps) {
   return (
-    <Card className="p-8">
+    <Card className="p-8 bg-[#292727] border-none">
       <div className="flex flex-col items-center">
         {/* QR Code Display */}
         <div
@@ -46,7 +46,7 @@ export function QRCodeDisplay({
           )}
         </div>
 
-        <p className="text-sm text-muted-foreground text-center mb-6">
+        <p className="text-sm text-white/80 text-center mb-6">
           {MESSAGES.DESCRIPTION}
         </p>
 
@@ -63,8 +63,8 @@ export function QRCodeDisplay({
 
         {/* Download Format Info */}
         {!hasError && !isGenerating && (
-          <Alert className="mb-4">
-            <AlertDescription className="text-xs">
+          <Alert className="mb-4 bg-white/80">
+            <AlertDescription className="text-xs text-black">
               <strong>PNG:</strong> • Best for digital use <strong>SVG:</strong>{" "}
               • Perfect for large prints <strong>PDF:</strong> • Ready to print
               with instructions

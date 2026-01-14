@@ -33,12 +33,12 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
     useQRCodeActions(menuUrl, qrCodeDataUrl, restaurant.name);
 
   return (
-    <div className="max-w-lg mx-auto space-y-6">
+    <div className=" space-y-6">
       {/* Header */}
-      <header className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">{MESSAGES.TITLE}</h2>
-        <p className="text-sm text-muted-foreground">{MESSAGES.SUBTITLE}</p>
-        <p className="text-xs text-muted-foreground">
+      <header className=" space-y-2">
+        <h2 className="text-2xl font-bold text-white ">{MESSAGES.TITLE}</h2>
+        <p className="text-sm text-white/80">{MESSAGES.SUBTITLE}</p>
+        <p className="text-xs text-white/80 ">
           Restaurant: <span className="font-semibold">{restaurant.name}</span>
         </p>
       </header>
@@ -56,14 +56,14 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
       />
 
       {/* Print Guidelines */}
-      <Card className="p-4 bg-primary/5 border-primary/20">
-        <h3 className="font-semibold text-foreground text-sm mb-2 flex items-center gap-2">
+      <Card className="p-4 bg-[#292727]  border-primary/20">
+        <h3 className="font-semibold text-white text-sm  flex items-center gap-2">
           <span role="img" aria-label="Tip">
             💡
           </span>
           {MESSAGES.TIP_TITLE}
         </h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-white/80 leading-relaxed">
           {MESSAGES.TIP_CONTENT}
         </p>
       </Card>

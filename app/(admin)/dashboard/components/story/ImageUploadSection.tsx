@@ -1,5 +1,5 @@
 import type React from "react";
-import { ImagePlus, X} from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 import { StoryCardPreview } from "./StoryCardPreview";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
@@ -21,7 +21,7 @@ export function ImageUploadSection({
   onImageRemove,
 }: ImageUploadSectionProps) {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <label>Card Image</label>
       <div className="flex items-start gap-4">
         {isUploading ? (
@@ -36,7 +36,7 @@ export function ImageUploadSection({
             <button
               type="button"
               onClick={onImageRemove}
-              className="absolute -top-2 -right-2 p-1 bg-foreground text-background rounded-full hover:bg-foreground/80 transition-colors"
+              className="absolute -top-2 -right-2 p-1 bg-foreground text-background rounded-full hover:bg-foreground/80 transition-colors cursor-pointer"
             >
               <X className="h-3 w-3" />
             </button>
