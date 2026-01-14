@@ -1,5 +1,6 @@
 import type React from "react";
-import { ImagePlus, X, Loader2 } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface HeroImageSectionProps {
   heroImage: string | null | undefined;
@@ -19,9 +20,7 @@ export function HeroImageSection({
       <label>Hero Background</label>
 
       {isUploading ? (
-        <div className="w-full h-32 rounded-lg border border-border flex items-center justify-center bg-muted">
-          <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-        </div>
+        <LoadingSpinner />
       ) : heroImage ? (
         <div className="relative">
           <img
