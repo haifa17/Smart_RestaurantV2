@@ -7,23 +7,29 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 interface DeleteConfirmDialogProps {
-  open: boolean
-  onClose: () => void
-  onConfirm: () => void
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: React.ReactNode;
+  description: React.ReactNode;
 }
 
-export function DeleteConfirmDialog({ open, onClose, onConfirm }: DeleteConfirmDialogProps) {
+export function DeleteDialog({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  description,
+}: DeleteConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Story Card?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This will permanently delete this story card. This action cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -36,5 +42,5 @@ export function DeleteConfirmDialog({ open, onClose, onConfirm }: DeleteConfirmD
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

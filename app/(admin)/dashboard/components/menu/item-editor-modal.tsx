@@ -1,7 +1,4 @@
-"use client";
-
 import type React from "react";
-
 import { useState, useEffect } from "react";
 import { ImagePlus, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,6 +29,7 @@ interface ItemEditorModalProps {
   categories: Category[];
   onSave: (item: Omit<MenuItem, "id">) => void;
   onUploadImage: (file: File, folder: "menu-items") => Promise<{ url: string }>;
+  restaurantId: string;
 }
 
 export function ItemEditorModal({
@@ -42,11 +40,10 @@ export function ItemEditorModal({
   categories,
   onSave,
   onUploadImage,
+  restaurantId,
 }: ItemEditorModalProps) {
-  const [nameAr, setNameAr] = useState("");
   const [name, setname] = useState("");
-  const [descriptionAr, setDescriptionAr] = useState("");
-  const [descriptionFr, setDescriptionFr] = useState("");
+  const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
@@ -55,16 +52,13 @@ export function ItemEditorModal({
   useEffect(() => {
     if (item) {
       setname(item.name || "");
-      setDescriptionAr(item.descriptionAr || "");
-      setDescriptionFr(item.descriptionFr || "");
+      setDescription(item.description || "");
       setPrice(item.price.toString());
       setImage(item.image || null);
       setSelectedCategoryId(item.categoryId);
     } else {
-      setNameAr("");
       setname("");
-      setDescriptionAr("");
-      setDescriptionFr("");
+      setDescription("");
       setPrice("");
       setImage(null);
       setSelectedCategoryId(categoryId);
@@ -88,16 +82,15 @@ export function ItemEditorModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nameAr.trim() && name.trim() && price && selectedCategoryId) {
+    if (name.trim() && price && selectedCategoryId && restaurantId) {
       onSave({
         categoryId: selectedCategoryId,
-        nameAr: nameAr.trim(),
         name: name.trim(),
-        descriptionAr: descriptionAr.trim() || undefined,
-        descriptionFr: descriptionFr.trim() || undefined,
+        description: description.trim() || undefined,
         price: Number.parseFloat(price),
         image,
         available: true,
+        restaurantId,
       });
     }
   };
@@ -151,9 +144,7 @@ export function ItemEditorModal({
 
                 {/* Live Preview Card */}
                 <div className="flex-1 p-3 rounded-lg border border-border bg-muted/30">
-                  <p className="text-xs text-muted-foreground mb-2">
-                    Preview (French)
-                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">Preview</p>
                   <div className="flex gap-3">
                     {image ? (
                       <img
@@ -169,7 +160,7 @@ export function ItemEditorModal({
                         {name || "Item name"}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {descriptionFr || "Description"}
+                        {description || "Description"}
                       </p>
                       <p className="text-sm font-medium text-foreground mt-0.5">
                         {price ? Number.parseFloat(price).toFixed(2) : "0.00"}{" "}
@@ -201,56 +192,29 @@ export function ItemEditorModal({
               </Select>
             </div>
 
-            {/* Name Arabic */}
+            {/* Name */}
             <div className="space-y-2">
-              <label htmlFor="name-ar">Item Name (Arabic)</label>
+              <label htmlFor="name">Item Name</label>
               <Input
-                id="name-ar"
-                placeholder="مثال: بيتزا مارغريتا"
-                value={nameAr}
-                onChange={(e) => setNameAr(e.target.value)}
-                dir="rtl"
-              />
-            </div>
-
-            {/* Name French */}
-            <div className="space-y-2">
-              <label htmlFor="name-fr">Item Name (French)</label>
-              <Input
-                id="name-fr"
+                id="name"
                 placeholder="e.g., Pizza Margherita"
                 value={name}
                 onChange={(e) => setname(e.target.value)}
+                className="capitalize"
               />
             </div>
 
-            {/* Description Arabic */}
+            {/* Description  */}
             <div className="space-y-2">
-              <label htmlFor="description-ar">
-                Description (Arabic){" "}
+              <label htmlFor="description">
+                Description{" "}
                 <span className="text-muted-foreground">(optional)</span>
               </label>
               <Textarea
-                id="description-ar"
-                placeholder="وصف مختصر للطبق..."
-                value={descriptionAr}
-                onChange={(e) => setDescriptionAr(e.target.value)}
-                dir="rtl"
-                rows={2}
-              />
-            </div>
-
-            {/* Description French */}
-            <div className="space-y-2">
-              <label htmlFor="description-fr">
-                Description (French){" "}
-                <span className="text-muted-foreground">(optional)</span>
-              </label>
-              <Textarea
-                id="description-fr"
+                id="description"
                 placeholder="A brief description of the item..."
-                value={descriptionFr}
-                onChange={(e) => setDescriptionFr(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 rows={2}
               />
             </div>
@@ -279,7 +243,6 @@ export function ItemEditorModal({
             <Button
               type="submit"
               disabled={
-                !nameAr.trim() ||
                 !name.trim() ||
                 !price ||
                 !selectedCategoryId ||

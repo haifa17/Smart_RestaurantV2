@@ -12,6 +12,7 @@ export interface MenuItemFormData {
   price: number;
   image?: string | null;
   available?: boolean;
+  restaurantId: string;
 }
 
 export type DeleteConfirmState = {
@@ -19,19 +20,19 @@ export type DeleteConfirmState = {
   id: string;
 } | null;
 
-export type DownloadFormat = typeof DOWNLOAD_FORMATS[number]
+export type DownloadFormat = (typeof DOWNLOAD_FORMATS)[number];
 export interface QRCodeScreenProps {
-  restaurant: Restaurant,
-   baseUrl?: string
+  restaurant: Restaurant;
+  baseUrl?: string;
 }
 
 export interface QRCodeDisplayProps {
-  menuUrl: string
-  qrCodeDataUrl: string
-  onCopyLink: () => void
-  onDownload: (format: DownloadFormat) => void
-  onRetry: () => void
-  copied: boolean
-  isGenerating: boolean
-  hasError: boolean
+  menuUrl: string;
+  qrCodeDataUrl: string;
+  onCopyLink: () => void;
+  onDownload: (format: DownloadFormat) => void;
+  onRetry: () => void;
+  copied: boolean;
+  isGenerating: boolean;
+  hasError: boolean;
 }

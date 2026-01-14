@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const categoryCreateSchema = z.object({
-  restaurantId: z.string().cuid(),
+  restaurantId: z.string(),
   name: z.string().min(1, "name is required").max(200),
   visible: z.boolean().default(true),
   order: z.number().int().min(0).optional(),
@@ -9,7 +9,7 @@ export const categoryCreateSchema = z.object({
 export const categoryReorderSchema = z.object({
   categories: z.array(
     z.object({
-      id: z.string().cuid(),
+      id: z.string(),
       order: z.number().int().min(0),
     })
   ),

@@ -15,6 +15,7 @@ function createPrismaClient() {
   console.log('Creating Prisma client with DATABASE_URL:', databaseUrl.substring(0, 30) + '...')
 
   const neon = new Pool({ connectionString: databaseUrl })
+  //@ts-ignore
   const adapter = new PrismaNeon(neon)
 
   return new PrismaClient({

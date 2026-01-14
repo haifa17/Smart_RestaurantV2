@@ -1,21 +1,31 @@
-import { Card } from "@/components/ui/card"
-import { StoryCard } from "@/lib/models/story"
-import { Eye, EyeOff, Pencil, Trash2, BookOpen } from "lucide-react"
-
+import { Card } from "@/components/ui/card";
+import { StoryCard } from "@/lib/models/story";
+import { Eye, EyeOff, Pencil, Trash2, BookOpen } from "lucide-react";
 
 interface StoryCardItemProps {
-  card: StoryCard
-  onEdit: () => void
-  onDelete: () => void
-  onToggleVisibility: () => void
+  card: StoryCard;
+  onEdit: () => void;
+  onDelete: () => void;
+  onToggleVisibility: () => void;
 }
 
-export function StoryCardItem({ card, onEdit, onDelete, onToggleVisibility }: StoryCardItemProps) {
+export function StoryCardItem({
+  card,
+  onEdit,
+  onDelete,
+  onToggleVisibility,
+}: StoryCardItemProps) {
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-video">
         {card.image ? (
-          <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
+          <div className=" p-4 ">
+            <img
+              src={card.image}
+              alt={card.title}
+              className="w-full h-full object-cover "
+            />
+          </div>
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <BookOpen className="h-12 w-12 text-muted-foreground" />
@@ -31,8 +41,12 @@ export function StoryCardItem({ card, onEdit, onDelete, onToggleVisibility }: St
       <div className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground truncate">{card.title}</h3>
-            <p className="text-sm text-muted-foreground truncate">{card.subtitle}</p>
+            <h3 className="font-semibold text-foreground truncate">
+              {card.title}
+            </h3>
+            <p className="text-sm text-muted-foreground truncate">
+              {card.subtitle}
+            </p>
           </div>
         </div>
 
@@ -63,5 +77,5 @@ export function StoryCardItem({ card, onEdit, onDelete, onToggleVisibility }: St
         </div>
       </div>
     </Card>
-  )
+  );
 }

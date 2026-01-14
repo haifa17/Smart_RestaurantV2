@@ -6,7 +6,7 @@ export interface MenuItem extends BaseModel {
   name: string;
   description?: string;
   price: number;
-  image: string | null;
-  available: boolean;
+  image?: string | null;
+  available?: boolean;
   isActive?: boolean;
 }

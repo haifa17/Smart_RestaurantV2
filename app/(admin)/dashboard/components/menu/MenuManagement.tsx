@@ -1,30 +1,21 @@
-
 import { useState, useMemo, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Category } from "@/lib/models/category";
 import { MenuItem } from "@/lib/models/menuItem";
 import {
   CategoryFormData,
   DeleteConfirmState,
   MenuItemFormData,
-} from "../lib/types";
-import { CategoryCard } from "./cards/CategoryCard";
-import { CategoryEditor } from "@/components/category-editor";
-import { ItemEditorModal } from "@/components/item-editor-modal";
+} from "../../lib/types";
+import { CategoryCard } from "../cards/CategoryCard";
+import { CategoryEditor } from "@/app/(admin)/dashboard/components/menu/category-editor";
+import { ItemEditorModal } from "@/app/(admin)/dashboard/components/menu/item-editor-modal";
+import { DeleteDialog } from "@/components/dialogs/DeleteDialog";
 
 interface MenuManagementProps {
+  restaurantId: string;
   categories: Category[];
   menuItems: MenuItem[];
   isLoading: boolean;
@@ -44,6 +35,7 @@ interface MenuManagementProps {
 }
 
 export function MenuManagement({
+  restaurantId,
   categories,
   menuItems,
   onCreateCategory,
@@ -110,7 +102,10 @@ export function MenuManagement({
         onUpdateMenuItem(editingItem.id, item);
         setEditingItem(null);
       } else {
-        onCreateMenuItem(item);
+        onCreateMenuItem({
+          ...item,
+          restaurantId,
+        });
         setIsCreatingItem(false);
         setSelectedCategoryId(null);
       }
@@ -210,34 +205,21 @@ export function MenuManagement({
         categories={categories}
         onSave={handleSaveItem}
         onUploadImage={onUploadImage}
+        restaurantId={restaurantId}
       />
-
-      <AlertDialog
+      <DeleteDialog
         open={deleteConfirm !== null}
-        onOpenChange={() => setDeleteConfirm(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Delete {deleteConfirm?.type === "category" ? "Category" : "Item"}?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {deleteConfirm?.type === "category"
-                ? "This will delete the category and all items. Cannot be undone."
-                : "This will permanently delete this item. Cannot be undone."}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title={`Delete ${
+          deleteConfirm?.type === "category" ? "Category" : "Item"
+        }?`}
+        description={` ${
+          deleteConfirm?.type === "category"
+            ? "This will delete the category and all items. Cannot be undone."
+            : "This will permanently delete this item. Cannot be undone"
+        }?`}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

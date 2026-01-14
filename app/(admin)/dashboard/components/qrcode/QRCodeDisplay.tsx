@@ -65,8 +65,8 @@ export function QRCodeDisplay({
         {!hasError && !isGenerating && (
           <Alert className="mb-4">
             <AlertDescription className="text-xs">
-              <strong>PNG:</strong> Best for digital use • <strong>SVG:</strong>{" "}
-              Perfect for large prints • <strong>PDF:</strong> Ready to print
+              <strong>PNG:</strong> • Best for digital use <strong>SVG:</strong>{" "}
+              • Perfect for large prints <strong>PDF:</strong> • Ready to print
               with instructions
             </AlertDescription>
           </Alert>

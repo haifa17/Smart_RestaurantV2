@@ -1,32 +1,34 @@
-
-import { useState } from "react"
-import { StoryManagementHeader } from "./StoryManagementHeader"
-import { StoryCard } from "@/lib/models/story"
-import { StoryCardGrid } from "./StoryCardGrid"
-import { EmptyState } from "./EmptyState"
-import { StoryCardEditor } from "./StoryCardEditor"
-import { DeleteConfirmDialog } from "./DeleteConfirmDialog"
+import { useState } from "react";
+import { StoryManagementHeader } from "./StoryManagementHeader";
+import { StoryCard } from "@/lib/models/story";
+import { StoryCardGrid } from "./StoryCardGrid";
+import { EmptyState } from "./EmptyState";
+import { StoryCardEditor } from "./StoryCardEditor";
+import { DeleteDialog } from "@/components/dialogs/DeleteDialog";
 
 interface StoryManagementProps {
-  storyCards: StoryCard[]
-  isLoading: boolean
+  storyCards: StoryCard[];
+  isLoading: boolean;
   onCreateStoryCard: (data: {
-    title: string
-    subtitle: string
-    image?: string | null
-    visible?: boolean
-  }) => void
+    title: string;
+    subtitle: string;
+    image?: string | null;
+    visible?: boolean;
+  }) => void;
   onUpdateStoryCard: (
     id: string,
     data: {
-      title?: string
-      subtitle?: string
-      image?: string | null
-      visible?: boolean
+      title?: string;
+      subtitle?: string;
+      image?: string | null;
+      visible?: boolean;
     }
-  ) => void
-  onDeleteStoryCard: (id: string) => void
-  onUploadImage: (file: File, folder: "story-cards") => Promise<{ url: string }>
+  ) => void;
+  onDeleteStoryCard: (id: string) => void;
+  onUploadImage: (
+    file: File,
+    folder: "story-cards"
+  ) => Promise<{ url: string }>;
 }
 
 export function StoryManagement({
@@ -37,35 +39,40 @@ export function StoryManagement({
   onDeleteStoryCard,
   onUploadImage,
 }: StoryManagementProps) {
-  const [editingCard, setEditingCard] = useState<StoryCard | null>(null)
-  const [isCreatingCard, setIsCreatingCard] = useState(false)
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [editingCard, setEditingCard] = useState<StoryCard | null>(null);
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const handleCreateCard = (data: Partial<StoryCard>) => {
-    onCreateStoryCard(data as any)
-    setIsCreatingCard(false)
-  }
+    onCreateStoryCard(data as any);
+    setIsCreatingCard(false);
+  };
 
   const handleUpdateCard = (data: Partial<StoryCard>) => {
     if (editingCard) {
-      onUpdateStoryCard(editingCard.id, data)
-      setEditingCard(null)
+      onUpdateStoryCard(editingCard.id, data);
+      setEditingCard(null);
     }
-  }
+  };
 
   const handleDeleteCard = (id: string) => {
-    onDeleteStoryCard(id)
-    setDeleteConfirm(null)
-  }
+    onDeleteStoryCard(id);
+    setDeleteConfirm(null);
+  };
 
   const handleToggleVisibility = (id: string) => {
-    const card = storyCards.find((c) => c.id === id)
+    const card = storyCards.find((c) => c.id === id);
     if (card) {
-      onUpdateStoryCard(id, { visible: !card.visible })
+      onUpdateStoryCard(id, {
+        title: card.title,
+        subtitle: card.subtitle,
+        visible: !card.visible,
+        image: card.image, // optional, if your mutation requires it
+      });
     }
-  }
+  };
 
-  const sortedCards = [...storyCards].sort((a, b) => a.order! - b.order!)
+  const sortedCards = [...storyCards].sort((a, b) => a.order! - b.order!);
 
   return (
     <div className="space-y-6">
@@ -85,22 +92,23 @@ export function StoryManagement({
       <StoryCardEditor
         open={isCreatingCard || editingCard !== null}
         onClose={() => {
-          setIsCreatingCard(false)
-          setEditingCard(null)
+          setIsCreatingCard(false);
+          setEditingCard(null);
         }}
         storyCard={editingCard}
         onSave={(data) => {
-          editingCard ? handleUpdateCard(data) : handleCreateCard(data)
+          editingCard ? handleUpdateCard(data) : handleCreateCard(data);
         }}
         onUploadImage={onUploadImage}
       />
 
-      <DeleteConfirmDialog
+      <DeleteDialog
+        title="Delete Story Card?"
+        description="This will permanently delete this story card. This action cannot be undone."
         open={deleteConfirm !== null}
         onClose={() => setDeleteConfirm(null)}
         onConfirm={() => deleteConfirm && handleDeleteCard(deleteConfirm)}
       />
     </div>
-  )
+  );
 }
-

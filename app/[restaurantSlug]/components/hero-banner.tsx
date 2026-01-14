@@ -4,7 +4,6 @@ import { Phone, Clock } from "lucide-react"
 import Image from "next/image"
 import { Restaurant } from "@/lib/models/restaurant"
 import Link from "next/link"
-import { formatSchedules } from "@/lib/utils"
 
 interface HeroBannerProps {
   restaurant: Restaurant
@@ -93,7 +92,8 @@ export function HeroBanner({ restaurant }: HeroBannerProps) {
             <div className="flex flex-col">
               <span className="text-cream text-sm sm:text-base">Ouvert tous les jours</span>
               <span className="text-xs sm:text-sm">
-               {formatSchedules(restaurant.schedules)}
+                {/* {formatSchedules(restaurant.schedules)} */}
+                
               </span>
             </div>
           </div>

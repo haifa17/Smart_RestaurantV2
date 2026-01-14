@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuManagement } from "../MenuManagement";
+import { MenuManagement } from "../menu/MenuManagement";
 import { useCategoryMutations } from "../../hooks/mutations/useCategoryMutations";
 import { useImageUpload } from "../../hooks/mutations/useImageUpload";
 import { useMenuItemMutations } from "../../hooks/mutations/useMenuItemMutations";
@@ -27,6 +27,7 @@ export function MenuPage({ restaurantId }: MenuPageProps) {
 
   return (
     <MenuManagement
+      restaurantId={restaurantId}
       categories={categories}
       menuItems={menuItems}
       isLoading={categoriesLoading || menuItemsLoading}

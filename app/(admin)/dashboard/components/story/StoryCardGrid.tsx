@@ -1,17 +1,21 @@
-import { StoryCard } from "@/lib/models/story"
-import { StoryCardItem } from "../cards/StoryCardItem"
-
+import { StoryCard } from "@/lib/models/story";
+import { StoryCardItem } from "../cards/StoryCardItem";
 
 interface StoryCardGridProps {
-  cards: StoryCard[]
-  onEdit: (card: StoryCard) => void
-  onDelete: (id: string) => void
-  onToggleVisibility: (id: string) => void
+  cards: StoryCard[];
+  onEdit: (card: StoryCard) => void;
+  onDelete: (id: string) => void;
+  onToggleVisibility: (id: string) => void;
 }
 
-export function StoryCardGrid({ cards, onEdit, onDelete, onToggleVisibility }: StoryCardGridProps) {
+export function StoryCardGrid({
+  cards,
+  onEdit,
+  onDelete,
+  onToggleVisibility,
+}: StoryCardGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {cards.map((card) => (
         <StoryCardItem
           key={card.id}
@@ -22,5 +26,5 @@ export function StoryCardGrid({ cards, onEdit, onDelete, onToggleVisibility }: S
         />
       ))}
     </div>
-  )
+  );
 }

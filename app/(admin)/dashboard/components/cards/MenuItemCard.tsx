@@ -24,9 +24,9 @@ export function MenuItemCard({
 
       <div className="flex-1 min-w-0">
         <h4 className="font-medium truncate">{item.name || "Unnamed"}</h4>
-        {item.descriptionFr && (
+        {item.description && (
           <p className="text-sm text-muted-foreground truncate">
-            {item.descriptionFr}
+            {item.description}
           </p>
         )}
         <p className="text-sm font-medium mt-0.5">

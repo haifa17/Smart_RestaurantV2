@@ -32,7 +32,7 @@ export const MESSAGES = {
   DOWNLOAD_SUCCESS: (format: string) => `QR code downloaded as ${format.toUpperCase()}`,
   DOWNLOAD_ERROR: "Failed to download QR code. Please try again.",
   GENERATION_ERROR: "Failed to generate QR code",
-  TIP_TITLE: "💡 Print Guidelines",
+  TIP_TITLE: "Print Guidelines",
   TIP_CONTENT: "For best results, print on high-quality paper or laminate for durability. Recommended size: 3x3 inches minimum.",
   RETRY: "Retry",
 } as const
