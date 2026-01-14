@@ -15,7 +15,7 @@ export function HeroImageSection({
   onRemove,
 }: HeroImageSectionProps) {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2 lg:gap-4">
       <label>Hero Background</label>
 
       {isUploading ? (
@@ -39,7 +39,7 @@ export function HeroImageSection({
           </button>
         </div>
       ) : (
-        <label className=" w-full h-32 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
+        <div className=" w-full h-52 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
           <ImagePlus className="h-8 w-8 text-muted-foreground mb-2" />
           <span className="text-sm text-muted-foreground">
             Upload hero image
@@ -51,7 +51,7 @@ export function HeroImageSection({
             className="hidden"
             disabled={isUploading}
           />
-        </label>
+        </div>
       )}
     </div>
   );

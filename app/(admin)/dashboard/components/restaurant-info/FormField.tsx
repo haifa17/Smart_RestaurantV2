@@ -30,7 +30,7 @@ export function FormField({
   const isTextarea = rows !== undefined
 
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2 lg:gap-4">
       <label htmlFor={id}>
         {label} {optional && <span className="text-muted-foreground">(optional)</span>}
       </label>

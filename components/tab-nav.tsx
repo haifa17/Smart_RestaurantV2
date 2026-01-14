@@ -1,4 +1,3 @@
-"use client"
 
 import { UtensilsCrossed, QrCode, Store, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -29,7 +28,7 @@ export function TabNav({ activeTab, setActiveTab }: TabNavProps) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-3 text-sm lg:text-base font-medium transition-colors border-b-2 -mb-px",
+                  "flex items-center cursor-pointer gap-2 px-4 py-3 text-sm lg:text-base font-medium transition-colors border-b-2 -mb-px",
                   isActive
                     ? "font-bold "
                     : "border-transparent  hover:border-border",

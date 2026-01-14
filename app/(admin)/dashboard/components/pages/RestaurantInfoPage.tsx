@@ -11,7 +11,10 @@ interface RestaurantInfoPageProps {
 }
 
 export function RestaurantInfoPage({ restaurantId }: RestaurantInfoPageProps) {
+  console.log("restaurantId", restaurantId);
+
   const { data: restaurant, isLoading } = useRestaurant(restaurantId);
+  console.log("restaurant", restaurant);
   const { updateRestaurant } = useRestaurantMutations(restaurantId);
   const uploadImage = useImageUpload();
 

@@ -7,7 +7,7 @@ const DashContent = () => {
   const [activeTab, setActiveTab] = useState<"menu" | "qr" | "info" | "story">(
     "menu"
   );
-  const RESTAURANT_ID = process.env.NEXT_PUBLIC_RESTAURANT_ID || "";
+  const RESTAURANT_ID = process.env.NEXT_PUBLIC_RESTAURANT_ID || "resteau_test";
 
   return (
     <div>

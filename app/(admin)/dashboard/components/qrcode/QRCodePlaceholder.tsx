@@ -1,11 +1,15 @@
-"use client"
-import { Loader2 } from "lucide-react"
+"use client";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export function QRCodePlaceholder() {
   return (
     <div className="relative w-full h-full flex items-center justify-center">
       {/* Decorative QR pattern background */}
-      <svg viewBox="0 0 200 200" className="w-full h-full opacity-20" aria-hidden="true">
+      <svg
+        viewBox="0 0 200 200"
+        className="w-full h-full opacity-20"
+        aria-hidden="true"
+      >
         <rect x="0" y="0" width="200" height="200" fill="white" />
         {/* Position markers */}
         {[
@@ -16,16 +20,19 @@ export function QRCodePlaceholder() {
           <g key={i}>
             <rect x={x} y={y} width="50" height="50" fill="currentColor" />
             <rect x={x + 5} y={y + 5} width="40" height="40" fill="white" />
-            <rect x={x + 12} y={y + 12} width="26" height="26" fill="currentColor" />
+            <rect
+              x={x + 12}
+              y={y + 12}
+              width="26"
+              height="26"
+              fill="currentColor"
+            />
           </g>
         ))}
       </svg>
-      
+
       {/* Loading spinner overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-        <Loader2 className="h-10 w-10 animate-spin text-primary mb-2" />
-        <p className="text-sm text-muted-foreground">Generating QR Code...</p>
-      </div>
+      <LoadingSpinner />
     </div>
-  )
+  );
 }
