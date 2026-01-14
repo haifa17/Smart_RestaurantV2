@@ -39,5 +39,4 @@ export const MESSAGES = {
   RETRY: "Retry",
 } as const;
 
-export const RESTAURANT_ID =
-  process.env.NEXT_PUBLIC_RESTAURANT_ID || "resteau_test";
+export const RESTAURANT_ID = process.env.NEXT_PUBLIC_RESTAURANT_ID;

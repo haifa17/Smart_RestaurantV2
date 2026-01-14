@@ -142,15 +142,16 @@ export function MenuManagement({
       </div>
 
       {sorted.length === 0 ? (
-        <Card className="p-12 bg-transparent text-center">
-          <h3 className="font-medium text-white mb-1">No categories yet</h3>
+        <Card className="p-12 bg-transparent border-none text-center">
+          <h3 className="font-medium text-white mb-1 capitalize">
+            No categories yet
+          </h3>
           <p className="text-sm text-white/80 mb-4">
             Create your first category
           </p>
           <Button
-          className="cursor-pointer bg-orange-700/90 text-white hover:bg-orange-700 flex items-center w-full mt-4"
+            className="cursor-pointer bg-[#D9D9D9] text-black hover:bg-[#D9D9D9]/80  flex items-center w-full mt-4"
             onClick={() => setIsCreatingCategory(true)}
-            variant="outline"
           >
             <Plus size={15} />
             Add Category
