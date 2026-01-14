@@ -22,10 +22,9 @@ export function transformRestaurant(
     })),
     description: restaurant.description ?? undefined,
     tagline: restaurant.tagline,
-    storyAr: restaurant.storyAr,
-    storyFr: restaurant.storyFr,
+    story: restaurant.story,
     isActive: restaurant.isActive,
-    createdAt: restaurant.createdAt.toISOString(),
-    updatedAt: restaurant.updatedAt.toISOString(),
+    created_at: restaurant.createdAt.toISOString(),
+    updated_at: restaurant.updatedAt.toISOString(),
   }
 }

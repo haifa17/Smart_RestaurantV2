@@ -11,12 +11,12 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
   const { restaurantSlug } = await params
 
   try {
-    const { restaurant, categories, menuItems, storyCards } = await getMenuData(restaurantSlug)
+    // const { restaurant, categories, menuItems, storyCards } = await getMenuData(restaurantSlug)
 
     return (
       <div className="min-h-screen">
         {/* <LanguageToggle /> */}
-        <HeroBanner restaurant={restaurant} />
+        {/* <HeroBanner restaurant={restaurant} /> */}
         {/* <StorySection storyCards={storyCards} />
         <MenuSection
           categories={categories}
