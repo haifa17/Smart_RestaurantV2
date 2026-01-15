@@ -2,6 +2,11 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma-simple'
 import { handleApiError, createSuccessResponse } from '@/lib/api-error'
 import { storyCardCreateSchema } from '@/lib/dtos/story'
+import { addCorsHeaders, handleOptions } from '@/lib/cors'
+
+export async function OPTIONS() {
+  return handleOptions()
+}
 
 // GET /api/admin/story-cards?restaurantId=xxx
 export async function GET(request: NextRequest) {
@@ -12,7 +17,7 @@ export async function GET(request: NextRequest) {
     if (!restaurantId) {
       return Response.json(
         { success: false, error: { message: 'restaurantId is required', code: 'MISSING_PARAM' } },
-        { status: 400 }
+        { status: 400, headers: addCorsHeaders() }
       )
     }
 
@@ -26,9 +31,9 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return createSuccessResponse(storyCards)
+    return createSuccessResponse(storyCards, 200, addCorsHeaders())
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, addCorsHeaders())
   }
 }
 
@@ -52,8 +57,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return createSuccessResponse(storyCard, 201)
+    return createSuccessResponse(storyCard, 201, addCorsHeaders())
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, addCorsHeaders())
   }
 }

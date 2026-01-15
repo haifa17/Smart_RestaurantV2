@@ -7,6 +7,11 @@ import {
 } from "@/lib/api-error";
 import { revalidateTag } from "next/cache";
 import { storyCardUpdateSchema } from "@/lib/dtos/story";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleOptions();
+}
 
 // GET /api/admin/story-cards/[id]
 export async function GET(
@@ -23,9 +28,9 @@ export async function GET(
       throw new ApiError(404, "NOT_FOUND", "Story card not found");
     }
 
-    return createSuccessResponse(storyCard);
+    return createSuccessResponse(storyCard, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -58,9 +63,9 @@ export async function PATCH(
     //@ts-ignore
     revalidateTag(`menu-${existingStoryCard.restaurantId}`);
 
-    return createSuccessResponse(storyCard);
+    return createSuccessResponse(storyCard, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -94,10 +99,12 @@ export async function DELETE(
     //@ts-ignore
     revalidateTag(`menu-${existingStoryCard.restaurantId}`);
 
-    return createSuccessResponse({
-      message: "Story card deleted successfully",
-    });
+    return createSuccessResponse(
+      { message: "Story card deleted successfully" },
+      200,
+      addCorsHeaders()
+    );
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }

@@ -2,6 +2,11 @@ import { NextRequest } from 'next/server'
 import { uploadImage } from '@/lib/cloudinary'
 import { handleApiError, createSuccessResponse, ApiError } from '@/lib/api-error'
 import { imageUploadSchema } from '@/lib/dtos/image'
+import { addCorsHeaders, handleOptions } from '@/lib/cors'
+
+export async function OPTIONS() {
+  return handleOptions()
+}
 
 // POST /api/admin/upload
 export async function POST(request: NextRequest) {
@@ -35,8 +40,8 @@ export async function POST(request: NextRequest) {
     // Upload to Cloudinary
     const url = await uploadImage(buffer, validatedFolder)
 
-    return createSuccessResponse({ url })
+    return createSuccessResponse({ url }, 200, addCorsHeaders())
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, addCorsHeaders())
   }
 }
