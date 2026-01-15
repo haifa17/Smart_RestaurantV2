@@ -26,7 +26,12 @@ const Header = () => {
           alt="Restaurant logo"
           className=" object-cover"
         />
-        <Button className="hover:underline" size="sm" asChild disabled={!restaurant}>
+        <Button
+          className="hover:underline"
+          size="sm"
+          asChild
+          disabled={!restaurant}
+        >
           <Link
             href="/"
             target="_blank"
@@ -47,7 +52,7 @@ const Header = () => {
         </SignUpButton>
       </SignedOut>
       <SignedIn>
-        <UserButton />
+        <UserButton afterSignOutUrl="/sign-in" />
       </SignedIn>
     </header>
   );
