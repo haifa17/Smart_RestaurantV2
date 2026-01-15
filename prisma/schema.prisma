@@ -34,7 +34,7 @@ model Restaurant {
   logo        String?
   heroImage   String?
   tagline     String? @default("")
-  story     String?
+  story       String?
   description String?
 
   // ✅ FIXED SCHEDULE
@@ -80,7 +80,10 @@ model Category {
   id           String @id @default(cuid())
   restaurantId String
 
-  name   String
+  nameEn String?
+  nameFr String?
+  nameAr String?
+  icon   String?
 
   visible Boolean @default(true)
   order   Int     @default(0)
@@ -93,7 +96,10 @@ model Category {
 
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   menuItems  MenuItem[]
-  @@unique([restaurantId, name])
+  
+  @@unique([restaurantId, nameEn])
+  @@unique([restaurantId, nameFr])
+  @@unique([restaurantId, nameAr])
   @@index([restaurantId, visible, isActive])
   @@index([restaurantId, order])
   @@map("categories")
@@ -104,15 +110,25 @@ model MenuItem {
   restaurantId String
   categoryId   String
 
-  name          String
-  description String @default("")
+  nameEn String?
+  nameFr String?
+  nameAr String?
+
+  descriptionEn String?
+  descriptionFr String?
+  descriptionAr String?
 
   price     Decimal @db.Decimal(10, 2)
   image     String?
   available Boolean @default(true)
 
-  isActive  Boolean   @default(true)
-  deletedAt DateTime?
+  isActive             Boolean   @default(true)
+  isChefRecommendation Boolean   @default(false)
+  isPopular            Boolean   @default(false)
+  isSpicy              Boolean   @default(false)
+  isVegetarian         Boolean   @default(false)
+
+  deletedAt            DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,7 +145,7 @@ model StoryCard {
   id           String @id @default(cuid())
   restaurantId String
 
-  title   String
+  title    String
   subtitle String
 
   image String?

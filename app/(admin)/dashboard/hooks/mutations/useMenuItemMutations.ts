@@ -13,12 +13,24 @@ export function useMenuItemMutations(restaurantId: string) {
   const createMenuItem = useMutation({
     mutationFn: (data: {
       categoryId: string;
-      name: string;
-      description?: string;
+
+      nameEn?: string;
+      nameFr?: string;
+      nameAr?: string;
+
+      descriptionEn?: string;
+      descriptionFr?: string;
+      descriptionAr?: string;
+
       price: number;
       image?: string | null;
+
       available?: boolean;
       isActive?: boolean;
+      isChefRecommendation?: boolean;
+      isPopular?: boolean;
+      isSpicy?: boolean;
+      isVegetarian?: boolean;
     }) => apiClient.createMenuItem({ restaurantId, ...data }),
     onSuccess: () => {
       invalidateCache();
@@ -37,11 +49,24 @@ export function useMenuItemMutations(restaurantId: string) {
       id: string;
       data: {
         categoryId?: string;
-        name?: string;
-        description?: string;
+
+        nameEn?: string;
+        nameFr?: string;
+        nameAr?: string;
+
+        descriptionEn?: string;
+        descriptionFr?: string;
+        descriptionAr?: string;
+
         price?: number;
         image?: string | null;
+
         available?: boolean;
+        isActive?: boolean;
+        isChefRecommendation?: boolean;
+        isPopular?: boolean;
+        isSpicy?: boolean;
+        isVegetarian?: boolean;
       };
     }) => apiClient.updateMenuItem(id, data),
     onSuccess: () => {

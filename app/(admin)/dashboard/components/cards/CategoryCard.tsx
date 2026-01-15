@@ -61,7 +61,7 @@ export function CategoryCard({
 
         <div className="flex-1 min-w-0">
           <h3 className="font-medium truncate capitalize">
-            {category.name || "Unnamed"}
+            {category.nameEn || category.nameFr || category.nameAr || "Unnamed"}
           </h3>
           <p className="text-xs text-white/80 ">{items.length} items</p>
         </div>
@@ -70,7 +70,10 @@ export function CategoryCard({
           {/* Toggle visibility */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <button onClick={onToggleVis} className="p-2 hover:scale-110 cursor-pointer">
+              <button
+                onClick={onToggleVis}
+                className="p-2 hover:scale-110 cursor-pointer"
+              >
                 {category.visible ? (
                   <Eye className="h-4 w-4 text-[#D9D9D9]" />
                 ) : (
@@ -86,7 +89,10 @@ export function CategoryCard({
           {/* Edit */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <button onClick={onEdit} className="p-2 hover:scale-110 cursor-pointer">
+              <button
+                onClick={onEdit}
+                className="p-2 hover:scale-110 cursor-pointer"
+              >
                 <Pencil className="h-4 w-4 text-[#D9D9D9]" />
               </button>
             </TooltipTrigger>
@@ -114,9 +120,7 @@ export function CategoryCard({
 
       <div className="p-4">
         {items.length === 0 ? (
-          <p className="text-sm text-white text-center py-4">
-            No items
-          </p>
+          <p className="text-sm text-white text-center py-4">No items</p>
         ) : (
           <div className="space-y-2">
             {items.map((item) => (

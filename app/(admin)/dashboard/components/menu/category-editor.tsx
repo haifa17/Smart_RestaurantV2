@@ -15,7 +15,7 @@ interface CategoryEditorProps {
   open: boolean;
   onClose: () => void;
   category: Category | null;
-  onSave: (data: { name: string }) => void;
+  onSave: (data: { nameEn?: string; nameFr?: string; nameAr?: string }) => void;
 }
 
 export function CategoryEditor({
@@ -24,21 +24,32 @@ export function CategoryEditor({
   category,
   onSave,
 }: CategoryEditorProps) {
-  const [name, setname] = useState("");
+  const [nameEn, setNameEn] = useState("");
+  const [nameFr, setNameFr] = useState("");
+  const [nameAr, setNameAr] = useState("");
 
   useEffect(() => {
     if (category) {
-      setname(category.name || "");
+      setNameEn(category.nameEn || "");
+      setNameFr(category.nameFr || "");
+      setNameAr(category.nameAr || "");
     } else {
-      setname("");
+      setNameEn("");
+      setNameFr("");
+      setNameAr("");
     }
   }, [category, open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim()) {
-      onSave({ name: name.trim() });
-    }
+
+    if (!nameEn.trim() && !nameFr.trim() && !nameAr.trim()) return;
+
+    onSave({
+      nameEn: nameEn.trim() || undefined,
+      nameFr: nameFr.trim() || undefined,
+      nameAr: nameAr.trim() || undefined,
+    });
   };
 
   return (
@@ -51,12 +62,24 @@ export function CategoryEditor({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="category-name" className="text-sm">Category Name</label>
+            <label htmlFor="category-name" className="text-sm">
+              Category Name
+            </label>
             <Input
-              id="category-name"
-              placeholder="e.g., Entrées, Plats principaux"
-              value={name}
-              onChange={(e) => setname(e.target.value)}
+              placeholder="Name (English)"
+              value={nameEn}
+              onChange={(e) => setNameEn(e.target.value)}
+            />
+            <Input
+              placeholder="Nom (Français)"
+              value={nameFr}
+              onChange={(e) => setNameFr(e.target.value)}
+            />
+            <Input
+              placeholder="الاسم (العربية)"
+              dir="rtl"
+              value={nameAr}
+              onChange={(e) => setNameAr(e.target.value)}
             />
           </div>
           <DialogFooter>
@@ -71,7 +94,7 @@ export function CategoryEditor({
             <Button
               className="cursor-pointer"
               type="submit"
-              disabled={!name.trim()}
+              disabled={!nameEn.trim() && !nameFr.trim() && !nameAr.trim()}
             >
               {category ? "Save Changes" : "Add Category"}
             </Button>

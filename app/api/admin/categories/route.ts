@@ -35,6 +35,19 @@ export async function GET(request: NextRequest) {
       orderBy: {
         order: "asc",
       },
+      select: {
+        id: true,
+        restaurantId: true,
+        nameEn: true,
+        nameFr: true,
+        nameAr: true,
+        icon: true,
+        visible: true,
+        order: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     return createSuccessResponse(categories, 200, addCorsHeaders());
@@ -49,34 +62,35 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = categoryCreateSchema.parse(body);
 
-    // Check for duplicate
-    const exists = await prisma.category.findUnique({
+    const { restaurantId, nameEn, nameFr, nameAr } = validatedData;
+
+    // 🔒 Check duplicates per language
+    const duplicate = await prisma.category.findFirst({
       where: {
-        restaurantId_name: {
-          restaurantId: validatedData.restaurantId,
-          name: validatedData.name,
-        },
+        restaurantId,
+        OR: [
+          nameEn ? { nameEn } : undefined,
+          nameFr ? { nameFr } : undefined,
+          nameAr ? { nameAr } : undefined,
+        ].filter(Boolean) as any,
       },
     });
 
-    if (exists) {
+    if (duplicate) {
       return Response.json(
         {
           success: false,
           error: {
-            message: "Category already exists",
+            message: "Category name already exists for this restaurant",
             code: "DUPLICATE_CATEGORY",
           },
         },
-        {
-          status: 409,
-          headers: addCorsHeaders(),
-        }
+        { status: 409, headers: addCorsHeaders() }
       );
     }
 
     const maxOrder = await prisma.category.findFirst({
-      where: { restaurantId: validatedData.restaurantId },
+      where: { restaurantId },
       orderBy: { order: "desc" },
       select: { order: true },
     });

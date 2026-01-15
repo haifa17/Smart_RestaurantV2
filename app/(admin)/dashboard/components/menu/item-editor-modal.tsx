@@ -42,26 +42,51 @@ export function ItemEditorModal({
   onUploadImage,
   restaurantId,
 }: ItemEditorModalProps) {
-  const [name, setname] = useState("");
-  const [description, setDescription] = useState("");
+  const [nameEn, setNameEn] = useState("");
+  const [nameFr, setNameFr] = useState("");
+  const [nameAr, setNameAr] = useState("");
+
+  const [descriptionEn, setDescriptionEn] = useState("");
+  const [descriptionFr, setDescriptionFr] = useState("");
+  const [descriptionAr, setDescriptionAr] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
   const [isUploading, setIsUploading] = useState(false);
-
+  const [isChefRecommendation, setIsChefRecommendation] = useState(false);
+  const [isPopular, setIsPopular] = useState(false);
+  const [isSpicy, setIsSpicy] = useState(false);
+  const [isVegetarian, setIsVegetarian] = useState(false);
   useEffect(() => {
     if (item) {
-      setname(item.name || "");
-      setDescription(item.description || "");
+      setNameEn(item.nameEn || "");
+      setNameFr(item.nameFr || "");
+      setNameAr(item.nameAr || "");
+
+      setDescriptionEn(item.descriptionEn || "");
+      setDescriptionFr(item.descriptionFr || "");
+      setDescriptionAr(item.descriptionAr || "");
       setPrice(item.price.toString());
       setImage(item.image || null);
       setSelectedCategoryId(item.categoryId);
+      setIsChefRecommendation(item.isChefRecommendation ?? false);
+      setIsPopular(item.isPopular ?? false);
+      setIsSpicy(item.isSpicy ?? false);
+      setIsVegetarian(item.isVegetarian ?? false);
     } else {
-      setname("");
-      setDescription("");
+      setNameEn("");
+      setNameFr("");
+      setNameAr("");
+      setDescriptionEn("");
+      setDescriptionFr("");
+      setDescriptionAr("");
       setPrice("");
       setImage(null);
       setSelectedCategoryId(categoryId);
+      setIsChefRecommendation(false);
+      setIsPopular(false);
+      setIsSpicy(false);
+      setIsVegetarian(false);
     }
   }, [item, categoryId, open]);
 
@@ -82,17 +107,38 @@ export function ItemEditorModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && price && selectedCategoryId && restaurantId) {
-      onSave({
-        categoryId: selectedCategoryId,
-        name: name.trim(),
-        description: description.trim() || undefined,
-        price: Number.parseFloat(price),
-        image,
-        available: true,
-        restaurantId,
-      });
+
+    if (
+      !price ||
+      !selectedCategoryId ||
+      !restaurantId ||
+      (!nameEn.trim() && !nameFr.trim() && !nameAr.trim())
+    ) {
+      return;
     }
+
+    onSave({
+      restaurantId,
+      categoryId: selectedCategoryId,
+
+      nameEn: nameEn.trim() || undefined,
+      nameFr: nameFr.trim() || undefined,
+      nameAr: nameAr.trim() || undefined,
+
+      descriptionEn: descriptionEn.trim() || undefined,
+      descriptionFr: descriptionFr.trim() || undefined,
+      descriptionAr: descriptionAr.trim() || undefined,
+
+      price: Number(price),
+      image,
+
+      available: true,
+      isActive: true,
+      isChefRecommendation,
+      isPopular,
+      isSpicy,
+      isVegetarian,
+    });
   };
 
   return (
@@ -157,10 +203,13 @@ export function ItemEditorModal({
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate text-foreground">
-                        {name || "Item name"}
+                        {nameEn || nameFr || nameAr || "Item name"}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {description || "Description"}
+                        {descriptionEn ||
+                          descriptionAr ||
+                          descriptionFr ||
+                          "Description"}
                       </p>
                       <p className="text-sm font-medium text-foreground mt-0.5">
                         {price ? Number.parseFloat(price).toFixed(2) : "0.00"}{" "}
@@ -185,7 +234,10 @@ export function ItemEditorModal({
                 <SelectContent>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
-                      {cat.name || cat.name || "Unnamed Category"}
+                      {cat.nameEn ||
+                        cat.nameFr ||
+                        cat.nameAr ||
+                        "Unnamed Category"}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -196,11 +248,20 @@ export function ItemEditorModal({
             <div className="space-y-2">
               <label htmlFor="name">Item Name</label>
               <Input
-                id="name"
-                placeholder="e.g., Pizza Margherita"
-                value={name}
-                onChange={(e) => setname(e.target.value)}
-                className="capitalize"
+                placeholder="Name (English)"
+                value={nameEn}
+                onChange={(e) => setNameEn(e.target.value)}
+              />
+              <Input
+                placeholder="Nom (Français)"
+                value={nameFr}
+                onChange={(e) => setNameFr(e.target.value)}
+              />
+              <Input
+                placeholder="الاسم (العربية)"
+                dir="rtl"
+                value={nameAr}
+                onChange={(e) => setNameAr(e.target.value)}
               />
             </div>
 
@@ -211,11 +272,20 @@ export function ItemEditorModal({
                 <span className="text-muted-foreground">(optional)</span>
               </label>
               <Textarea
-                id="description"
-                placeholder="A brief description of the item..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={2}
+                placeholder="Description (English)"
+                value={descriptionEn}
+                onChange={(e) => setDescriptionEn(e.target.value)}
+              />
+              <Textarea
+                placeholder="Description (Français)"
+                value={descriptionFr}
+                onChange={(e) => setDescriptionFr(e.target.value)}
+              />
+              <Textarea
+                placeholder="الوصف (العربية)"
+                dir="rtl"
+                value={descriptionAr}
+                onChange={(e) => setDescriptionAr(e.target.value)}
               />
             </div>
 
@@ -234,6 +304,46 @@ export function ItemEditorModal({
                 />
               </div>
             </div>
+            <div className="space-y-2">
+              <label>Attributes</label>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isChefRecommendation}
+                    onChange={(e) => setIsChefRecommendation(e.target.checked)}
+                  />
+                  Chef Recommendation
+                </label>
+
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isPopular}
+                    onChange={(e) => setIsPopular(e.target.checked)}
+                  />
+                  Popular
+                </label>
+
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isSpicy}
+                    onChange={(e) => setIsSpicy(e.target.checked)}
+                  />
+                  Spicy 🌶️
+                </label>
+
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isVegetarian}
+                    onChange={(e) => setIsVegetarian(e.target.checked)}
+                  />
+                  Vegetarian 🥬
+                </label>
+              </div>
+            </div>
           </div>
 
           <DialogFooter>
@@ -243,10 +353,10 @@ export function ItemEditorModal({
             <Button
               type="submit"
               disabled={
-                !name.trim() ||
+                isUploading ||
                 !price ||
                 !selectedCategoryId ||
-                isUploading
+                (!nameEn.trim() && !nameFr.trim() && !nameAr.trim())
               }
             >
               {item ? "Save Changes" : "Add Item"}

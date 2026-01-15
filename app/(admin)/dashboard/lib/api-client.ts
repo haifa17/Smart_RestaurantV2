@@ -87,7 +87,9 @@ export class AdminApiClient {
 
   createCategory(data: {
     restaurantId: string;
-    name: string;
+    nameEn?: string;
+    nameFr?: string;
+    nameAr?: string;
     visible?: boolean;
     order?: number;
   }) {

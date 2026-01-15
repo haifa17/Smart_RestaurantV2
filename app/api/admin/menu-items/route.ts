@@ -44,7 +44,11 @@ export async function POST(request: NextRequest) {
     const validatedData = menuItemCreateSchema.parse(body)
 
     const menuItem = await prisma.menuItem.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        available: validatedData.available ?? true,
+        isActive: validatedData.isActive ?? true,
+      },
     })
 
     return createSuccessResponse(menuItem, 201, addCorsHeaders())
