@@ -30,7 +30,7 @@ export function TabNav({ activeTab, setActiveTab }: TabNavProps) {
                   "flex items-center cursor-pointer gap-2 px-4 py-3 text-sm lg:text-base font-medium transition-colors border-b-2 -mb-px",
                   isActive
                     ? "font-bold "
-                    : "border-transparent text-white/70 hover:border-border",
+                    : "border-transparent hover:border-border",
                 )}
               >
                 <Icon className="h-4 w-4" />

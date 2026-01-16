@@ -128,7 +128,7 @@ export function MenuManagement({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Menu</h2>
-          <p className="text-sm text-white/80 mt-1">
+          <p className="text-sm  mt-1">
             Manage categories and items
           </p>
         </div>
@@ -143,10 +143,10 @@ export function MenuManagement({
 
       {sorted.length === 0 ? (
         <Card className="p-12 bg-transparent border-none text-center">
-          <h3 className="font-medium text-white mb-1 capitalize">
+          <h3 className="font-medium  mb-1 capitalize">
             No categories yet
           </h3>
-          <p className="text-sm text-white/80 mb-4">
+          <p className="text-sm  mb-4">
             Create your first category
           </p>
           <Button

@@ -22,7 +22,7 @@ export function MenuItemCard({
   const description =
     item.descriptionEn || item.descriptionFr || item.descriptionAr;
   return (
-    <div className="flex items-center gap-4 p-3 text-white rounded-lg border transition-colors">
+    <div className="flex items-center gap-4 p-3  rounded-lg border transition-colors">
       {item.image ? (
         <img src={item.image} className="w-14 h-14 rounded-md object-cover" />
       ) : (
@@ -34,7 +34,7 @@ export function MenuItemCard({
           {item.nameEn || item.nameFr || item.nameAr || "Unnamed"}
         </h4>
         {description && (
-          <p className="text-sm text-white/80 truncate">{description}</p>
+          <p className="text-sm  truncate">{description}</p>
         )}
         <p className="text-sm font-medium mt-0.5">
           {Number(item.price).toFixed(2)} TND

@@ -8,7 +8,7 @@ interface EmptyStateProps {
 
 export function EmptyState({ onAddCard }: EmptyStateProps) {
   return (
-    <Card className="p-12 bg-transparent text-white border-none text-center">
+    <Card className="p-12  text-center">
       <div className="mx-auto w-12 h-12 rounded-full border flex items-center justify-center mb-4">
         <BookOpen className="h-6 w-6 t" />
       </div>

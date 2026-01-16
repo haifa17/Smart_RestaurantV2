@@ -12,9 +12,7 @@ export default function AdminLayout({
 }) {
   return (
     <ClerkProvider>
-      <TooltipProvider>
-        <div className="bg-[#1A1A1A] text-white min-h-screen">{children}</div>
-      </TooltipProvider>
+      <TooltipProvider>{children}</TooltipProvider>
     </ClerkProvider>
   );
 }

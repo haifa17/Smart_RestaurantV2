@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Header from "./Header";
+import Header from "../../../../components/Header";
 import DashContent from "./DashContent";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export default function DashboardClient() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="max-w-5xl  mx-auto p-4 flex flex-col gap-10">
+      <div className=" flex flex-col gap-5">
         <Header />
         <DashContent />
       </div>

@@ -21,7 +21,7 @@ export function HeroImageSection({
   onRemove,
 }: HeroImageSectionProps) {
   return (
-    <div className="flex flex-col text-white gap-2 lg:gap-4">
+    <div className="flex flex-col  gap-2 lg:gap-4">
       <label>Hero Background</label>
 
       {isUploading ? (

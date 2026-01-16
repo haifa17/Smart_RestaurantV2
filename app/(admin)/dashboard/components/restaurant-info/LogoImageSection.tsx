@@ -20,7 +20,7 @@ export function LogoImageSection({
   onRemove,
 }: LogoImageSectionProps) {
   return (
-    <div className="flex flex-col gap-2 lg:gap-4 text-white">
+    <div className="flex flex-col gap-2 lg:gap-4 ">
       <label>Restaurant Logo</label>
 
       {isUploading ? (

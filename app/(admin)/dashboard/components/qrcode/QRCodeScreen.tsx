@@ -36,9 +36,9 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
     <div className=" space-y-6">
       {/* Header */}
       <header className=" space-y-2">
-        <h2 className="text-2xl font-bold text-white ">{MESSAGES.TITLE}</h2>
-        <p className="text-sm text-white/80">{MESSAGES.SUBTITLE}</p>
-        <p className="text-xs text-white/80 ">
+        <h2 className="text-2xl font-bold ">{MESSAGES.TITLE}</h2>
+        <p className="text-sm ">{MESSAGES.SUBTITLE}</p>
+        <p className="text-xs  ">
           Restaurant: <span className="font-semibold">{restaurant.name}</span>
         </p>
       </header>

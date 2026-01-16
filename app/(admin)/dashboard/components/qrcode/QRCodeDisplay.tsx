@@ -17,7 +17,7 @@ export function QRCodeDisplay({
   hasError,
 }: QRCodeDisplayProps) {
   return (
-    <Card className="p-8 bg-[#292727] border-none">
+    <Card className="p-8 ">
       <div className="flex flex-col items-center">
         {/* QR Code Display */}
         <div
@@ -46,7 +46,7 @@ export function QRCodeDisplay({
           )}
         </div>
 
-        <p className="text-sm text-white/80 text-center mb-6">
+        <p className="text-sm  text-center mb-6">
           {MESSAGES.DESCRIPTION}
         </p>
 

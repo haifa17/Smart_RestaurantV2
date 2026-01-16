@@ -21,7 +21,7 @@ export function StoryCardItem({
   onToggleVisibility,
 }: StoryCardItemProps) {
   return (
-    <Card className="overflow-hidden bg-[#292727] border-none shadow-md text-white">
+    <Card className="overflow-hidden  shadow-md ">
       <div className="relative aspect-video">
         {card.image ? (
           <div className=" p-4 ">

@@ -124,7 +124,7 @@ export function RestaurantInfo({
     <div className="w-full mx-auto space-y-6">
       <RestaurantHeader />
 
-      <Card className="p-6 space-y-6 bg-transparent border-none">
+      <Card className="p-6 space-y-6 ">
         <LogoImageSection
           logoImage={logoImage}
           isUploading={isUploadingLogo}
