@@ -17,11 +17,11 @@ const SidebarItems = () => {
         <button
           key={item.key}
           onClick={() => setActiveTab(item.key)}
-          className={`w-full flex gap-2 items-center text-left px-4 py-2 rounded-lg transition
+          className={`w-full flex gap-2 cursor-pointer items-center text-left px-4 py-2 rounded-lg transition
             ${
               activeTab === item.key
-                ? "bg-orange-700 text-white"
-                : "hover:bg-gray-100"
+                ? "bg-transaprent border-2 border-blue-500 text-white"
+                : "hover:text-blue-500"
             }`}
         >
           {item.icon}

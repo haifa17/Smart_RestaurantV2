@@ -133,7 +133,7 @@ export function MenuManagement({
           </p>
         </div>
         <Button
-          className="cursor-pointer bg-orange-700/90 text-white hover:bg-orange-700 flex items-center"
+          className="cursor-pointer bg-linear-to-r from-blue-500 to-blue-700  flex items-center"
           onClick={() => setIsCreatingCategory(true)}
         >
           <Plus size={15} />

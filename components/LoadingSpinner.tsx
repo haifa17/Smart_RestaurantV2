@@ -1,10 +1,20 @@
+"use client";
+
+import { pulseVariants } from "@/lib/variants";
+import { motion } from "framer-motion";
+
 export function LoadingSpinner() {
   return (
-    <div className="flex items-center justify-center py-12">
-      <div className="text-center">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent mb-4" />
-        <p className="text-sm text-muted-foreground">Loading...</p>
+    <motion.div
+      variants={pulseVariants}
+      initial="initial"
+      animate="animate"
+      className="relative "
+    >
+      <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-700 rounded-full blur-2xl opacity-30" />
+      <div className="relative flex justify-center items-center ">
+        <img src="/logo.svg" className="w-[80%]" />
       </div>
-    </div>
-  )
+    </motion.div>
+  );
 }
