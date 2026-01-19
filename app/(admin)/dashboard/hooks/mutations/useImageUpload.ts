@@ -9,7 +9,7 @@ export function useImageUpload() {
       folder,
     }: {
       file: File;
-      folder: "logos" | "heroes" | "menu-items" | "story-cards";
+      folder: "logos" | "heroes" | "menu-items";
     }) => apiClient.uploadImage(file, folder),
     onError: (error: Error) => {
       toast.error(`Failed to upload image: ${error.message}`);

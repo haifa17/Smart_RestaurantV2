@@ -1,15 +1,14 @@
 
-import { UtensilsCrossed, QrCode, Store, BookOpen } from "lucide-react"
+import { UtensilsCrossed, QrCode, Store } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface TabNavProps {
-  activeTab: "menu" | "qr" | "info" | "story"
-  setActiveTab: (tab: "menu" | "qr" | "info" | "story") => void
+  activeTab: "menu" | "qr" | "info" 
+  setActiveTab: (tab: "menu" | "qr" | "info" ) => void
 }
 
 const tabs = [
   { id: "menu" as const, label: "Menu", icon: UtensilsCrossed },
-  { id: "story" as const, label: "Story Cards", icon: BookOpen },
   { id: "qr" as const, label: "QR Code", icon: QrCode },
   { id: "info" as const, label: "Restaurant Info", icon: Store },
 ]

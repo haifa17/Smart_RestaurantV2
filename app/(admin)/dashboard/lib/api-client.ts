@@ -1,7 +1,6 @@
 import { Category } from "@/lib/models/category";
 import { MenuItem } from "@/lib/models/menuItem";
 import { Restaurant } from "@/lib/models/restaurant";
-import { StoryCard } from "@/lib/models/story";
 import { ApiResponse } from "@/lib/types";
 
 /* ============================================================================
@@ -145,33 +144,12 @@ export class AdminApiClient {
   }
 
   /* ============================================================================
-   * STORY CARDS
-   * ========================================================================== */
-
-  getStoryCards(restaurantId: string) {
-    const params = new URLSearchParams({ restaurantId });
-    return this.get<StoryCard[]>(`/story-cards?${params}`);
-  }
-
-  createStoryCard(data: Omit<StoryCard, "id">) {
-    return this.post<StoryCard>("/story-cards", data);
-  }
-
-  updateStoryCard(id: string, data: Partial<StoryCard>) {
-    return this.patch<StoryCard>(`/story-cards/${id}`, data);
-  }
-
-  deleteStoryCard(id: string) {
-    return this.delete<{ message: string }>(`/story-cards/${id}`);
-  }
-
-  /* ============================================================================
    * IMAGE UPLOAD (multipart)
    * ========================================================================== */
 
   async uploadImage(
     file: File,
-    folder: "logos" | "heroes" | "menu-items" | "story-cards"
+    folder: "logos" | "heroes" | "menu-items" 
   ) {
     const formData = new FormData();
     formData.append("file", file);

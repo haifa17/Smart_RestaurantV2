@@ -1,5 +1,5 @@
 import React from "react";
-import { Book, QrCode, Settings, UtensilsCrossed } from "lucide-react";
+import { QrCode, Settings, UtensilsCrossed } from "lucide-react";
 import { Tab, useTab } from "./contexts/TabContext";
 
 const SidebarItems = () => {
@@ -8,7 +8,6 @@ const SidebarItems = () => {
   const items: { key: Tab; label: string; icon: React.ReactNode }[] = [
     { key: "menu", label: "Menu", icon: <UtensilsCrossed size={18} /> },
     { key: "qr", label: "QR Code", icon: <QrCode size={18} /> },
-    { key: "story", label: "Story", icon: <Book size={18} /> },
     { key: "info", label: "Restaurant Info", icon: <Settings size={18} /> },
   ];
 

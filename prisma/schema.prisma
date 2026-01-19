@@ -46,7 +46,6 @@ model Restaurant {
 
   categories Category[]
   menuItems  MenuItem[]
-  storyCards StoryCard[]
 
   @@index([slug])
   @@index([isActive])
@@ -139,30 +138,4 @@ model MenuItem {
   @@index([restaurantId, categoryId, available, isActive])
   @@index([categoryId])
   @@map("menu_items")
-}
-
-model StoryCard {
-  id           String @id @default(cuid())
-  restaurantId String
-
-  title    String
-  subtitle String
-
-  image String?
-
-  visible Boolean @default(true)
-  order   Int     @default(0)
-
-  isActive  Boolean   @default(true)
-  deletedAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-
-  @@unique([restaurantId, title])
-  @@index([restaurantId, visible, isActive])
-  @@index([restaurantId, order])
-  @@map("story_cards")
 }
