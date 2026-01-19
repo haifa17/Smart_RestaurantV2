@@ -1,3 +1,4 @@
+
 export const pulseVariants = {
   initial: { scale: 1 },
   animate: {

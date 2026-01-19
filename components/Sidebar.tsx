@@ -28,7 +28,7 @@ export const Sidebar = () => {
             <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-700 rounded-full blur-2xl opacity-30" />
             <div className="relative flex justify-center items-center ">
               <img
-                src={restaurant?.logo || "/H2A.png"}
+                src={restaurant?.logo || "/logo.svg"}
                 alt="Restaurant logo"
                 className="w-28 h-28 rounded-full border "
               />
