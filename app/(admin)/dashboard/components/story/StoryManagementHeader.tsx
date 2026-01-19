@@ -9,7 +9,7 @@ export function StoryManagementHeader({ onAddCard }: StoryManagementHeaderProps)
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h2 className="text-xl font-semibold ">Story Cards</h2>
+        <h2 className="text-xl font-bold ">Story Cards</h2>
         <p className="text-sm text-white/80 mt-1">
           Manage your restaurant's story cards
         </p>

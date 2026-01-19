@@ -10,7 +10,7 @@ interface SaveButtonProps {
 
 export function SaveButton({ onClick, disabled, isLoading, saved }: SaveButtonProps) {
   return (
-    <Button onClick={onClick} className="w-full cursor-pointer gap-2 bg-[#D9D9D9] text-black  hover:bg-[#D9D9D9]/80 " disabled={disabled}>
+    <Button onClick={onClick} className="w-full cursor-pointer gap-2 bg-orange-700 text-white  hover:bg-orange-800 " disabled={disabled}>
       {saved ? (
         <>
           <Check className="h-4 w-4" />
