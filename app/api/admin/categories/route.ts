@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma-simple";
+import { prisma } from '@/lib/prsima-simple'
 import { handleApiError, createSuccessResponse } from "@/lib/api-error";
 import { categoryCreateSchema } from "@/lib/dtos/category";
 import { addCorsHeaders, handleOptions } from "@/lib/cors";

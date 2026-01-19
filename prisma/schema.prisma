@@ -95,7 +95,7 @@ model Category {
 
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   menuItems  MenuItem[]
-  
+
   @@unique([restaurantId, nameEn])
   @@unique([restaurantId, nameFr])
   @@unique([restaurantId, nameAr])
@@ -121,13 +121,13 @@ model MenuItem {
   image     String?
   available Boolean @default(true)
 
-  isActive             Boolean   @default(true)
-  isChefRecommendation Boolean   @default(false)
-  isPopular            Boolean   @default(false)
-  isSpicy              Boolean   @default(false)
-  isVegetarian         Boolean   @default(false)
+  isActive             Boolean @default(true)
+  isChefRecommendation Boolean @default(false)
+  isPopular            Boolean @default(false)
+  isSpicy              Boolean @default(false)
+  isVegetarian         Boolean @default(false)
 
-  deletedAt            DateTime?
+  deletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -138,4 +138,15 @@ model MenuItem {
   @@index([restaurantId, categoryId, available, isActive])
   @@index([categoryId])
   @@map("menu_items")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

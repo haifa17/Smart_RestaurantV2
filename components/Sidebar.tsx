@@ -10,6 +10,7 @@ import { useClerk } from "@clerk/nextjs";
 export const Sidebar = () => {
   const { data: restaurant } = useRestaurant(RESTAURANT_ID!);
   const { signOut } = useClerk();
+  const currentYear = new Date().getFullYear();
 
   return (
     <aside className="w-64 border-r h-screen sticky top-0 px-4 flex flex-col">
@@ -36,16 +37,33 @@ export const Sidebar = () => {
         <SidebarItems />
       </div>
 
-      {/* Bottom Section - Logout */}
-      <div className="pb-6 pt-4 border-t">
+      {/* Bottom Section - Logout + Footer */}
+      <div className="pb-6 pt-4 border-t flex flex-col items-center gap-2">
+        {/* Logout Button */}
         <Button
-          onClick={() => signOut()}
+          onClick={() => signOut({ redirectUrl: "/sign-in" })}
           variant="outline"
           className="w-full flex items-center gap-2 text-orange-700 hover:text-red-700 hover:bg-red-50"
         >
           <LogOut className="h-4 w-4" />
           Logout
         </Button>
+
+        {/* Footer */}
+        <div className="mt-4 text-center text-xs text-gray-400">
+          <div>
+            Powered by{" "}
+            <Link
+              href="https://www.h2a-group.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-600"
+            >
+              H2A
+            </Link>
+          </div>
+          <div>© {currentYear} H2A. All rights reserved.</div>
+        </div>
       </div>
     </aside>
   );

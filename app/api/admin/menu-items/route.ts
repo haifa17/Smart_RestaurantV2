@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma-simple'
 import { createSuccessResponse, handleApiError } from '@/lib/api-error'
 import { menuItemCreateSchema } from '@/lib/dtos/menuItem'
 import { addCorsHeaders, handleOptions } from '@/lib/cors'
+import { prisma } from '@/lib/prsima-simple'
 
 export async function OPTIONS() {
   return handleOptions()

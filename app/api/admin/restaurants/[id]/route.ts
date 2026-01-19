@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma-simple'
+import { prisma } from '@/lib/prsima-simple'
 import { revalidateTag } from 'next/cache'
 import { ApiError, createSuccessResponse, handleApiError } from '@/lib/api-error'
 import { restaurantUpdateSchema } from '@/lib/dtos/restaurant'
