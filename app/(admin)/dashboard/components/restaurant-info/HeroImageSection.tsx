@@ -1,12 +1,12 @@
 import type React from "react";
 import { ImagePlus, X } from "lucide-react";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LoadingSpinner } from "@/components/Loading";
 interface HeroImageSectionProps {
   heroImage: string | null | undefined;
   isUploading: boolean;
@@ -21,8 +21,8 @@ export function HeroImageSection({
   onRemove,
 }: HeroImageSectionProps) {
   return (
-    <div className="flex flex-col text-white gap-2 lg:gap-4">
-      <label>Hero Background</label>
+    <div className="flex flex-col  gap-2 lg:gap-4">
+      <label>Arrière-plan de votre site</label>
 
       {isUploading ? (
         <LoadingSpinner />
@@ -45,7 +45,7 @@ export function HeroImageSection({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p className="capitalize">Remove hero image</p>
+                <p className="capitalize">Supprimer l'image d'arrière-plan</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -54,7 +54,7 @@ export function HeroImageSection({
         <label className="w-full h-52 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
           <ImagePlus className="h-8 w-8 text-muted-foreground mb-2" />
           <span className="text-sm text-muted-foreground">
-            Upload hero image
+            Télécharger image d'arrière-plan
           </span>
           <input
             type="file"

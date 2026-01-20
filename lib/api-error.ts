@@ -13,7 +13,10 @@ export class ApiError extends Error {
   }
 }
 
-export function handleApiError(error: unknown): Response {
+export function handleApiError(
+  error: unknown,
+  headers?: HeadersInit
+): Response {
   console.error("API Error:", error);
 
   // Handle ApiError instances
@@ -27,7 +30,7 @@ export function handleApiError(error: unknown): Response {
           details: error.details,
         },
       },
-      { status: error.statusCode }
+      { status: error.statusCode, headers }
     );
   }
 
@@ -42,7 +45,7 @@ export function handleApiError(error: unknown): Response {
           details: error.issues,
         },
       },
-      { status: 400 }
+      { status: 400, headers }
     );
   }
 
@@ -59,7 +62,7 @@ export function handleApiError(error: unknown): Response {
               details: error.meta,
             },
           },
-          { status: 409 }
+          { status: 409, headers }
         );
 
       case "P2025": // Record not found
@@ -71,7 +74,7 @@ export function handleApiError(error: unknown): Response {
               code: "NOT_FOUND",
             },
           },
-          { status: 404 }
+          { status: 404, headers }
         );
 
       case "P2003": // Foreign key constraint violation
@@ -84,7 +87,7 @@ export function handleApiError(error: unknown): Response {
               details: error.meta,
             },
           },
-          { status: 400 }
+          { status: 400, headers }
         );
 
       default:
@@ -98,7 +101,7 @@ export function handleApiError(error: unknown): Response {
                 process.env.NODE_ENV === "development" ? error.meta : undefined,
             },
           },
-          { status: 500 }
+          { status: 500, headers }
         );
     }
   }
@@ -116,7 +119,7 @@ export function handleApiError(error: unknown): Response {
           code: "INTERNAL_ERROR",
         },
       },
-      { status: 500 }
+      { status: 500, headers }
     );
   }
 
@@ -129,20 +132,21 @@ export function handleApiError(error: unknown): Response {
         code: "UNKNOWN_ERROR",
       },
     },
-    { status: 500 }
+    { status: 500, headers }
   );
 }
 
 // Helper function to create success responses
 export function createSuccessResponse<T>(
   data: T,
-  status: number = 200
+  status: number = 200,
+  headers?: HeadersInit
 ): Response {
   return Response.json(
     {
       success: true,
       data,
     },
-    { status }
+    { status, headers }
   );
 }

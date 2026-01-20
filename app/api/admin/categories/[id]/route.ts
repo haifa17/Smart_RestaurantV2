@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma-simple";
+import { prisma } from '@/lib/prsima-simple'
 import {
   handleApiError,
   createSuccessResponse,
@@ -7,6 +7,11 @@ import {
 } from "@/lib/api-error";
 import { revalidateTag } from "next/cache";
 import { categoryUpdateSchema } from "@/lib/dtos/category";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleOptions();
+}
 
 // GET /api/admin/categories/[id]
 export async function GET(
@@ -23,9 +28,9 @@ export async function GET(
       throw new ApiError(404, "NOT_FOUND", "Category not found");
     }
 
-    return createSuccessResponse(category);
+    return createSuccessResponse(category, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -58,9 +63,9 @@ export async function PATCH(
     //@ts-ignore
     revalidateTag(`menu-${existingCategory.restaurantId}`);
 
-    return createSuccessResponse(category);
+    return createSuccessResponse(category, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -105,8 +110,12 @@ export async function DELETE(
     //@ts-ignore
     revalidateTag(`menu-${existingCategory.restaurantId}`);
 
-    return createSuccessResponse({ message: "Category deleted successfully" });
+    return createSuccessResponse(
+      { message: "Category deleted successfully" },
+      200,
+      addCorsHeaders()
+    );
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }

@@ -1,31 +1,38 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Header from "./Header";
-import DashContent from "./DashContent";
-import { useState } from "react";
+import { useTab } from "@/components/contexts/TabContext";
+import { TabsMangement } from "./TabsMangement";
+import { LoadingSpinner } from "@/components/Loading";
+import { useMyRestaurant } from "../hooks/mutations/useMyRestaurantMutation";
 
 export default function DashboardClient() {
+  const { activeTab } = useTab();
+  const { data: restaurant, isLoading, error } = useMyRestaurant();
 
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            refetchOnWindowFocus: false,
-            retry: 1,
-            staleTime: 30000,
-          },
-        },
-      })
-  );
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <LoadingSpinner />
+          <p className="mt-4 text-gray-500">Loading your restaurant...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !restaurant?.restaurantId) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center text-gray-500">
+          <p>Unable to load restaurant. Please refresh the page.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="max-w-5xl  mx-auto p-4 flex flex-col gap-10">
-        <Header />
-        <DashContent />
-      </div>
-    </QueryClientProvider>
+    <div className="p-8">
+      <TabsMangement activeTab={activeTab} restaurantId={restaurant.restaurantId} />
+    </div>
   );
 }

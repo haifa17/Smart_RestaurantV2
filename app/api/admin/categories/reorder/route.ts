@@ -1,8 +1,13 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma-simple";
+import { prisma } from '@/lib/prsima-simple'
 import { handleApiError, createSuccessResponse } from "@/lib/api-error";
 import { revalidateTag } from "next/cache";
 import { categoryReorderSchema } from "@/lib/dtos/category";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleOptions();
+}
 
 // PATCH /api/admin/categories/reorder
 export async function PATCH(request: NextRequest) {
@@ -40,8 +45,8 @@ export async function PATCH(request: NextRequest) {
       revalidateTag(`menu-${firstCategory.restaurantId}`);
     }
 
-    return createSuccessResponse(updatedCategories);
+    return createSuccessResponse(updatedCategories, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }

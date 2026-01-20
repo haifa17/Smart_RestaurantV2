@@ -2,17 +2,32 @@ import { Restaurant } from "@/lib/models/restaurant";
 import { DOWNLOAD_FORMATS } from "./constants";
 
 export interface CategoryFormData {
-  name: string;
+  nameEn?: string;
+  nameFr?: string;
+  nameAr?: string;
 }
 
 export interface MenuItemFormData {
+  restaurantId: string;
   categoryId: string;
-  name: string;
-  description?: string;
+
+  nameEn?: string;
+  nameFr?: string;
+  nameAr?: string;
+
+  descriptionEn?: string;
+  descriptionFr?: string;
+  descriptionAr?: string;
+
   price: number;
   image?: string | null;
   available?: boolean;
-  restaurantId: string;
+
+  isActive?: boolean;
+  isChefRecommendation?: boolean;
+  isPopular?: boolean;
+  isSpicy?: boolean;
+  isVegetarian?: boolean;
 }
 
 export type DeleteConfirmState = {

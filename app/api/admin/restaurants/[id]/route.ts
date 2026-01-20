@@ -1,8 +1,13 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma-simple'
+import { prisma } from '@/lib/prsima-simple'
 import { revalidateTag } from 'next/cache'
 import { ApiError, createSuccessResponse, handleApiError } from '@/lib/api-error'
 import { restaurantUpdateSchema } from '@/lib/dtos/restaurant'
+import { addCorsHeaders, handleOptions } from '@/lib/cors'
+
+export async function OPTIONS() {
+  return handleOptions()
+}
 
 // GET /api/admin/restaurants/[id]
 export async function GET(
@@ -19,9 +24,9 @@ export async function GET(
       throw new ApiError(404, 'NOT_FOUND', 'Restaurant not found')
     }
 
-    return createSuccessResponse(restaurant)
+    return createSuccessResponse(restaurant, 200, addCorsHeaders())
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, addCorsHeaders())
   }
 }
 
@@ -44,8 +49,8 @@ export async function PATCH(
     //@ts-ignore
     revalidateTag(`menu-${id}`)
 
-    return createSuccessResponse(restaurant)
+    return createSuccessResponse(restaurant, 200, addCorsHeaders())
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, addCorsHeaders())
   }
 }

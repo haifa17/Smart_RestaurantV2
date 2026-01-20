@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma-simple";
+import { prisma } from '@/lib/prsima-simple'
 import {
   handleApiError,
   createSuccessResponse,
@@ -7,6 +7,11 @@ import {
 } from "@/lib/api-error";
 import { revalidateTag } from "next/cache";
 import { menuItemUpdateSchema } from "@/lib/dtos/menuItem";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleOptions();
+}
 
 // GET /api/admin/menu-items/[id]
 export async function GET(
@@ -23,9 +28,9 @@ export async function GET(
       throw new ApiError(404, "NOT_FOUND", "Menu item not found");
     }
 
-    return createSuccessResponse(menuItem);
+    return createSuccessResponse(menuItem, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -58,9 +63,9 @@ export async function PATCH(
     //@ts-ignore
     revalidateTag(`menu-${existingItem.restaurantId}`);
 
-    return createSuccessResponse(menuItem);
+    return createSuccessResponse(menuItem, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
@@ -94,8 +99,12 @@ export async function DELETE(
     //@ts-ignore
     revalidateTag(`menu-${existingItem.restaurantId}`);
 
-    return createSuccessResponse({ message: "Menu item deleted successfully" });
+    return createSuccessResponse(
+      { message: "Menu item deleted successfully" },
+      200,
+      addCorsHeaders()
+    );
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error, addCorsHeaders());
   }
 }

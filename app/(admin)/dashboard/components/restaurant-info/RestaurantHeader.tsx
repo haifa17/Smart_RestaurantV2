@@ -1,9 +1,9 @@
 export function RestaurantHeader() {
   return (
     <div>
-      <h2 className="text-xl font-semibold ">Restaurant Info</h2>
-      <p className="text-sm mt-1 text-white/80">
-        This information appears on your customer menu
+      <h2 className="text-xl font-bold ">Informations sur le restaurant</h2>
+      <p className="text-sm text-muted-foreground mt-1">
+        Ces informations figurent sur le menu client.
       </p>
     </div>
   )

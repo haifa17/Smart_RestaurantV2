@@ -13,10 +13,10 @@ export function useCategoryMutations(restaurantId: string) {
   };
 
   const createCategory = useMutation({
-    mutationFn: (data: { name: string }) =>
+    mutationFn: (data: { nameEn?: string; nameFr?: string; nameAr?: string }) =>
       apiClient.createCategory({
         restaurantId,
-        name: data.name,
+        ...data,
         visible: true,
       }),
     onSuccess: () => {
@@ -35,7 +35,9 @@ export function useCategoryMutations(restaurantId: string) {
     }: {
       id: string;
       data: {
-        name?: string;
+        nameEn?: string;
+        nameFr?: string;
+        nameAr?: string;
         visible?: boolean;
         order?: number;
       };

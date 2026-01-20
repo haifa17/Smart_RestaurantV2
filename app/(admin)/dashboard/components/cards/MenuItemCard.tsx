@@ -19,8 +19,10 @@ export function MenuItemCard({
   onEdit,
   onDelete,
 }: MenuItemCardProps) {
+  const description =
+    item.descriptionEn || item.descriptionFr || item.descriptionAr;
   return (
-    <div className="flex items-center gap-4 p-3 text-white rounded-lg border transition-colors">
+    <div className="flex items-center gap-4 p-3  rounded-lg border transition-colors">
       {item.image ? (
         <img src={item.image} className="w-14 h-14 rounded-md object-cover" />
       ) : (
@@ -28,9 +30,11 @@ export function MenuItemCard({
       )}
 
       <div className="flex-1 min-w-0">
-        <h4 className="font-medium truncate">{item.name || "Unnamed"}</h4>
-        {item.description && (
-          <p className="text-sm text-white/80 truncate">{item.description}</p>
+        <h4 className="font-medium truncate">
+          {item.nameEn || item.nameFr || item.nameAr || "Unnamed"}
+        </h4>
+        {description && (
+          <p className="text-sm  truncate">{description}</p>
         )}
         <p className="text-sm font-medium mt-0.5">
           {Number(item.price).toFixed(2)} TND
