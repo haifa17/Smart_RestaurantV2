@@ -7,6 +7,7 @@ import { CategoryEditor } from "@/app/(admin)/dashboard/components/menu/category
 import { CategoryCard } from "../cards/CategoryCard";
 import { useCategories } from "../../hooks/queries/useCategories";
 import { useCategoryMutations } from "../../hooks/mutations/useCategoryMutations";
+import { Plus } from "lucide-react";
 
 export function CategoriesPage({ restaurantId }: { restaurantId: string }) {
     const { data: categories = [], isLoading } = useCategories(restaurantId);
@@ -27,13 +28,14 @@ export function CategoriesPage({ restaurantId }: { restaurantId: string }) {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-xl font-bold">Categories</h2>
+                    <h2 className="text-xl font-bold">Catégories</h2>
                     <p className="text-sm text-muted-foreground">
-                        Manage your menu categories
+                        Gérez les catégories de votre menu
                     </p>
                 </div>
-                <Button className="cursor-pointer bg-linear-to-r from-blue-500 to-blue-700  flex items-center"
-                    onClick={() => setIsCreatingCategory(true)}>Add Category</Button>
+                <Button className="cursor-pointer bg-linear-to-r from-blue-500 to-blue-700  text-white flex items-center"
+                    onClick={() => setIsCreatingCategory(true)}>                                     <Plus size={14} />
+                    Ajouter une catégorie</Button>
             </div>
 
             {/* List categories */}

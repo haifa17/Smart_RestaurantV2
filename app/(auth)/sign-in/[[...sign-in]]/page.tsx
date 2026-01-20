@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { LogoAnimation } from "@/components/LogoAnimation";
 
 export default function CustomSignInPage() {
   const router = useRouter();
@@ -42,8 +42,8 @@ export default function CustomSignInPage() {
     } catch (err: any) {
       setError(
         err.errors?.[0]?.longMessage ||
-          err.message ||
-          "Invalid email or password"
+        err.message ||
+        "Invalid email or password"
       );
     } finally {
       setLoading(false);
@@ -68,10 +68,10 @@ export default function CustomSignInPage() {
     <div className="flex flex-col lg:flex-row min-h-screen">
       {/* Left side - Branding / Logo */}
       <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white flex-col justify-center items-center p-12 ">
-        <LoadingSpinner />
-        <h1 className="text-4xl font-bold mb-4 text-center -mt-5 ">Welcome Back!</h1>
+        <LogoAnimation />
+        <h1 className="text-4xl font-bold mb-4 text-center -mt-5">Bienvenue !</h1>
         <p className="text-md text-center">
-          Access your dashboard and manage your products with ease.
+          Accédez à votre tableau de bord et gérez vos produits facilement.
         </p>
       </div>
 
@@ -79,7 +79,7 @@ export default function CustomSignInPage() {
       <div className="flex flex-1 justify-center items-center p-8 bg-gray-50">
         <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl flex items-center gap-2 font-bold mb-6 text-gray-800 justify-center text-center">
-            Sign In
+            Connexion
             <LogIn size={20} />
           </h2>
 
@@ -103,7 +103,7 @@ export default function CustomSignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="user@example.com"
+                placeholder="utilisateur@exemple.com"
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
               />
             </div>
@@ -113,7 +113,7 @@ export default function CustomSignInPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Mot de passe
               </label>
               <input
                 type="password"
@@ -129,34 +129,35 @@ export default function CustomSignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-slate-900 cursor-pointer  text-white py-2 rounded-md font-semibold hover:bg-slate-900/90 transition"
+              className="w-full bg-slate-900 cursor-pointer text-white py-2 rounded-md font-semibold hover:bg-slate-900/90 transition"
             >
-              {loading ? "Loading..." : "Sign In"}
+              {loading ? "Chargement..." : "Se connecter"}
             </button>
           </form>
 
           {/* Divider */}
           <div className="my-4 flex items-center">
             <hr className="flex-1 border-gray-300" />
-            <span className="mx-2 text-gray-400 text-sm">or</span>
+            <span className="mx-2 text-gray-400 text-sm">ou</span>
             <hr className="flex-1 border-gray-300" />
           </div>
 
           {/* Google login */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full text-sm bg-white border border-gray-300 py-2 rounded-md  cursor-pointer flex items-center justify-center hover:bg-gray-50 transition"
+            className="w-full text-sm bg-white border border-gray-300 py-2 rounded-md cursor-pointer flex items-center justify-center hover:bg-gray-50 transition"
           >
             <img src="/google-icon.png" alt="Google" className="w-5 h-5 mr-2" />
+            Se connecter avec Google
           </button>
 
           <p className="mt-6 text-sm text-gray-500 text-center">
-            Don't have an account?{" "}
+            Vous n'avez pas de compte ?{" "}
             <a
               href="/sign-up"
               className="text-blue-600 cursor-pointer font-medium hover:underline"
             >
-              Sign Up
+              Inscrivez-vous
             </a>
           </p>
         </div>

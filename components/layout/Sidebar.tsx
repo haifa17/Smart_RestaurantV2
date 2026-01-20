@@ -3,14 +3,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ExternalLink, LogOut } from "lucide-react";
 import { useRestaurant } from "@/app/(admin)/dashboard/hooks/queries/useRestaurant";
-import { RESTAURANT_ID } from "@/app/(admin)/dashboard/lib/constants";
 import SidebarItems from "./SidebarItems";
 import { useClerk } from "@clerk/nextjs";
 import { pulseVariants } from "@/lib/variants";
 import { motion } from "framer-motion";
+import { useMyRestaurant } from "@/app/(admin)/dashboard/hooks/mutations/useMyRestaurantMutation";
 
 export const Sidebar = () => {
-  const { data: restaurant } = useRestaurant(RESTAURANT_ID!);
+  const { data: myRestaurant } = useMyRestaurant();
+  const { data: restaurant } = useRestaurant(myRestaurant?.restaurantId!);
   const { signOut } = useClerk();
   const currentYear = new Date().getFullYear();
 
@@ -36,7 +37,7 @@ export const Sidebar = () => {
           </motion.div>
           <Link href="/" target="_blank" rel="noopener noreferrer " className="flex gap-1 text-sm font-semibold items-center hover:underline">
             <ExternalLink className="h-4 w-4" />
-            View Menu
+            Voir Menu
           </Link>
         </div>
         <SidebarItems />

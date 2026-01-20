@@ -1,5 +1,5 @@
 "use client";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { LoadingSpinner } from "@/components/Loading";
 
 export function QRCodePlaceholder() {
   return (

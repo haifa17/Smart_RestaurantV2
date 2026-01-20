@@ -47,10 +47,10 @@ export default function VerifyCodeForm({ signUp, email }: VerifyCodeFormProps) {
   return (
     <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-        Verify Your Email
+        Vérifiez votre email
       </h2>
       <p className="text-sm text-gray-600 mb-4 text-center">
-        Enter the code sent to {email}
+        Entrez le code envoyé à {email}
       </p>
 
       {error && (
@@ -60,7 +60,7 @@ export default function VerifyCodeForm({ signUp, email }: VerifyCodeFormProps) {
       <form onSubmit={handleVerify} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Verification Code
+            Code de vérification
           </label>
           <input
             type="text"
@@ -76,9 +76,10 @@ export default function VerifyCodeForm({ signUp, email }: VerifyCodeFormProps) {
           disabled={loading}
           className="w-full bg-slate-900 cursor-pointer text-white py-2 rounded-md font-semibold hover:bg-slate-900/90 transition"
         >
-          {loading ? "Verifying..." : "Verify Email"}
+          {loading ? "Vérification en cours..." : "Vérifier l’email"}
         </button>
       </form>
     </div>
+
   );
 }

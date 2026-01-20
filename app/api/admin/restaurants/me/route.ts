@@ -1,5 +1,4 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { createSuccessResponse } from "@/lib/api-error";
 import { addCorsHeaders } from "@/lib/cors";
 import { getOrCreateRestaurant } from "@/lib/services/restaurantService";
 

@@ -2,8 +2,8 @@
 
 import { useTab } from "@/components/contexts/TabContext";
 import { TabsMangement } from "./TabsMangement";
-import { useMyRestaurant } from "../hooks/queries/useMyRestaurant";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { LoadingSpinner } from "@/components/Loading";
+import { useMyRestaurant } from "../hooks/mutations/useMyRestaurantMutation";
 
 export default function DashboardClient() {
   const { activeTab } = useTab();

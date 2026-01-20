@@ -57,13 +57,13 @@ export function CategoryEditor({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {category ? "Edit Category" : "Add Category"}
+            {category ? "Modifier la catégorie" : "Ajouter une catégorie"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="flex flex-col gap-2">
             <label htmlFor="category-name" className="text-sm">
-              Category Name
+              Nom de la catégorie
             </label>
             <Input
               placeholder="Name (English)"
@@ -89,14 +89,14 @@ export function CategoryEditor({
               className="cursor-pointer"
               onClick={onClose}
             >
-              Cancel
+              Annuler
             </Button>
             <Button
               className="cursor-pointer"
               type="submit"
               disabled={!nameEn.trim() && !nameFr.trim() && !nameAr.trim()}
             >
-              {category ? "Save Changes" : "Add Category"}
+              {category ? "Enregistrer les modifications" : "Ajouter une catégorie"}
             </Button>
           </DialogFooter>
         </form>

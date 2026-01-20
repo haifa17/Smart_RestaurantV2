@@ -65,38 +65,42 @@ export default function SignUpForm({
   return (
     <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
       <h2 className="text-2xl flex items-center gap-2 font-bold mb-6 text-gray-800 justify-center text-center">
-        Sign Up <LogIn size={20} />
+        Inscription <LogIn size={20} />
       </h2>
+
       {error && (
         <p className="mb-4 text-red-500 text-sm text-center">{error}</p>
       )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            First Name
+            Prénom
           </label>
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
-            placeholder="First Name"
+            placeholder="Prénom"
             className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Last Name
+            Nom
           </label>
           <input
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
-            placeholder="Last Name"
+            placeholder="Nom"
             className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Email
@@ -106,13 +110,14 @@ export default function SignUpForm({
             value={emailInput}
             onChange={(e) => setEmailInput(e.target.value)}
             required
-            placeholder="user@example.com"
+            placeholder="utilisateur@exemple.com"
             className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Password
+            Mot de passe
           </label>
           <input
             type="password"
@@ -129,21 +134,26 @@ export default function SignUpForm({
           disabled={loading}
           className="w-full bg-slate-900 cursor-pointer text-white py-2 rounded-md font-semibold hover:bg-slate-900/90 transition"
         >
-          {loading ? "Signing Up..." : "Sign Up"}
+          {loading ? "Inscription en cours..." : "S’inscrire"}
         </button>
       </form>
+
       <div className="my-4 flex items-center">
         <hr className="flex-1 border-gray-300" />
-        <span className="mx-2 text-gray-400 text-sm">or</span>
+        <span className="mx-2 text-gray-400 text-sm">ou</span>
         <hr className="flex-1 border-gray-300" />
       </div>
-      <div id="clerk-captcha"></div>{" "}
+
+      <div id="clerk-captcha"></div>
+
       <button
         onClick={handleGoogleSignUp}
         className="w-full bg-white cursor-pointer border border-gray-300 py-2 rounded-md flex items-center justify-center hover:bg-gray-50 transition"
       >
         <img src="/google-icon.png" alt="Google" className="w-5 h-5 mr-2" />
+        Se connecter avec Google
       </button>
     </div>
+
   );
 }

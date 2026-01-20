@@ -1,4 +1,3 @@
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Tooltip,
   TooltipContent,
@@ -21,10 +20,10 @@ export function LogoImageSection({
 }: LogoImageSectionProps) {
   return (
     <div className="flex flex-col gap-2 lg:gap-4 ">
-      <label>Restaurant Logo</label>
+      <label>Logo du restaurant</label>
 
       {isUploading ? (
-        <LoadingSpinner />
+        <div> Loading ...</div>
       ) : logoImage ? (
         <div className="relative group justify-center flex">
           <img
@@ -32,25 +31,25 @@ export function LogoImageSection({
             alt="Restaurant logo"
             className="w-32 h-32 rounded-full object-cover"
           />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={onRemove}
-                  className="absolute cursor-pointer -top-2 -right-2 p-1.5 rounded-full bg-foreground text-background"
-                >
-                  <X size={20} />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Remove logo</p>
-              </TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={onRemove}
+                className="absolute cursor-pointer -top-2 -right-2 p-1.5 rounded-full bg-foreground text-background"
+              >
+                <X size={20} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Supprimer logo</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       ) : (
         <label className="w-32 h-32 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
           <ImagePlus className="h-6 w-6 text-muted-foreground mb-1" />
-          <span className="text-sm text-muted-foreground">Upload logo</span>
+          <span className="text-sm text-muted-foreground capitalize">Télécharger logo</span>
           <input
             type="file"
             accept="image/*"

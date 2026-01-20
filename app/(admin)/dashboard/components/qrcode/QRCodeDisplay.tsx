@@ -65,9 +65,9 @@ export function QRCodeDisplay({
         {!hasError && !isGenerating && (
           <Alert className="mb-4 bg-white/80">
             <AlertDescription className="text-xs text-black">
-              <strong>PNG:</strong> • Best for digital use <strong>SVG:</strong>{" "}
-              • Perfect for large prints <strong>PDF:</strong> • Ready to print
-              with instructions
+              <strong>PNG :</strong> • Idéal pour une utilisation digitale{" "}
+              <strong>SVG :</strong> • Parfait pour les impressions grand format{" "}
+              <strong>PDF :</strong> • Prêt à imprimer avec instructions
             </AlertDescription>
           </Alert>
         )}
@@ -83,7 +83,7 @@ export function QRCodeDisplay({
                 className="gap-1.5"
                 onClick={() => onDownload(format)}
                 disabled={isGenerating || hasError}
-                aria-label={`Download QR code as ${format.toUpperCase()}`}
+                aria-label={`Télécharger le QR code en ${format.toUpperCase()}`}
               >
                 <Download className="h-3.5 w-3.5" aria-hidden="true" />
                 {format.toUpperCase()}
@@ -96,17 +96,16 @@ export function QRCodeDisplay({
             className="w-full gap-2"
             onClick={onCopyLink}
             disabled={isGenerating}
-            aria-label={copied ? "Link copied" : "Copy menu link to clipboard"}
+            aria-label={copied ? "Lien copié" : "Copier le lien du menu"}
           >
             {copied ? (
               <>
                 <Check className="h-4 w-4" aria-hidden="true" />
-                Copied!
-              </>
+                Copié !              </>
             ) : (
               <>
                 <Copy className="h-4 w-4" aria-hidden="true" />
-                Copy Menu Link
+                Copier le lien du menu
               </>
             )}
           </Button>

@@ -6,10 +6,10 @@ const SidebarItems = () => {
   const { activeTab, setActiveTab } = useTab();
 
   const items: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: "menu", label: "Menu Management", icon: <UtensilsCrossed size={18} /> },
-    { key: "categories", label: "Categories", icon: <FolderOpen size={18} /> },
+    { key: "menu", label: "Gestion du menu", icon: <UtensilsCrossed size={18} /> },
+    { key: "categories", label: "Catégories", icon: <FolderOpen size={18} /> },
     { key: "qr", label: "QR Code", icon: <QrCode size={18} /> },
-    { key: "info", label: "Restaurant Info", icon: <Settings size={18} /> },
+    { key: "info", label: "Infos du restaurant", icon: <Settings size={18} /> },
   ];
 
   return (

@@ -84,7 +84,7 @@ export function RestaurantInfo({
 
       setIsUploadingLogo(true);
       try {
-        const { url } = await onUploadImage(file, "logos"); 
+        const { url } = await onUploadImage(file, "logos");
         setLogoImage(url);
         onUpdate({ logo: url });
         toast.success("Logo uploaded successfully");
@@ -140,35 +140,35 @@ export function RestaurantInfo({
 
         <FormField
           id="name"
-          label="Restaurant Name"
+          label="Nom du restaurant"
           value={localData.name}
           onChange={(value) => updateField("name", value)}
-          placeholder="Your Restaurant Name"
+          placeholder="Nom de votre restaurant"
         />
 
         <FormField
           id="tagline"
-          label="Tagline"
+          label="Slogan"
           optional
           value={localData.tagline}
           onChange={(value) => updateField("tagline", value)}
-          placeholder="A short description of your restaurant..."
+          placeholder="Une courte description de votre restaurant..."
           rows={2}
         />
 
         <FormField
           id="story"
-          label="Story"
+          label="Histoire"
           optional
           value={localData.story}
           onChange={(value) => updateField("story", value)}
-          placeholder="Tell your restaurant's story..."
+          placeholder="Racontez l'histoire de votre restaurant..."
           rows={4}
         />
 
         <FormField
           id="phone"
-          label="Phone Number"
+          label="Numéro de téléphone"
           optional
           type="tel"
           value={localData.phone}

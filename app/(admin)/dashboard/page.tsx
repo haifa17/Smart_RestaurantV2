@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DashboardClient from "./components/DashboardClient";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Suspense } from "react";
+import { LoadingSpinner } from "@/components/Loading";
 
 export const metadata = {
   title: "Admin Dashboard",

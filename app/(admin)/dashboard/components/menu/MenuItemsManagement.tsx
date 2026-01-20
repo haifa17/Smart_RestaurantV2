@@ -4,13 +4,10 @@ import { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
 import { MenuItem } from "@/lib/models/menuItem";
 import { Category } from "@/lib/models/category";
-
 import { ItemEditorModal } from "@/app/(admin)/dashboard/components/menu/item-editor-modal";
 import { DeleteDialog } from "@/components/dialogs/DeleteDialog";
-
 import { MenuItemFormData, DeleteConfirmState } from "../../lib/types";
 import { MenuItemCard } from "../cards/MenuItemCard";
 
@@ -60,9 +57,9 @@ export function MenuItemsManagement({
         <div className="space-y-6">
             {/* header */}
             <div>
-                <h2 className="text-xl font-bold">Menu Items</h2>
+                <h2 className="text-xl font-bold ">Articles du menu</h2>
                 <p className="text-sm text-muted-foreground">
-                    Manage your dishes and drinks
+                    Gérez vos plats et boissons
                 </p>
             </div>
 
@@ -70,7 +67,7 @@ export function MenuItemsManagement({
             {categories.length === 0 && (
                 <Card className="p-12 text-center border-dashed">
                     <p className="text-sm text-muted-foreground">
-                        You must create at least one category before adding items.
+                        Vous devez créer au moins une catégorie avant d&apos;ajouter des articles.
                     </p>
                 </Card>
             )}
@@ -95,13 +92,13 @@ export function MenuItemsManagement({
                                     }
                                 >
                                     <Plus size={14} />
-                                    Add Item
+                                    Ajouter un article
                                 </Button>
                             </div>
 
                             {items.length === 0 ? (
                                 <p className="text-sm text-muted-foreground">
-                                    No items in this category
+                                    Aucun article dans cette catégorie
                                 </p>
                             ) : (
                                 <div className="space-y-2">

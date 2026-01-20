@@ -145,13 +145,13 @@ export function ItemEditorModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{item ? "Edit Item" : "Add Item"}</DialogTitle>
+          <DialogTitle>{item ? "Modifier l'article" : "Ajouter un article"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
             {/* Image Upload */}
             <div className="space-y-2">
-              <label>Item Image</label>
+              <label>Image de l&apos;article</label>
               <div className="flex items-start gap-4">
                 {isUploading ? (
                   <div className="w-24 h-24 rounded-lg border border-border flex flex-col items-center justify-center bg-muted">
@@ -176,7 +176,7 @@ export function ItemEditorModal({
                   <label className="w-24 h-24 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
                     <ImagePlus className="h-6 w-6 text-muted-foreground mb-1" />
                     <span className="text-xs text-muted-foreground">
-                      Upload
+                      Télécharger
                     </span>
                     <input
                       type="file"
@@ -190,7 +190,7 @@ export function ItemEditorModal({
 
                 {/* Live Preview Card */}
                 <div className="flex-1 p-3 rounded-lg border border-border bg-muted/30">
-                  <p className="text-xs text-muted-foreground mb-2">Preview</p>
+                  <p className="text-xs text-muted-foreground mb-2">Aperçu</p>
                   <div className="flex gap-3">
                     {image ? (
                       <img
@@ -223,13 +223,13 @@ export function ItemEditorModal({
 
             {/* Category Select */}
             <div className="space-y-2">
-              <label htmlFor="category">Category</label>
+              <label htmlFor="category">Catégorie</label>
               <Select
                 value={selectedCategoryId}
                 onValueChange={setSelectedCategoryId}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder="Selectionner une catégorie" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
@@ -246,7 +246,7 @@ export function ItemEditorModal({
 
             {/* Name */}
             <div className="space-y-2">
-              <label htmlFor="name">Item Name</label>
+              <label htmlFor="name">Nom de l&apos;article</label>
               <Input
                 placeholder="Name (English)"
                 value={nameEn}
@@ -269,7 +269,7 @@ export function ItemEditorModal({
             <div className="space-y-2">
               <label htmlFor="description">
                 Description{" "}
-                <span className="text-muted-foreground">(optional)</span>
+                <span className="text-muted-foreground">(optionnel)</span>
               </label>
               <Textarea
                 placeholder="Description (English)"
@@ -305,7 +305,7 @@ export function ItemEditorModal({
               </div>
             </div>
             <div className="space-y-2">
-              <label>Attributes</label>
+              <label>Attributs</label>
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex items-center gap-2 text-sm">
                   <input
@@ -313,7 +313,7 @@ export function ItemEditorModal({
                     checked={isChefRecommendation}
                     onChange={(e) => setIsChefRecommendation(e.target.checked)}
                   />
-                  Chef Recommendation
+                  Recommandé par le chef
                 </label>
 
                 <label className="flex items-center gap-2 text-sm">
@@ -322,7 +322,7 @@ export function ItemEditorModal({
                     checked={isPopular}
                     onChange={(e) => setIsPopular(e.target.checked)}
                   />
-                  Popular
+                  Populaire
                 </label>
 
                 <label className="flex items-center gap-2 text-sm">
@@ -331,7 +331,7 @@ export function ItemEditorModal({
                     checked={isSpicy}
                     onChange={(e) => setIsSpicy(e.target.checked)}
                   />
-                  Spicy 🌶️
+                  Épicé 🌶️
                 </label>
 
                 <label className="flex items-center gap-2 text-sm">
@@ -340,7 +340,7 @@ export function ItemEditorModal({
                     checked={isVegetarian}
                     onChange={(e) => setIsVegetarian(e.target.checked)}
                   />
-                  Vegetarian 🥬
+                  Végétarien 🥬
                 </label>
               </div>
             </div>
@@ -348,7 +348,7 @@ export function ItemEditorModal({
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
+              Annuler
             </Button>
             <Button
               type="submit"
@@ -359,7 +359,7 @@ export function ItemEditorModal({
                 (!nameEn.trim() && !nameFr.trim() && !nameAr.trim())
               }
             >
-              {item ? "Save Changes" : "Add Item"}
+              {item ? "Enregistrer les modifications" : "Ajouter un article"}
             </Button>
           </DialogFooter>
         </form>

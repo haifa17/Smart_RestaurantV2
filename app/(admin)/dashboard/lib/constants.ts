@@ -24,19 +24,18 @@ export const DOWNLOAD_FORMATS = ["png", "svg", "pdf"] as const;
 export const COPY_SUCCESS_DURATION = 2000;
 
 export const MESSAGES = {
-  TITLE: "Your QR Code",
-  SUBTITLE: "Print this QR code and place it on your tables",
-  DESCRIPTION: "Scan to view the digital menu",
-  COPY_SUCCESS: "Link copied to clipboard",
-  COPY_ERROR: "Failed to copy link",
+  TITLE: "Votre QR Code",
+  SUBTITLE: "Imprimez ce QR code et placez-le sur vos tables",
+  DESCRIPTION: "Scannez pour consulter le menu numérique",
+  COPY_SUCCESS: "Lien copié dans le presse-papiers",
+  COPY_ERROR: "Échec de la copie du lien",
   DOWNLOAD_SUCCESS: (format: string) =>
-    `QR code downloaded as ${format.toUpperCase()}`,
-  DOWNLOAD_ERROR: "Failed to download QR code. Please try again.",
-  GENERATION_ERROR: "Failed to generate QR code",
-  TIP_TITLE: "Print Guidelines",
+    `QR code téléchargé en ${format.toUpperCase()}`,
+  DOWNLOAD_ERROR: "Échec du téléchargement du QR code. Veuillez réessayer.",
+  GENERATION_ERROR: "Échec de la génération du QR code",
+  TIP_TITLE: "Instructions d'impression",
   TIP_CONTENT:
-    "For best results, print on high-quality paper or laminate for durability. Recommended size: 3x3 inches minimum.",
-  RETRY: "Retry",
+    "Pour de meilleurs résultats, imprimez sur du papier de haute qualité ou plastifiez pour plus de durabilité. Taille recommandée : minimum 3x3 pouces.",
+  RETRY: "Réessayer",
 } as const;
 
-export const RESTAURANT_ID = process.env.NEXT_PUBLIC_RESTAURANT_ID;

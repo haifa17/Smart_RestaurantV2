@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 
 interface RestaurantData {
     restaurantId: string;
@@ -6,7 +5,7 @@ interface RestaurantData {
     slug: string;
 }
 
-async function fetchMyRestaurant(): Promise<RestaurantData> {
+export async function fetchMyRestaurant(): Promise<RestaurantData> {
     const response = await fetch("/api/admin/restaurants/me");
 
     if (!response.ok) {
@@ -22,11 +21,3 @@ async function fetchMyRestaurant(): Promise<RestaurantData> {
     return data.data;
 }
 
-export function useMyRestaurant() {
-    return useQuery({
-        queryKey: ["myRestaurant"],
-        queryFn: fetchMyRestaurant,
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        retry: 2,
-    });
-}
