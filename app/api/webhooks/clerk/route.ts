@@ -51,19 +51,27 @@ export async function POST(req: Request) {
 
   if (eventType === "user.created") {
     const { id, email_addresses, first_name, last_name, image_url } = evt.data;
+    const email = email_addresses[0].email_address;
+    const firstName = first_name || null;
 
     try {
+      // Create the user in database
       await prisma.user.create({
         data: {
           clerkId: id,
-          email: email_addresses[0].email_address,
-          firstName: first_name || null,
+          email: email,
+          firstName: firstName,
           lastName: last_name || null,
           imageUrl: image_url || null,
         },
       });
 
       console.log("✅ User created in database:", id);
+
+      // Also create a restaurant for this user
+      const { createRestaurantForUser } = await import("@/lib/services/restaurantService");
+      const restaurant = await createRestaurantForUser(id, email, firstName);
+      console.log("✅ Restaurant created for user:", restaurant.id);
     } catch (error) {
       console.error("Error creating user in database:", error);
       return new Response("Error: Database error", {
