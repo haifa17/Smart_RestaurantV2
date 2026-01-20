@@ -35,10 +35,12 @@ export const Sidebar = () => {
               />
             </div>
           </motion.div>
-          <Link href="/" target="_blank" rel="noopener noreferrer " className="flex gap-1 text-sm font-semibold items-center hover:underline">
-            <ExternalLink className="h-4 w-4" />
-            Voir Menu
-          </Link>
+          {restaurant?.slug && (
+            <Link href={`/menu/${restaurant.slug}`} target="_blank" rel="noopener noreferrer" className="flex gap-1 text-sm font-semibold items-center hover:underline">
+              <ExternalLink className="h-4 w-4" />
+              Voir Menu
+            </Link>
+          )}
         </div>
         <SidebarItems />
       </div>
