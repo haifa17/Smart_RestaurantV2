@@ -1,10 +1,10 @@
 "use client";
 
-import Header from "@/components/Header";
+import Header from "@/components/layout/Header";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TabProvider } from "@/components/contexts/TabContext";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar } from "@/components/layout/Sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
