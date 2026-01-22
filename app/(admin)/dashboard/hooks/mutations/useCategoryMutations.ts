@@ -21,10 +21,10 @@ export function useCategoryMutations(restaurantId: string) {
       }),
     onSuccess: () => {
       invalidateCache();
-      toast.success("Category added successfully");
+      toast.success("Catégorie ajoutée avec succès");
     },
     onError: (error: Error) => {
-      toast.error(`Failed to add category: ${error.message}`);
+      toast.error(`Impossible d'ajouter la catégorie: ${error.message}`);
     },
   });
 
@@ -44,10 +44,10 @@ export function useCategoryMutations(restaurantId: string) {
     }) => apiClient.updateCategory(id, data),
     onSuccess: () => {
       invalidateCache();
-      toast.success("Category updated successfully");
+      toast.success("Catégorie mise à jour avec succès");
     },
     onError: (error: Error) => {
-      toast.error(`Failed to update category: ${error.message}`);
+      toast.error(`Échec de la mise à jour de la catégorie: ${error.message}`);
     },
   });
 
@@ -56,10 +56,10 @@ export function useCategoryMutations(restaurantId: string) {
     onSuccess: () => {
       invalidateCache();
       queryClient.invalidateQueries({ queryKey: ["menuItems", restaurantId] });
-      toast.success("Category deleted successfully");
+      toast.success("Catégorie supprimée avec succès");
     },
     onError: (error: Error) => {
-      toast.error(`Failed to delete category: ${error.message}`);
+      toast.error(`Échec de la suppression de la catégorie: ${error.message}`);
     },
   });
 
@@ -70,7 +70,7 @@ export function useCategoryMutations(restaurantId: string) {
       invalidateCache();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to reorder categories: ${error.message}`);
+      toast.error(`Impossible de réorganiser les catégories: ${error.message}`);
     },
   });
 

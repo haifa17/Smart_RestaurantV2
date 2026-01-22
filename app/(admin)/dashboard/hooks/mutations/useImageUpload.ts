@@ -12,7 +12,7 @@ export function useImageUpload() {
       folder: "logos" | "heroes" | "menu-items";
     }) => apiClient.uploadImage(file, folder),
     onError: (error: Error) => {
-      toast.error(`Failed to upload image: ${error.message}`);
+      toast.error(`Échec du chargement de l'image: ${error.message}`);
     },
   });
 }

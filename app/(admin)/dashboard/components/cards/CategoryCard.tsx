@@ -52,10 +52,7 @@ export function CategoryCard({
         {/* name */}
         <div className="flex-1 min-w-0">
           <h3 className="font-medium truncate capitalize">
-            {category.nameEn ||
-              category.nameFr ||
-              category.nameAr ||
-              "Unnamed"}
+            {category.nameEn || category.nameFr || category.nameAr || "Unnamed"}
           </h3>
         </div>
 
@@ -65,7 +62,7 @@ export function CategoryCard({
             <TooltipTrigger asChild>
               <button
                 onClick={onToggleVis}
-                className="p-2 hover:scale-110"
+                className="p-2 hover:scale-110 cursor-pointer"
               >
                 {category.visible ? (
                   <Eye className="h-4 w-4" />
@@ -75,7 +72,7 @@ export function CategoryCard({
               </button>
             </TooltipTrigger>
             <TooltipContent>
-              {category.visible ? "Hide category" : "Show category"}
+              {category.visible ? "Masquer la catégorie" : "Afficher la catégorie"}
             </TooltipContent>
           </Tooltip>
 
@@ -83,24 +80,24 @@ export function CategoryCard({
             <TooltipTrigger asChild>
               <button
                 onClick={onEdit}
-                className="p-2 hover:scale-110"
+                className="p-2 hover:scale-110 cursor-pointer"
               >
                 <Pencil className="h-4 w-4" />
               </button>
             </TooltipTrigger>
-            <TooltipContent>Edit category</TooltipContent>
+            <TooltipContent>Modifier la catégorie</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 onClick={onDelete}
-                className="p-2 hover:text-destructive hover:scale-110"
+                className="p-2 hover:text-destructive hover:scale-110 cursor-pointer"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
             </TooltipTrigger>
-            <TooltipContent>Delete category</TooltipContent>
+            <TooltipContent>Supprimer la catégorie</TooltipContent>
           </Tooltip>
         </div>
       </div>

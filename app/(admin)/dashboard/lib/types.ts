@@ -51,3 +51,9 @@ export interface QRCodeDisplayProps {
   isGenerating: boolean;
   hasError: boolean;
 }
+
+export interface DashboardStats {
+  totalCategories: number
+  totalItems: number
+  lastUpdated: string
+}

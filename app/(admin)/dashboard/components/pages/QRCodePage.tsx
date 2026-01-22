@@ -15,7 +15,7 @@ export function QRCodePage({ restaurantId }: QRCodePageProps) {
   }
 
   if (!restaurant) {
-    return <div>Restaurant not found</div>;
+    return <div>Restaurant introuvable</div>;
   }
 
   return <QRCodeScreen restaurant={restaurant} />;

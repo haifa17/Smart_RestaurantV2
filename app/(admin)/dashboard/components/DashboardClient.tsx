@@ -14,7 +14,7 @@ export default function DashboardClient() {
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center">
           <LoadingSpinner />
-          <p className="mt-4 text-gray-500">Loading your restaurant...</p>
+          <p className="mt-4 text-gray-500">Chargement de votre restaurant...</p>
         </div>
       </div>
     );
@@ -24,7 +24,7 @@ export default function DashboardClient() {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center text-gray-500">
-          <p>Unable to load restaurant. Please refresh the page.</p>
+          <p>Impossible de charger le restaurant. Veuillez actualiser la page.</p>
         </div>
       </div>
     );

@@ -56,7 +56,7 @@ export function CategoryEditor({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-xl">
             {category ? "Modifier la catégorie" : "Ajouter une catégorie"}
           </DialogTitle>
         </DialogHeader>
@@ -96,7 +96,9 @@ export function CategoryEditor({
               type="submit"
               disabled={!nameEn.trim() && !nameFr.trim() && !nameAr.trim()}
             >
-              {category ? "Enregistrer les modifications" : "Ajouter une catégorie"}
+              {category
+                ? "Enregistrer les modifications"
+                : "Ajouter une catégorie"}
             </Button>
           </DialogFooter>
         </form>

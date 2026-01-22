@@ -1,20 +1,25 @@
 "use client";
-import  { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
-export type Tab = "menu" | "categories" | "qr" | "info" ;
+export type Tab = "dashboard" | "menu" | "categories" | "qr" | "info";
 
 interface TabContextType {
   activeTab: Tab;
-  setActiveTab: (tab: Tab) => void;
+  setActiveTab: (tab: Tab, action?: string) => void; // allow optional action
+  action?: string;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
 
 export const TabProvider = ({ children }: { children: ReactNode }) => {
-  const [activeTab, setActiveTab] = useState<Tab>("menu");
-
+  const [activeTab, setActiveTabState] = useState<Tab>("dashboard");
+  const [action, setAction] = useState<string | undefined>(undefined);
+  const setActiveTab = (tab: Tab, action?: string) => {
+    setActiveTabState(tab);
+    setAction(action);
+  };
   return (
-    <TabContext.Provider value={{ activeTab, setActiveTab }}>
+    <TabContext.Provider value={{ activeTab, setActiveTab, action }}>
       {children}
     </TabContext.Provider>
   );

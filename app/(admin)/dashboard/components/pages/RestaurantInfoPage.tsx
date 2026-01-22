@@ -23,7 +23,7 @@ export function RestaurantInfoPage({ restaurantId }: RestaurantInfoPageProps) {
   }
 
   if (!restaurant) {
-    return <div>Restaurant not found</div>;
+    return <div>Restaurant introuvable</div>;
   }
 
   return (

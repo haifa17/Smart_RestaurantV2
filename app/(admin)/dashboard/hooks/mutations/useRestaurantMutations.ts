@@ -17,10 +17,14 @@ export function useRestaurantMutations(restaurantId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["restaurant", restaurantId] });
       apiClient.revalidateCache(`menu-${restaurantId}`);
-      toast.success("Restaurant info updated successfully");
+      toast.success(
+        "Les informations sur le restaurant ont été mises à jour avec succès",
+      );
     },
     onError: (error: Error) => {
-      toast.error(`Failed to update restaurant info: ${error.message}`);
+      toast.error(
+        `Impossible de mettre à jour les informations du restaurant: ${error.message}`,
+      );
     },
   });
 

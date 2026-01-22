@@ -1,5 +1,6 @@
 "use client";
 
+import { useTab } from "@/components/contexts/TabContext";
 import { useImageUpload } from "../../hooks/mutations/useImageUpload";
 import { useMenuItemMutations } from "../../hooks/mutations/useMenuItemMutations";
 import { useCategories } from "../../hooks/queries/useCategories";
@@ -17,6 +18,7 @@ export function MenuPage({ restaurantId }: MenuPageProps) {
     useMenuItemMutations(restaurantId);
 
   const uploadImage = useImageUpload();
+  const { action } = useTab();
 
   return (
     <MenuItemsManagement
@@ -24,13 +26,12 @@ export function MenuPage({ restaurantId }: MenuPageProps) {
       categories={categories}
       menuItems={menuItems}
       onCreate={createMenuItem.mutate}
-      onUpdate={(id, data) =>
-        updateMenuItem.mutate({ id, data })
-      }
+      onUpdate={(id, data) => updateMenuItem.mutate({ id, data })}
       onDelete={(id) => deleteMenuItem.mutate(id)}
       onUploadImage={(file) =>
         uploadImage.mutateAsync({ file, folder: "menu-items" })
       }
+      action={action}
     />
   );
 }

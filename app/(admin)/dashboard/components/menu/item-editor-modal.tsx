@@ -145,12 +145,14 @@ export function ItemEditorModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{item ? "Modifier l'article" : "Ajouter un article"}</DialogTitle>
+          <DialogTitle className="text-xl">
+            {item ? "Modifier l'article" : "Ajouter un article"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
             {/* Image Upload */}
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label>Image de l&apos;article</label>
               <div className="flex items-start gap-4">
                 {isUploading ? (
@@ -203,7 +205,7 @@ export function ItemEditorModal({
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate text-foreground">
-                        {nameEn || nameFr || nameAr || "Item name"}
+                        {nameEn || nameFr || nameAr || "Nom de l'article"}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
                         {descriptionEn ||
@@ -222,7 +224,7 @@ export function ItemEditorModal({
             </div>
 
             {/* Category Select */}
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="category">Catégorie</label>
               <Select
                 value={selectedCategoryId}
@@ -245,7 +247,7 @@ export function ItemEditorModal({
             </div>
 
             {/* Name */}
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="name">Nom de l&apos;article</label>
               <Input
                 placeholder="Name (English)"
@@ -266,7 +268,7 @@ export function ItemEditorModal({
             </div>
 
             {/* Description  */}
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="description">
                 Description{" "}
                 <span className="text-muted-foreground">(optionnel)</span>
@@ -290,7 +292,7 @@ export function ItemEditorModal({
             </div>
 
             {/* Price */}
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="price">Price (TND)</label>
               <div className="relative">
                 <Input
@@ -304,7 +306,7 @@ export function ItemEditorModal({
                 />
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label>Attributs</label>
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex items-center gap-2 text-sm">
@@ -347,11 +349,17 @@ export function ItemEditorModal({
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              className="cursor-pointer"
+              onClick={onClose}
+            >
               Annuler
             </Button>
             <Button
               type="submit"
+              className="cursor-pointer"
               disabled={
                 isUploading ||
                 !price ||

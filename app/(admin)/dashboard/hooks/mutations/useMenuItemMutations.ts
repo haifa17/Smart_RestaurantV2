@@ -34,10 +34,10 @@ export function useMenuItemMutations(restaurantId: string) {
     }) => apiClient.createMenuItem({ restaurantId, ...data }),
     onSuccess: () => {
       invalidateCache();
-      toast.success("Menu item added successfully");
+      toast.success("Élément de menu ajouté avec succès");
     },
     onError: (error: Error) => {
-      toast.error(`Failed to add menu item: ${error.message}`);
+      toast.error(`Impossible d'ajouter l'élément de menu : ${error.message}`);
     },
   });
 
@@ -71,10 +71,12 @@ export function useMenuItemMutations(restaurantId: string) {
     }) => apiClient.updateMenuItem(id, data),
     onSuccess: () => {
       invalidateCache();
-      toast.success("Menu item updated successfully");
+      toast.success("Élément de menu mis à jour avec succès");
     },
     onError: (error: Error) => {
-      toast.error(`Failed to update menu item: ${error.message}`);
+      toast.error(
+        `Impossible de mettre à jour l'élément de menu : ${error.message}`,
+      );
     },
   });
 
@@ -82,10 +84,10 @@ export function useMenuItemMutations(restaurantId: string) {
     mutationFn: (id: string) => apiClient.deleteMenuItem(id),
     onSuccess: () => {
       invalidateCache();
-      toast.success("Menu item deleted successfully");
+      toast.success("Élément de menu supprimé avec succès");
     },
     onError: (error: Error) => {
-      toast(`Failed to delete menu item: ${error.message}`);
+      toast(`Impossible de supprimer l'élément de menu : ${error.message}`);
     },
   });
 

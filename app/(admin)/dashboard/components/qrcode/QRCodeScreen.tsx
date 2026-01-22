@@ -17,10 +17,10 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
       <div className="max-w-md mx-auto">
         <Card className="p-6 text-center border-destructive">
           <p className="text-destructive font-medium">
-            Invalid restaurant configuration
+            Configuration du restaurant invalide{" "}
           </p>
           <p className="text-sm text-muted-foreground mt-2">
-            Please check the restaurant slug
+            Veuillez consulter l'URL du restaurant{" "}
           </p>
         </Card>
       </div>
@@ -35,9 +35,9 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
   return (
     <div className=" space-y-6">
       {/* Header */}
-      <header className=" space-y-2">
-        <h2 className="text-xl font-bold ">{MESSAGES.TITLE}</h2>
-        <p className="text-sm text-muted-foreground ">{MESSAGES.SUBTITLE}</p>
+      <header className=" space-y-1">
+        <h2 className="text-2xl font-bold ">{MESSAGES.TITLE}</h2>
+        <p className="text-muted-foreground ">{MESSAGES.SUBTITLE}</p>
         <p className="text-xs text-muted-foreground  ">
           Restaurant: <span className="font-semibold">{restaurant.name}</span>
         </p>
@@ -63,9 +63,7 @@ export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
           </span>
           {MESSAGES.TIP_TITLE}
         </h3>
-        <p className="text-sm leading-relaxed">
-          {MESSAGES.TIP_CONTENT}
-        </p>
+        <p className="text-sm leading-relaxed">{MESSAGES.TIP_CONTENT}</p>
       </Card>
     </div>
   );

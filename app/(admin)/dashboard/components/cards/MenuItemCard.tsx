@@ -57,7 +57,7 @@ export function MenuItemCard({
             </button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{item.available ? "Hide item" : "Show item"}</p>
+            <p>{item.available ? "Masquer l'élément" : "Afficher l'article"}</p>
           </TooltipContent>
         </Tooltip>
         <Tooltip>
@@ -71,7 +71,7 @@ export function MenuItemCard({
             </button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Edit item</p>
+            <p>Modifier l'élément</p>
           </TooltipContent>
         </Tooltip>
         <Tooltip>
@@ -85,7 +85,7 @@ export function MenuItemCard({
             </button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Delete item</p>
+            <p>Supprimer l'élément</p>
           </TooltipContent>
         </Tooltip>
       </div>
