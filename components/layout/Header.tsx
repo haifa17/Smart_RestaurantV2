@@ -4,13 +4,12 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
-  UserButton,
   useUser,
 } from "@clerk/nextjs";
+import UserAvatarMenu from "./UserAvatarMenu";
 
 const Header = () => {
   const { user } = useUser();
-
   return (
     <header className="sticky top-0 z-10 bg-white flex flex-col md:flex-row justify-end items-center px-4 py-6 gap-4 shadow">
       <SignedOut>
@@ -33,7 +32,7 @@ const Header = () => {
               </p>
             </div>
           )}
-          <UserButton afterSignOutUrl="/sign-in" />
+          <UserAvatarMenu />
         </div>
       </SignedIn>
     </header>

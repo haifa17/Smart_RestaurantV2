@@ -36,7 +36,7 @@ export function RecentItemsList({
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: restaurant.currency ?? "TDN",
+      currency: restaurant.currency ?? "TND",
     }).format(price);
   };
 
