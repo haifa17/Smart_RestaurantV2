@@ -16,7 +16,7 @@ export default function CustomSignUpPage() {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       {/* Left side - Branding / Logo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white flex-col justify-center items-center p-12  ">
+      <div className="flex lg:w-1/2 bg-slate-900 text-white flex-col justify-center items-center lg:p-12 p-8  ">
         <LogoAnimation />
         <h1 className="text-4xl font-bold mb-4 text-center -mt-5">Rejoignez-nous !</h1>
         <p className="text-md text-center">

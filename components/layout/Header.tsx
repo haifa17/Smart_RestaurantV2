@@ -1,25 +1,23 @@
 "use client";
 import {
   SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
   useUser,
 } from "@clerk/nextjs";
 import UserAvatarMenu from "./UserAvatarMenu";
+import { Menu } from "lucide-react";
 
-const Header = () => {
+const Header = ({ onMenuClick }: { onMenuClick: () => void }) => {
   const { user } = useUser();
   return (
-    <header className="sticky top-0 z-10 bg-white flex flex-col md:flex-row justify-end items-center px-4 py-6 gap-4 shadow">
-      <SignedOut>
-        <SignInButton />
-        <SignUpButton>
-          <button className="bg-orange-700 text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-            Sign Up
-          </button>
-        </SignUpButton>
-      </SignedOut>
+    <header className="sticky top-0 z-30 bg-white flex flex-row justify-between md:justify-end items-center px-4 py-6 gap-4 shadow">
+      {/* Hamburger only mobile */}
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden p-2 rounded-md hover:bg-gray-100 justify-end"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
       <SignedIn>
         <div className="flex items-center gap-3">
           {user && (

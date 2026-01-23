@@ -1,6 +1,7 @@
 "use client";
 import { SignUpResource } from "@clerk/types";
 import { LogIn } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface SignUpFormProps {
@@ -41,7 +42,7 @@ export default function SignUpForm({
       setStep("verify");
     } catch (err: any) {
       setError(
-        err.errors?.[0]?.longMessage || err.message || "Something went wrong"
+        err.errors?.[0]?.longMessage || err.message || "Something went wrong",
       );
     } finally {
       setLoading(false);
@@ -57,13 +58,13 @@ export default function SignUpForm({
       });
     } catch (err: any) {
       setError(
-        err.errors?.[0]?.longMessage || err.message || "Google signup failed"
+        err.errors?.[0]?.longMessage || err.message || "Google signup failed",
       );
     }
   };
 
   return (
-    <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+    <div className="w-full lg:max-w-md bg-white p-8 rounded-xl shadow-lg">
       <h2 className="text-2xl flex items-center gap-2 font-bold mb-6 text-gray-800 justify-center text-center">
         Inscription <LogIn size={20} />
       </h2>
@@ -88,9 +89,7 @@ export default function SignUpForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Nom
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Nom</label>
           <input
             type="text"
             value={lastName}
@@ -153,7 +152,15 @@ export default function SignUpForm({
         <img src="/google-icon.png" alt="Google" className="w-5 h-5 mr-2" />
         Se connecter avec Google
       </button>
+      <p className="mt-6 text-sm text-gray-500 text-center">
+        Vous avez un compte ?{" "}
+        <Link
+          href="/sign-in"
+          className="text-blue-600 cursor-pointer font-medium hover:underline"
+        >
+          Se connecter
+        </Link>
+      </p>
     </div>
-
   );
 }

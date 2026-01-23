@@ -4,6 +4,7 @@ import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
 import { LogoAnimation } from "@/components/LogoAnimation";
+import Link from "next/link";
 
 export default function CustomSignInPage() {
   const router = useRouter();
@@ -42,8 +43,8 @@ export default function CustomSignInPage() {
     } catch (err: any) {
       setError(
         err.errors?.[0]?.longMessage ||
-        err.message ||
-        "Invalid email or password"
+          err.message ||
+          "Invalid email or password",
       );
     } finally {
       setLoading(false);
@@ -59,7 +60,7 @@ export default function CustomSignInPage() {
       });
     } catch (err: any) {
       setError(
-        err.errors?.[0]?.longMessage || err.message || "Google login failed"
+        err.errors?.[0]?.longMessage || err.message || "Google login failed",
       );
     }
   };
@@ -67,9 +68,11 @@ export default function CustomSignInPage() {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       {/* Left side - Branding / Logo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white flex-col justify-center items-center p-12 ">
+      <div className="flex lg:w-1/2 bg-slate-900 text-white flex-col justify-center items-center p-8 lg:p-12 ">
         <LogoAnimation />
-        <h1 className="text-4xl font-bold mb-4 text-center -mt-5">Bienvenue !</h1>
+        <h1 className="text-4xl font-bold mb-4 text-center -mt-5">
+          Bienvenue !
+        </h1>
         <p className="text-md text-center">
           Accédez à votre tableau de bord et gérez vos produits facilement.
         </p>
@@ -77,7 +80,7 @@ export default function CustomSignInPage() {
 
       {/* Right side - SignIn Form */}
       <div className="flex flex-1 justify-center items-center p-8 bg-gray-50">
-        <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+        <div className="w-full lg:max-w-md bg-white p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl flex items-center gap-2 font-bold mb-6 text-gray-800 justify-center text-center">
             Connexion
             <LogIn size={20} />
@@ -153,12 +156,12 @@ export default function CustomSignInPage() {
 
           <p className="mt-6 text-sm text-gray-500 text-center">
             Vous n'avez pas de compte ?{" "}
-            <a
+            <Link
               href="/sign-up"
               className="text-blue-600 cursor-pointer font-medium hover:underline"
             >
               Inscrivez-vous
-            </a>
+            </Link>
           </p>
         </div>
       </div>

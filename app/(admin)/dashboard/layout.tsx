@@ -23,8 +23,9 @@ export default function AdminLayout({
             staleTime: 30000,
           },
         },
-      })
+      }),
   );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <ClerkProvider>
@@ -32,10 +33,13 @@ export default function AdminLayout({
         <TooltipProvider>
           <TabProvider>
             <div className="flex min-h-screen">
-              <Sidebar />
-              <div className="flex-1 flex flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+              />
+              <div className="flex-1 h-screen overflow-y-auto flex flex-col">
+                <Header onMenuClick={() => setIsSidebarOpen(true)} />
+                <main className="flex-1 ">{children}</main>
               </div>
             </div>
           </TabProvider>

@@ -51,7 +51,7 @@ export function RecentItemsList({
         {recentItems.map((item) => (
           <div
             key={item.id}
-            className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors duration-200"
+            className="flex flex-col lg:flex-row items-center gap-3 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors duration-200"
           >
             <Avatar className="h-12 w-12 rounded-lg">
               <AvatarImage
@@ -59,13 +59,13 @@ export function RecentItemsList({
                 alt={item.nameEn}
                 className="object-cover"
               />
-              <AvatarFallback className="rounded-lg bg-muted text-muted-foreground">
+              <AvatarFallback className="rounded-lg bg-muted text-muted-foreground ">
                 {item.nameEn!.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <p className="font-medium text-foreground truncate">
+                <p className="font-medium text-foreground truncate capitalize">
                   {item.nameEn || item.nameFr || item.nameAr}
                 </p>
                 <Badge
