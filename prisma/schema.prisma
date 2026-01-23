@@ -27,18 +27,18 @@ enum DayOfWeek {
 // ==============================
 
 model Restaurant {
-  id          String  @id @default(cuid())
-  slug        String  @unique
+  id          String     @id @default(cuid())
+  slug        String     @unique
   name        String
   phone       String?
   logo        String?
   heroImage   String?
-  tagline     String? @default("")
+  tagline     String?    @default("")
   story       String?
   description String?
-
+  menuBaseUrl String?
   // ✅ FIXED SCHEDULE
-  schedules Schedule[]
+  schedules   Schedule[]
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

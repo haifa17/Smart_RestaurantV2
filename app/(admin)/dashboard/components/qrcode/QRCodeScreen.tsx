@@ -7,11 +7,11 @@ import { useQRCodeGeneration } from "../../hooks/useQRCodeGeneration";
 import { useQRCodeActions } from "../../hooks/useQRCodeActions";
 import { QRCodeDisplay } from "./QRCodeDisplay";
 
-export function QRCodeScreen({ restaurant, baseUrl }: QRCodeScreenProps) {
+export function QRCodeScreen({ restaurant }: QRCodeScreenProps) {
   let menuUrl: string;
 
   try {
-    menuUrl = generateMenuUrl(restaurant.slug, baseUrl);
+    menuUrl = generateMenuUrl(restaurant.menuBaseUrl!, restaurant.slug);
   } catch (error) {
     return (
       <div className="max-w-md mx-auto">

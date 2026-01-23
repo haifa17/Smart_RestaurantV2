@@ -14,7 +14,7 @@ interface RestaurantInfoProps {
   onUpdate: (data: Partial<Restaurant>) => void;
   onUploadImage: (
     file: File,
-    folder: "logos" | "heroes"
+    folder: "logos" | "heroes",
   ) => Promise<{ url: string }>;
 }
 
@@ -23,6 +23,7 @@ interface FormData {
   phone: string;
   tagline: string;
   story: string;
+  menuBaseUrl: string;
 }
 
 const SAVE_SUCCESS_TIMEOUT = 2000;
@@ -39,13 +40,13 @@ export function RestaurantInfo({
     phone: restaurant.phone || "",
     tagline: restaurant.tagline || "",
     story: restaurant.story || "",
+    menuBaseUrl: restaurant.menuBaseUrl || "",
   });
 
   const [logoImage, setLogoImage] = useState<string | null>(
-    restaurant.logo || null
+    restaurant.logo || null,
   );
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
-
 
   const updateField = useCallback((field: keyof FormData, value: string) => {
     setLocalData((prev) => ({ ...prev, [field]: value }));
@@ -69,7 +70,7 @@ export function RestaurantInfo({
         setIsUploadingLogo(false);
       }
     },
-    [onUpdate, onUploadImage]
+    [onUpdate, onUploadImage],
   );
   const handleRemoveLogo = useCallback(() => {
     setLogoImage(null);
@@ -82,12 +83,13 @@ export function RestaurantInfo({
       phone: localData.phone || null,
       tagline: localData.tagline || null,
       story: localData.story || null,
+      menuBaseUrl: localData.menuBaseUrl || undefined,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), SAVE_SUCCESS_TIMEOUT);
   }, [localData, onUpdate]);
 
-  const isButtonDisabled = isLoading ;
+  const isButtonDisabled = isLoading;
 
   return (
     <div className="w-full mx-auto space-y-6">
@@ -137,7 +139,14 @@ export function RestaurantInfo({
           onChange={(value) => updateField("phone", value)}
           placeholder="+1 (555) 123-4567"
         />
-
+        <FormField
+          id="menuBaseUrl"
+          label="Menu URL"
+          optional
+          value={localData.menuBaseUrl}
+          onChange={(value) => updateField("menuBaseUrl", value)}
+          placeholder="https://menu.myrestaurant.com"
+        />
         <SaveButton
           onClick={handleSave}
           disabled={isButtonDisabled}

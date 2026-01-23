@@ -21,7 +21,7 @@ export const Sidebar = ({
   const currentYear = new Date().getFullYear();
 
   return (
-  <>
+    <>
       {/* Overlay (mobile only) */}
       {isOpen && (
         <div
@@ -51,7 +51,7 @@ export const Sidebar = ({
               animate="animate"
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full blur-2xl opacity-30" />
+              <div className="absolute inset-0 bg- menuBaseUrl String-to-r from-blue-500 to-blue-700 rounded-full blur-2xl opacity-30" />
               <div className="relative flex justify-center items-center">
                 <img
                   src={restaurant?.logo || "/logo.svg"}
@@ -63,10 +63,7 @@ export const Sidebar = ({
 
             {restaurant?.slug && (
               <Link
-                href={`${
-                  process.env.NEXT_PUBLIC_MENU_URL ||
-                  "http://localhost:3001"
-                }/${restaurant.slug}`}
+                href={`${restaurant.menuBaseUrl}/${restaurant.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex gap-1 text-sm font-semibold items-center hover:underline"

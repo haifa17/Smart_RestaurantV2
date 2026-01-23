@@ -13,4 +13,5 @@ export interface Restaurant extends BaseModel {
   story: string | null;
   isActive: boolean;
   currency?: string;
+  menuBaseUrl?:string
 }
