@@ -1,22 +1,23 @@
 "use client";
 import {
-  Clock,
+  DollarSign,
   FolderOpen,
-  Pencil,
   Plus,
   QrCode,
+  ShoppingCart,
   UtensilsCrossed,
 } from "lucide-react";
 import { StatCard } from "../cards/stat-card";
-import { formatDistanceToNow } from "date-fns";
 import { useCategories } from "../../hooks/queries/useCategories";
 import { useMenuItems } from "../../hooks/queries/useMenuItems";
 import { RecentItemsList } from "../dashboard/recent-items-list";
 import { CategoryOverview } from "../dashboard/category-overview";
 import { useRestaurant } from "../../hooks/queries/useRestaurant";
-import { fr } from "date-fns/locale";
 import { QuickActionCard } from "../cards/quick-action-card";
 import { useTab } from "@/components/contexts/TabContext";
+import { useOrderStats } from "../../hooks/queries/useOrderStats";
+import { useOrders } from "../../hooks/queries/useOrders";
+import { RecentOrdersList } from "../dashboard/recent-orders-list";
 
 interface Props {
   restaurantId: string;
@@ -29,16 +30,20 @@ export function DashboardPage({ restaurantId }: Props) {
     useMenuItems(restaurantId);
   const { data: restaurant, isLoading: restaurantLoading } =
     useRestaurant(restaurantId);
-
-  if (catLoading || itemsLoading || restaurantLoading)
+  const { data: orders = [], isLoading: ordersLoading } =
+    useOrders(restaurantId);
+  const { data: orderStats } = useOrderStats(restaurantId);
+  if (catLoading || itemsLoading || restaurantLoading || ordersLoading)
     return <div>Loading..</div>;
-
   const stats = {
     totalCategories: categories.length,
     totalItems: menuItems.length,
     lastUpdated: menuItems.length
       ? menuItems[0].updated_at
       : new Date().toISOString(),
+    totalOrders: orders.length,
+    pendingOrders: orders.filter((o) => o.status === "PENDING").length,
+    revenueToday: orderStats?.revenueToday || 0,
   };
 
   return (
@@ -52,7 +57,7 @@ export function DashboardPage({ restaurantId }: Props) {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
           title="Total des catégories"
           value={stats.totalCategories}
@@ -67,12 +72,16 @@ export function DashboardPage({ restaurantId }: Props) {
           trend={{ value: 12, isPositive: true }}
         />
         <StatCard
-          title="Dernière mise à jour"
-          value={formatDistanceToNow(
-            new Date(stats.lastUpdated ?? new Date().toISOString()),
-            { addSuffix: false, locale: fr },
-          )}
-          icon={<Clock className="h-5 w-5 text-white" />}
+          title="Commandes en attente"
+          value={stats.pendingOrders}
+          icon={<ShoppingCart className="h-5 w-5 text-white" />}
+          description={`${stats.totalOrders} commandes au total`}
+        />
+        <StatCard
+          title="Revenus aujourd'hui"
+          value={`${stats.revenueToday.toFixed(0)} TND`}
+          icon={<DollarSign className="h-5 w-5 text-white" />}
+          description={`${orderStats?.completedToday || 0} commandes terminées`}
         />
       </div>
       {/* Quick Actions */}
@@ -80,23 +89,29 @@ export function DashboardPage({ restaurantId }: Props) {
         <h2 className="text-lg font-semibold text-foreground mb-4">
           Actions rapides
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <QuickActionCard
-            title="Ajouter un article"
-            description="Ajouter un nouvel élément de menu"
+            title="Nouvelle commande"
+            description="Créer une nouvelle commande"
             icon={<Plus className="h-5 w-5" />}
-            onClick={() => setActiveTab("menu", "add")}
+            onClick={() => setActiveTab("orders", "add")}
             variant="primary"
           />
           <QuickActionCard
-            title="Modifier le menu"
-            description="Gérez vos éléments de menu"
-            icon={<Pencil className="h-5 w-5" />}
-            onClick={() => setActiveTab("menu")}
+            title="Ajouter un article"
+            description="Ajouter un élément au menu"
+            icon={<Plus className="h-5 w-5" />}
+            onClick={() => setActiveTab("menu", "add")}
+          />
+          <QuickActionCard
+            title="Gérer les commandes"
+            description="Voir toutes les commandes"
+            icon={<ShoppingCart className="h-5 w-5" />}
+            onClick={() => setActiveTab("orders")}
           />
           <QuickActionCard
             title="Télécharger le code QR"
-            description="Obtenez votre code QR de menu"
+            description="Obtenez votre code QR"
             icon={<QrCode className="h-5 w-5" />}
             onClick={() => setActiveTab("qr")}
           />
@@ -106,11 +121,14 @@ export function DashboardPage({ restaurantId }: Props) {
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {restaurant && (
-          <RecentItemsList
-            menuItems={menuItems}
-            categories={categories}
-            restaurant={restaurant}
-          />
+          <>
+            <RecentOrdersList orders={orders} restaurantId={restaurantId} />
+            <RecentItemsList
+              menuItems={menuItems}
+              categories={categories}
+              restaurant={restaurant}
+            />
+          </>
         )}
         <CategoryOverview menuItems={menuItems} categories={categories} />
       </div>

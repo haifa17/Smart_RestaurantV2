@@ -1,5 +1,12 @@
 import React from "react";
-import { FolderOpen, LayoutDashboard, QrCode, Settings, UtensilsCrossed } from "lucide-react";
+import {
+  FolderOpen,
+  LayoutDashboard,
+  QrCode,
+  Settings,
+  ShoppingCart,
+  UtensilsCrossed,
+} from "lucide-react";
 import { Tab, useTab } from "../contexts/TabContext";
 
 const SidebarItems = () => {
@@ -17,6 +24,8 @@ const SidebarItems = () => {
       icon: <UtensilsCrossed size={18} />,
     },
     { key: "categories", label: "Catégories", icon: <FolderOpen size={18} /> },
+    { key: "orders", label: "Commandes", icon: <ShoppingCart  size={18} /> },
+
     { key: "qr", label: "QR Code", icon: <QrCode size={18} /> },
     { key: "info", label: "Infos du restaurant", icon: <Settings size={18} /> },
   ];
