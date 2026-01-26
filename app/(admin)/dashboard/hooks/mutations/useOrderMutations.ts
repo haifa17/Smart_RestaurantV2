@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateOrderData, UpdateOrderData } from "@/lib/models/order";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 export function useOrderMutations(id: string) {
   const queryClient = useQueryClient();
