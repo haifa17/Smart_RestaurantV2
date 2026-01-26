@@ -17,7 +17,7 @@ const OrderDetailsDialog = ({
 }) => {
   return (
     <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl overflow-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">
             Détails de la commande {selectedOrder?.orderNumber}

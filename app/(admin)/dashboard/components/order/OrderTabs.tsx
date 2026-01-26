@@ -25,9 +25,6 @@ const OrderTabs = ({
 }) => {
   const handleTabChange = (v: string) => {
     setActiveTab(v as "active" | "completed");
-    toast.success(
-      `Vous avez affiché les commandes ${v === "active" ? "actives" : "terminées"}`,
-    );
   };
 
   const handleStatusChange = (v: OrderStatus | "ALL") => {
