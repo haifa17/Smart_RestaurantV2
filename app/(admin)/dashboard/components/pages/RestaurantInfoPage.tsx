@@ -14,7 +14,8 @@ export function RestaurantInfoPage({ restaurantId }: RestaurantInfoPageProps) {
   console.log("restaurantId", restaurantId);
 
   const { data: restaurant, isLoading } = useRestaurant(restaurantId);
-  console.log("restaurant", restaurant);
+  console.log("restaurant data:", restaurant);
+  console.log("restaurant.schedules:", restaurant?.schedules);
   const { updateRestaurant } = useRestaurantMutations(restaurantId);
   const uploadImage = useImageUpload();
 
@@ -30,7 +31,12 @@ export function RestaurantInfoPage({ restaurantId }: RestaurantInfoPageProps) {
     <RestaurantInfo
       restaurant={restaurant}
       isLoading={isLoading}
-      onUpdate={(data) => updateRestaurant.mutate(data)}
+      onUpdate={(data) => {
+        console.log("=== onUpdate called ===");
+        console.log("Update data being sent:", data);
+        console.log("Schedules in update:", data.schedules);
+        updateRestaurant.mutate(data);
+      }}
       onUploadImage={(file, folder) =>
         uploadImage.mutateAsync({ file, folder })
       }

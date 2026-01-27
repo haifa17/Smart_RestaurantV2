@@ -12,6 +12,7 @@ interface FormFieldProps {
   rows?: number;
   dir?: "ltr" | "rtl";
   className?: string;
+  disabled?: boolean;
 }
 
 export function FormField({
@@ -25,6 +26,7 @@ export function FormField({
   rows,
   dir,
   className,
+  disabled,
 }: FormFieldProps) {
   const isTextarea = rows !== undefined;
 
@@ -50,6 +52,7 @@ export function FormField({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
         />
       )}
     </div>

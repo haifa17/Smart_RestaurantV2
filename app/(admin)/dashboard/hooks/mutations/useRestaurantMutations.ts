@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../lib/api-client";
 import { toast } from "react-toastify";
+import { Schedule } from "@/lib/models/schedule";
 
 export function useRestaurantMutations(restaurantId: string) {
   const queryClient = useQueryClient();
@@ -13,6 +14,8 @@ export function useRestaurantMutations(restaurantId: string) {
       heroImage?: string | null;
       tagline?: string | null;
       story?: string | null;
+      schedules?: Schedule[];
+      menuBaseUrl?: string;
     }) => apiClient.updateRestaurant(restaurantId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["restaurant", restaurantId] });

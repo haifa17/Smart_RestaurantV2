@@ -7,6 +7,8 @@ import { RestaurantHeader } from "./RestaurantHeader";
 import { FormField } from "./FormField";
 import { SaveButton } from "@/components/buttons/SaveButton";
 import { LogoImageSection } from "./LogoImageSection";
+import { Schedule } from "@/lib/models/schedule";
+import { ScheduleEditor } from "./ScheduleEditor";
 
 interface RestaurantInfoProps {
   restaurant: Restaurant;
@@ -24,6 +26,7 @@ interface FormData {
   tagline: string;
   story: string;
   menuBaseUrl: string;
+  schedules: Schedule[];
 }
 
 const SAVE_SUCCESS_TIMEOUT = 2000;
@@ -41,6 +44,7 @@ export function RestaurantInfo({
     tagline: restaurant.tagline || "",
     story: restaurant.story || "",
     menuBaseUrl: restaurant.menuBaseUrl || "",
+    schedules: restaurant.schedules || [],
   });
 
   const [logoImage, setLogoImage] = useState<string | null>(
@@ -51,7 +55,9 @@ export function RestaurantInfo({
   const updateField = useCallback((field: keyof FormData, value: string) => {
     setLocalData((prev) => ({ ...prev, [field]: value }));
   }, []);
-
+  const updateSchedules = useCallback((schedules: Schedule[]) => {
+    setLocalData((prev) => ({ ...prev, schedules }));
+  }, []);
   const handleLogoUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -84,6 +90,7 @@ export function RestaurantInfo({
       tagline: localData.tagline || null,
       story: localData.story || null,
       menuBaseUrl: localData.menuBaseUrl || undefined,
+      schedules: localData.schedules || [],
     });
     setSaved(true);
     setTimeout(() => setSaved(false), SAVE_SUCCESS_TIMEOUT);
@@ -139,6 +146,7 @@ export function RestaurantInfo({
           onChange={(value) => updateField("phone", value)}
           placeholder="+1 (555) 123-4567"
         />
+
         <FormField
           id="menuBaseUrl"
           label="Menu URL"
@@ -146,6 +154,10 @@ export function RestaurantInfo({
           value={localData.menuBaseUrl}
           onChange={(value) => updateField("menuBaseUrl", value)}
           placeholder="https://menu.myrestaurant.com"
+        />
+        <ScheduleEditor
+          schedules={localData.schedules}
+          onChange={updateSchedules}
         />
         <SaveButton
           onClick={handleSave}
