@@ -95,7 +95,7 @@ export function RecentOrdersList({ orders, restaurantId }: Props) {
                 <div className="text-right">
                   <p className="font-semibold">
                     {" "}
-                    {Number(order.total).toFixed(2)} TND
+                    {Number(order.total).toFixed(2)} £
                   </p>
                   {!order.isPaid && (
                     <Badge variant="destructive" className="text-xs mt-1">

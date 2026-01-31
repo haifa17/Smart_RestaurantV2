@@ -17,4 +17,5 @@ export interface MenuItem extends BaseModel {
   isPopular?: boolean;
   isSpicy?: boolean;
   isVegetarian?: boolean;
+  updatedAt?: string;
 }

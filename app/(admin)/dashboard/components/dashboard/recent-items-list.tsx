@@ -24,8 +24,8 @@ export function RecentItemsList({
   const recentItems = [...menuItems]
     .sort(
       (a, b) =>
-        new Date(b.updated_at ?? Date.now()).getTime() -
-        new Date(a.updated_at ?? Date.now()).getTime(),
+        new Date(b.updatedAt ?? Date.now()).getTime() -
+        new Date(a.updatedAt ?? Date.now()).getTime(),
     )
     .slice(0, 5);
 
@@ -34,9 +34,9 @@ export function RecentItemsList({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
-      currency: restaurant.currency ?? "TND",
+      currency: restaurant.currency ?? "EUR",
     }).format(price);
   };
 
@@ -47,7 +47,7 @@ export function RecentItemsList({
           Récemment mis à jour{" "}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1  gap-4">
         {recentItems.map((item) => (
           <div
             key={item.id}
@@ -88,10 +88,10 @@ export function RecentItemsList({
             </div>
             <p className="text-xs text-muted-foreground whitespace-nowrap">
               {formatDistanceToNow(
-                new Date(item.updated_at ?? Date.now()).getTime(),
+                new Date(item.updatedAt ?? Date.now()).getTime(),
                 {
                   addSuffix: true,
-                  locale: fr 
+                  locale: fr
                 },
               )}
             </p>
