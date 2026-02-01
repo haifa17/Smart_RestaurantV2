@@ -37,7 +37,7 @@ export function MenuItemCard({
           <p className="text-sm  truncate">{description}</p>
         )}
         <p className="text-sm font-medium mt-0.5">
-          {Number(item.price).toFixed(2)} £
+          {Number(item.price).toFixed(2)} EUR
         </p>
       </div>
 

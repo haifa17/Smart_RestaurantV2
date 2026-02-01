@@ -74,7 +74,7 @@ const OrderDetailsDialog = ({
                       )}
                     </div>
                     <p className="font-medium">
-                      {(item.price * item.quantity).toFixed(2)} £
+                      {(item.price * item.quantity).toFixed(2)} EUR
                     </p>
                   </div>
                 ))}
@@ -84,15 +84,15 @@ const OrderDetailsDialog = ({
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between">
                 <span>Sous-total</span>
-                <span>{Number(selectedOrder.subtotal).toFixed(2)} £</span>
+                <span>{Number(selectedOrder.subtotal).toFixed(2)} EUR</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>TVA</span>
-                <span>{Number(selectedOrder.tax).toFixed(2)} £</span>
+                <span>{Number(selectedOrder.tax).toFixed(2)} EUR</span>
               </div>
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span> {Number(selectedOrder.total).toFixed(2)} £ </span>
+                <span> {Number(selectedOrder.total).toFixed(2)} EUR </span>
               </div>
             </div>
 

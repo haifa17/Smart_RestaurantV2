@@ -215,7 +215,7 @@ export function ItemEditorModal({
                       </p>
                       <p className="text-sm font-medium text-foreground mt-0.5">
                         {price ? Number.parseFloat(price).toFixed(2) : "0.00"}{" "}
-                        £
+                        EUR
                       </p>
                     </div>
                   </div>
@@ -293,7 +293,7 @@ export function ItemEditorModal({
 
             {/* Price */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="price">Price (£)</label>
+              <label htmlFor="price">Price (EUR)</label>
               <div className="relative">
                 <Input
                   id="price"

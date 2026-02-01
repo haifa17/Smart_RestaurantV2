@@ -79,7 +79,7 @@ export function DashboardPage({ restaurantId }: Props) {
         />
         <StatCard
           title="Revenus aujourd'hui"
-          value={`${stats.revenueToday.toFixed(0)} £`}
+          value={`${stats.revenueToday.toFixed(0)} EUR`}
           icon={<DollarSign className="h-5 w-5 text-white" />}
           description={`${orderStats?.completedToday || 0} commandes terminées`}
         />

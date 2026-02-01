@@ -230,7 +230,7 @@ export function OrderEditor({
                           {item.menuItem.nameEn || item.menuItem.nameFr}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {Number(item.menuItem.price).toFixed(2)} £
+                          {Number(item.menuItem.price).toFixed(2)} EUR
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -281,7 +281,7 @@ export function OrderEditor({
                         {item.nameEn || item.nameFr || item.nameAr}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {Number(item.price).toFixed(2)} £
+                        {Number(item.price).toFixed(2)} EUR
                       </p>
                     </div>
                     <Plus className="h-4 w-4 text-blue-600" />
@@ -297,15 +297,15 @@ export function OrderEditor({
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span>Sous-total</span>
-                <span>{subtotal.toFixed(2)} £</span>
+                <span>{subtotal.toFixed(2)} EUR</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>TVA (10%)</span>
-                <span>{tax.toFixed(2)} £</span>
+                <span>{tax.toFixed(2)} EUR</span>
               </div>
               <div className="flex justify-between font-semibold text-lg pt-2 border-t">
                 <span>Total</span>
-                <span>{total.toFixed(2)} £</span>
+                <span>{total.toFixed(2)} EUR</span>
               </div>
             </div>
           </Card>

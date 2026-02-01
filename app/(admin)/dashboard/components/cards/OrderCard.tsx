@@ -121,7 +121,7 @@ export function OrderCard({
               {order.items.length} article{order.items.length > 1 ? "s" : ""}
             </p>
             <p className="font-semibold text-lg mt-1">
-              {Number(order.total).toFixed(2)} £
+              {Number(order.total).toFixed(2)} EUR
             </p>
           </div>
 
