@@ -46,7 +46,7 @@ export async function GET(
   }
 }
 
-// POST /api/restaurants/[restaurantId]/orders
+// POST /api/admin/restaurants/[restaurantId]/orders
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
