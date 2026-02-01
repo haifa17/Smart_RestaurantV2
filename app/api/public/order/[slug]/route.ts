@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prsima-simple";
 import { createSuccessResponse, handleApiError } from "@/lib/api-error";
-import { addCorsHeaders } from "@/lib/cors";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
 
 interface PageProps {
   params: Promise<{
@@ -9,6 +9,15 @@ interface PageProps {
   }>;
 }
 
+/* ===============================
+   CORS PREFLIGHT
+   Uses your existing helper
+   =============================== */
+export const OPTIONS = handleOptions;
+
+/* ===============================
+   CREATE PUBLIC ORDER
+   =============================== */
 export async function POST(
   req: NextRequest,
   { params }: PageProps
@@ -33,9 +42,9 @@ export async function POST(
       );
     }
 
-    // 2️⃣ Generate order number (daily)
-    const today = new Date();
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    // 2️⃣ Generate daily order number
+    const now = new Date();
+    const startOfDay = new Date(now.setHours(0, 0, 0, 0));
     const dateStr = startOfDay.toISOString().split("T")[0].replace(/-/g, "");
 
     const orderCount = await prisma.order.count({
@@ -56,7 +65,7 @@ export async function POST(
         restaurantId: restaurant.id,
         customerName: data.customerName,
         customerPhone: data.customerPhone,
-        type: data.type, // DINE_IN | TAKEAWAY | DELIVERY
+        type: data.type,
         status: "PENDING",
         tableNumber: data.tableNumber,
         subtotal: data.subtotal,
