@@ -22,6 +22,10 @@ export async function GET(
     const { id } = await context.params;
     const menuItem = await prisma.menuItem.findUnique({
       where: { id, isActive: true },
+      include: {
+        sauces: true,
+        cheeses: true,
+      },
     });
 
     if (!menuItem) {
