@@ -225,26 +225,22 @@ export function ItemEditorModal({
     onSave({
       restaurantId,
       categoryId: selectedCategoryId,
-
       nameEn: nameEn.trim() || undefined,
       nameFr: nameFr.trim() || undefined,
       nameAr: nameAr.trim() || undefined,
-
       descriptionEn: descriptionEn.trim() || undefined,
       descriptionFr: descriptionFr.trim() || undefined,
       descriptionAr: descriptionAr.trim() || undefined,
-
       price: Number(price),
       image,
-
       available: true,
       isActive: true,
       isChefRecommendation,
       isPopular,
       isSpicy,
       isVegetarian,
-      sauces: sauces.length > 0 ? sauces : undefined,
-      cheeses: cheeses.length > 0 ? cheeses : undefined,
+      sauces,
+      cheeses,
     });
   };
 

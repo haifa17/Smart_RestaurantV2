@@ -48,18 +48,14 @@ export function useMenuItemMutations(restaurantId: string) {
       id: string;
       data: {
         categoryId?: string;
-
         nameEn?: string;
         nameFr?: string;
         nameAr?: string;
-
         descriptionEn?: string;
         descriptionFr?: string;
         descriptionAr?: string;
-
         price?: number;
         image?: string | null;
-
         available?: boolean;
         isActive?: boolean;
         isChefRecommendation?: boolean;

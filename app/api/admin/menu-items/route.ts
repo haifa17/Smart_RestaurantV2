@@ -56,31 +56,36 @@ export async function POST(request: NextRequest) {
         ...menuItemData,
         available: menuItemData.available ?? true,
         isActive: menuItemData.isActive ?? true,
-        // ✅ Create related sauces
-        sauces:
-          sauces && sauces.length > 0
-            ? {
+
+        // ✅ Create related sauces only if array has items
+        // Empty array or undefined = no sauces created
+        ...(sauces && sauces.length > 0
+          ? {
+              sauces: {
                 create: sauces.map((sauce) => ({
                   sauceType: sauce.sauceType,
                   customName: sauce.customName,
                   isIncluded: sauce.isIncluded ?? true,
                   extraCost: sauce.extraCost,
                 })),
-              }
-            : undefined,
+              },
+            }
+          : {}),
 
-        // ✅ Create related cheeses
-        cheeses:
-          cheeses && cheeses.length > 0
-            ? {
+        // ✅ Create related cheeses only if array has items
+        // Empty array or undefined = no cheeses created
+        ...(cheeses && cheeses.length > 0
+          ? {
+              cheeses: {
                 create: cheeses.map((cheese) => ({
                   cheeseType: cheese.cheeseType,
                   customName: cheese.customName,
                   isIncluded: cheese.isIncluded ?? true,
                   extraCost: cheese.extraCost,
                 })),
-              }
-            : undefined,
+              },
+            }
+          : {}),
       },
       // ✅ Include relations in response
       include: {

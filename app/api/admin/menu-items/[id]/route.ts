@@ -74,31 +74,35 @@ export async function PATCH(
       where: { id },
       data: {
         ...menuItemData,
-        // ✅ Create new sauces
-        sauces:
-          sauces && sauces.length > 0
-            ? {
+        // ✅ Create new sauces if provided AND non-empty
+        // If empty array is sent, relations are already deleted above
+        ...(sauces !== undefined && sauces.length > 0
+          ? {
+              sauces: {
                 create: sauces.map((sauce) => ({
                   sauceType: sauce.sauceType,
                   customName: sauce.customName,
                   isIncluded: sauce.isIncluded ?? true,
                   extraCost: sauce.extraCost,
                 })),
-              }
-            : undefined,
+              },
+            }
+          : {}),
 
-        // ✅ Create new cheeses
-        cheeses:
-          cheeses && cheeses.length > 0
-            ? {
+        // ✅ Create new cheeses if provided AND non-empty
+        // If empty array is sent, relations are already deleted above
+        ...(cheeses !== undefined && cheeses.length > 0
+          ? {
+              cheeses: {
                 create: cheeses.map((cheese) => ({
                   cheeseType: cheese.cheeseType,
                   customName: cheese.customName,
                   isIncluded: cheese.isIncluded ?? true,
-                  extraCost: cheese.extraCost,
+                  // extraCost: cheese.extraCost,
                 })),
-              }
-            : undefined,
+              },
+            }
+          : {}),
       },
       include: {
         sauces: true,
@@ -115,6 +119,7 @@ export async function PATCH(
     return handleApiError(error, addCorsHeaders());
   }
 }
+
 // DELETE /api/admin/menu-items/[id] - Soft delete
 export async function DELETE(
   request: NextRequest,
