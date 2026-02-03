@@ -119,16 +119,21 @@ export async function POST(req: NextRequest, { params }: PageProps) {
 
       } catch (error: any) {
         // Check if it's a unique constraint violation (duplicate orderNumber)
-        const isDuplicateError = error.code === 'P2002';
+        // Handle both Prisma error code (P2002) and driver adapter error code (DUPLICATE_ENTRY)
+        const isPrismaError = error.code === 'P2002';
+        const isDriverError = error.code === 'DUPLICATE_ENTRY';
+        const isDuplicateError = isPrismaError || isDriverError ||
+                                 error.message?.includes('already exists') ||
+                                 error.message?.includes('duplicate');
         const hasRetriesLeft = attempt < maxRetries - 1;
 
         if (isDuplicateError && hasRetriesLeft) {
           // Log the retry attempt
           console.log(`Order number collision detected, retrying... (attempt ${attempt + 1}/${maxRetries})`);
-          
+
           // Exponential backoff: wait longer with each retry
           await new Promise(resolve => setTimeout(resolve, 50 * (attempt + 1)));
-          
+
           // Continue to next iteration
           continue;
         }
