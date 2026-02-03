@@ -62,6 +62,10 @@ export interface CreateOrderData {
     price: number;
     quantity: number;
     notes?: string;
+    selectedSauces?: Array<{
+      sauceType: string;
+      customName?: string;
+    }>;
     selectedCheeses?: Array<{
       cheeseType: string;
       customName?: string;

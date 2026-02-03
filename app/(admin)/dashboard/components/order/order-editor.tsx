@@ -23,6 +23,7 @@ import { MenuItem } from "@/lib/models/menuItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "react-toastify";
 import { OrderType } from "@/lib/types";
+import { SelectedCheese, SelectedSauce } from "@/lib/models/OrderItem";
 
 interface OrderEditorProps {
   open: boolean;
@@ -35,6 +36,8 @@ interface CartItem {
   menuItem: MenuItem;
   quantity: number;
   notes?: string;
+  selectedSauces?: SelectedSauce[];
+  selectedCheeses?: SelectedCheese[];
 }
 
 export function OrderEditor({
@@ -113,6 +116,8 @@ export function OrderEditor({
         price: Number(item.menuItem.price),
         quantity: item.quantity,
         notes: item.notes,
+        selectedSauces: item.selectedSauces,
+        selectedCheeses: item.selectedCheeses,
       })),
       subtotal,
       tax,
