@@ -31,8 +31,6 @@ export interface Order {
   statusHistory?: OrderStatusHistory[];
 }
 
-
-
 export interface Customer {
   id: string;
   phone: string;
@@ -64,6 +62,10 @@ export interface CreateOrderData {
     price: number;
     quantity: number;
     notes?: string;
+    selectedCheeses?: Array<{
+      cheeseType: string;
+      customName?: string;
+    }>;
   }[];
   subtotal: number;
   tax: number;
@@ -78,4 +80,3 @@ export interface UpdateOrderData {
   adminNotes?: string;
   isPaid?: boolean;
 }
-
