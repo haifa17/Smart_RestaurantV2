@@ -17,13 +17,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateOrderData } from "@/lib/models/order";
-import { Plus, Minus, Trash2, Search } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  Trash2,
+  Search,
+  ChevronDown,
+  ChevronUp,
+  X,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { MenuItem } from "@/lib/models/menuItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "react-toastify";
 import { OrderType } from "@/lib/types";
 import { SelectedCheese, SelectedSauce } from "@/lib/models/OrderItem";
+import { CheeseType, SauceType } from "@/lib/ennum";
+import { CHEESE_OPTIONS, SAUCE_OPTIONS } from "../menu/constants";
 
 interface OrderEditorProps {
   open: boolean;
@@ -53,6 +63,7 @@ export function OrderEditor({
   const [notes, setNotes] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedCartItem, setExpandedCartItem] = useState<string | null>(null);
 
   const filteredMenuItems = menuItems.filter(
     (item) =>
@@ -74,7 +85,24 @@ export function OrderEditor({
         ),
       );
     } else {
-      setCart([...cart, { menuItem, quantity: 1 }]);
+      // Initialize with the menu item's default sauces and cheeses
+      const selectedSauces: SelectedSauce[] =
+        menuItem.sauces?.map((sauce) => ({
+          sauceType: sauce.sauceType,
+          customName: sauce.customName,
+          isIncluded: true,
+        })) || [];
+
+      const selectedCheeses: SelectedCheese[] =
+        menuItem.cheeses?.map((cheese) => ({
+          cheeseType: cheese.cheeseType,
+          customName: cheese.customName,
+          isIncluded: true,
+        })) || [];
+      setCart([
+        ...cart,
+        { menuItem, quantity: 1, selectedSauces, selectedCheeses },
+      ]);
     }
   };
 
@@ -98,7 +126,122 @@ export function OrderEditor({
     (sum, item) => sum + Number(item.menuItem.price) * item.quantity,
     0,
   );
-  const tax = subtotal * 0.1; // 10% tax
+  // Toggle existing sauce in the cart item
+  const toggleSauceInclusion = (menuItemId: string, sauceIndex: number) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newSauces = [...(item.selectedSauces || [])];
+        newSauces[sauceIndex] = {
+          ...newSauces[sauceIndex],
+          isIncluded: !newSauces[sauceIndex].isIncluded,
+        };
+        return { ...item, selectedSauces: newSauces };
+      }),
+    );
+  };
+
+  // Toggle existing cheese in the cart item
+  const toggleCheeseInclusion = (menuItemId: string, cheeseIndex: number) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newCheeses = [...(item.selectedCheeses || [])];
+        newCheeses[cheeseIndex] = {
+          ...newCheeses[cheeseIndex],
+          isIncluded: !newCheeses[cheeseIndex].isIncluded,
+        };
+        return { ...item, selectedCheeses: newCheeses };
+      }),
+    );
+  };
+  const updateItemNotes = (menuItemId: string, notes: string) => {
+    setCart(
+      cart.map((item) =>
+        item.menuItem.id === menuItemId ? { ...item, notes } : item,
+      ),
+    );
+  };
+  // Add a new sauce to the cart item (from the full list)
+  const addSauceToItem = (menuItemId: string, sauceType: SauceType) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        // Check if sauce already exists
+        const exists = item.selectedSauces?.some(
+          (s) => s.sauceType === sauceType,
+        );
+        if (exists) return item;
+
+        const newSauces = [
+          ...(item.selectedSauces || []),
+          {
+            sauceType,
+            isIncluded: true,
+          },
+        ];
+        return { ...item, selectedSauces: newSauces };
+      }),
+    );
+  };
+
+  // Add a new cheese to the cart item (from the full list)
+  const addCheeseToItem = (menuItemId: string, cheeseType: CheeseType) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        // Check if cheese already exists
+        const exists = item.selectedCheeses?.some(
+          (c) => c.cheeseType === cheeseType,
+        );
+        if (exists) return item;
+
+        const newCheeses = [
+          ...(item.selectedCheeses || []),
+          {
+            cheeseType,
+            isIncluded: true,
+          },
+        ];
+        return { ...item, selectedCheeses: newCheeses };
+      }),
+    );
+  };
+
+  // Remove a sauce completely from the cart item
+  // Update this function
+  const removeSauceFromItem = (menuItemId: string, sauceIndex: number) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newSauces = (item.selectedSauces || []).filter(
+          (_, idx) => idx !== sauceIndex,
+        ); // ✅ Handle undefined
+        return { ...item, selectedSauces: newSauces };
+      }),
+    );
+  };
+
+  // Update this function
+  const removeCheeseFromItem = (menuItemId: string, cheeseIndex: number) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newCheeses = (item.selectedCheeses || []).filter(
+          (_, idx) => idx !== cheeseIndex,
+        ); // ✅ Handle undefined
+        return { ...item, selectedCheeses: newCheeses };
+      }),
+    );
+  };
+  // const tax = subtotal * 0.1; // 10% tax
+  const tax = 0;
   const total = subtotal + tax;
 
   const handleSubmit = () => {
@@ -116,8 +259,8 @@ export function OrderEditor({
         price: Number(item.menuItem.price),
         quantity: item.quantity,
         notes: item.notes,
-        selectedSauces: item.selectedSauces,
-        selectedCheeses: item.selectedCheeses,
+        selectedSauces: item.selectedSauces?.filter((s) => s.isIncluded),
+        selectedCheeses: item.selectedCheeses?.filter((c) => c.isIncluded),
       })),
       subtotal,
       tax,
@@ -139,7 +282,35 @@ export function OrderEditor({
     setSearchQuery("");
     onClose();
   };
+  const getSauceLabel = (sauce: SelectedSauce): string => {
+    if (sauce.customName) return sauce.customName;
+    const option = SAUCE_OPTIONS.find((opt) => opt.type === sauce.sauceType);
+    return option?.label || sauce.sauceType;
+  };
 
+  const getCheeseLabel = (cheese: SelectedCheese): string => {
+    if (cheese.customName) return cheese.customName;
+    const option = CHEESE_OPTIONS.find((opt) => opt.type === cheese.cheeseType);
+    return option?.label || cheese.cheeseType;
+  };
+
+  // Get available sauces that are not already added to this cart item
+  const getAvailableSauces = (item: CartItem) => {
+    const existingSauceTypes = new Set(
+      item.selectedSauces?.map((s) => s.sauceType),
+    );
+    return SAUCE_OPTIONS.filter((sauce) => !existingSauceTypes.has(sauce.type));
+  };
+
+  // Get available cheeses that are not already added to this cart item
+  const getAvailableCheeses = (item: CartItem) => {
+    const existingCheeseTypes = new Set(
+      item.selectedCheeses?.map((c) => c.cheeseType),
+    );
+    return CHEESE_OPTIONS.filter(
+      (cheese) => !existingCheeseTypes.has(cheese.type),
+    );
+  };
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-auto">
@@ -147,7 +318,7 @@ export function OrderEditor({
           <DialogTitle className="text-xl">Nouvelle commande</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1  gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Left: Order Details */}
           <div className="space-y-4">
             <div className="flex flex-col gap-1">
@@ -225,49 +396,264 @@ export function OrderEditor({
                 <h3 className="font-semibold text-sm">
                   Panier ({cart.length})
                 </h3>
-                <ScrollArea className="h-40 border rounded-md p-2">
-                  {cart.map((item) => (
-                    <div
-                      key={item.menuItem.id}
-                      className="flex items-center justify-between p-2 hover:bg-muted rounded-md mb-1"
-                    >
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">
-                          {item.menuItem.nameEn || item.menuItem.nameFr}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {Number(item.menuItem.price).toFixed(2)} EUR
-                        </p>
+                <ScrollArea className="h-96 border rounded-md p-2">
+                  {cart.map((item) => {
+                    const isExpanded = expandedCartItem === item.menuItem.id;
+                    const availableSauces = getAvailableSauces(item);
+                    const availableCheeses = getAvailableCheeses(item);
+
+                    return (
+                      <div
+                        key={item.menuItem.id}
+                        className="border rounded-md p-2 mb-2 bg-card"
+                      >
+                        {/* Main Item Row */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-sm">
+                                {item.menuItem.nameEn || item.menuItem.nameFr}
+                              </p>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-5 w-5"
+                                onClick={() =>
+                                  setExpandedCartItem(
+                                    isExpanded ? null : item.menuItem.id,
+                                  )
+                                }
+                              >
+                                {isExpanded ? (
+                                  <ChevronUp className="h-3 w-3" />
+                                ) : (
+                                  <ChevronDown className="h-3 w-3" />
+                                )}
+                              </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              {Number(item.menuItem.price).toFixed(2)} EUR
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="h-7 w-7"
+                              onClick={() =>
+                                updateQuantity(item.menuItem.id, -1)
+                              }
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-8 text-center">
+                              {item.quantity}
+                            </span>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="h-7 w-7"
+                              onClick={() =>
+                                updateQuantity(item.menuItem.id, 1)
+                              }
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-7 w-7 text-red-600"
+                              onClick={() => removeFromCart(item.menuItem.id)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Expanded Customizations */}
+                        {isExpanded && (
+                          <div className="mt-3 pt-3 border-t space-y-3">
+                            {/* Sauces Section */}
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs font-semibold">Sauces:</p>
+                              </div>
+
+                              {/* Current Sauces */}
+                              {item.selectedSauces &&
+                              item.selectedSauces.length > 0 ? (
+                                <div className="space-y-1 mb-2">
+                                  {item.selectedSauces.map((sauce, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center justify-between gap-2 text-xs p-1 rounded hover:bg-muted"
+                                    >
+                                      <label className="flex items-center gap-2 cursor-pointer flex-1">
+                                        <input
+                                          type="checkbox"
+                                          checked={sauce.isIncluded}
+                                          onChange={() =>
+                                            toggleSauceInclusion(
+                                              item.menuItem.id,
+                                              idx,
+                                            )
+                                          }
+                                          className="cursor-pointer"
+                                        />
+                                        <span>{getSauceLabel(sauce)}</span>
+                                      </label>
+                                      <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        className="h-5 w-5 text-red-600"
+                                        onClick={() =>
+                                          removeSauceFromItem(
+                                            item.menuItem.id,
+                                            idx,
+                                          )
+                                        }
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground mb-2">
+                                  Aucune sauce sélectionnée
+                                </p>
+                              )}
+
+                              {/* Add Sauce Dropdown */}
+                              {availableSauces.length > 0 && (
+                                <Select
+                                  onValueChange={(value) =>
+                                    addSauceToItem(
+                                      item.menuItem.id,
+                                      value as SauceType,
+                                    )
+                                  }
+                                >
+                                  <SelectTrigger className="h-8 text-xs">
+                                    <SelectValue placeholder="+ Ajouter une sauce" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {availableSauces.map((sauce) => (
+                                      <SelectItem
+                                        key={sauce.type}
+                                        value={sauce.type}
+                                      >
+                                        {sauce.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
+                            </div>
+
+                            {/* Cheeses Section */}
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs font-semibold">
+                                  Fromages:
+                                </p>
+                              </div>
+
+                              {/* Current Cheeses */}
+                              {item.selectedCheeses &&
+                              item.selectedCheeses.length > 0 ? (
+                                <div className="space-y-1 mb-2">
+                                  {item.selectedCheeses.map((cheese, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center justify-between gap-2 text-xs p-1 rounded hover:bg-muted"
+                                    >
+                                      <label className="flex items-center gap-2 cursor-pointer flex-1">
+                                        <input
+                                          type="checkbox"
+                                          checked={cheese.isIncluded}
+                                          onChange={() =>
+                                            toggleCheeseInclusion(
+                                              item.menuItem.id,
+                                              idx,
+                                            )
+                                          }
+                                          className="cursor-pointer"
+                                        />
+                                        <span>{getCheeseLabel(cheese)}</span>
+                                      </label>
+                                      <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        className="h-5 w-5 text-red-600"
+                                        onClick={() =>
+                                          removeCheeseFromItem(
+                                            item.menuItem.id,
+                                            idx,
+                                          )
+                                        }
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground mb-2">
+                                  Aucun fromage sélectionné
+                                </p>
+                              )}
+
+                              {/* Add Cheese Dropdown */}
+                              {availableCheeses.length > 0 && (
+                                <Select
+                                  onValueChange={(value) =>
+                                    addCheeseToItem(
+                                      item.menuItem.id,
+                                      value as CheeseType,
+                                    )
+                                  }
+                                >
+                                  <SelectTrigger className="h-8 text-xs">
+                                    <SelectValue placeholder="+ Ajouter un fromage" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {availableCheeses.map((cheese) => (
+                                      <SelectItem
+                                        key={cheese.type}
+                                        value={cheese.type}
+                                      >
+                                        {cheese.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
+                            </div>
+
+                            {/* Item Notes */}
+                            <div>
+                              <p className="text-xs font-semibold mb-1">
+                                Notes:
+                              </p>
+                              <Textarea
+                                placeholder="Instructions spéciales pour cet article..."
+                                value={item.notes || ""}
+                                onChange={(e) =>
+                                  updateItemNotes(
+                                    item.menuItem.id,
+                                    e.target.value,
+                                  )
+                                }
+                                className="text-xs"
+                                rows={2}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          className="h-7 w-7"
-                          onClick={() => updateQuantity(item.menuItem.id, -1)}
-                        >
-                          <Minus className="h-3 w-3" />
-                        </Button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          className="h-7 w-7"
-                          onClick={() => updateQuantity(item.menuItem.id, 1)}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-7 w-7 text-red-600"
-                          onClick={() => removeFromCart(item.menuItem.id)}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </ScrollArea>
               </div>
             )}
