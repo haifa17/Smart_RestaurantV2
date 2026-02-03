@@ -77,6 +77,7 @@ export function ItemEditorModal({
   );
   const [otherCheese, setOtherCheese] = useState("");
   const [hasOtherCheese, setHasOtherCheese] = useState(false);
+
   useEffect(() => {
     if (item) {
       setNameEn(item.nameEn || "");
@@ -246,327 +247,329 @@ export function ItemEditorModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">
             {item ? "Modifier l'article" : "Ajouter un article"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
-            {/* Image Upload */}
-            <div className="flex flex-col gap-2">
-              <label>Image de l&apos;article</label>
-              <div className="flex items-start gap-4">
-                {isUploading ? (
-                  <div className="w-24 h-24 rounded-lg border border-border flex flex-col items-center justify-center bg-muted">
-                    <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
-                  </div>
-                ) : image ? (
-                  <div className="relative">
+        <div className="space-y-4 py-4 ">
+          {/* Image Upload */}
+          <div className="flex flex-col gap-2">
+            <label>Image de l&apos;article</label>
+            <div className="flex items-start gap-4">
+              {isUploading ? (
+                <div className="w-24 h-24 rounded-lg border border-border flex flex-col items-center justify-center bg-muted">
+                  <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
+                </div>
+              ) : image ? (
+                <div className="relative">
+                  <img
+                    src={image || "/placeholder.svg"}
+                    alt="Preview"
+                    className="w-24 h-24 rounded-lg object-cover border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setImage(null)}
+                    className="absolute -top-2 -right-2 p-1 bg-foreground text-background rounded-full hover:bg-foreground/80 transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ) : (
+                <label className="w-24 h-24 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
+                  <ImagePlus className="h-6 w-6 text-muted-foreground mb-1" />
+                  <span className="text-xs text-muted-foreground">
+                    Télécharger
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={isUploading}
+                  />
+                </label>
+              )}
+
+              {/* Live Preview Card */}
+              <div className="flex-1 p-3 rounded-lg border border-border bg-muted/30">
+                <p className="text-xs text-muted-foreground mb-2">Aperçu</p>
+                <div className="flex gap-3">
+                  {image ? (
                     <img
                       src={image || "/placeholder.svg"}
                       alt="Preview"
-                      className="w-24 h-24 rounded-lg object-cover border border-border"
+                      className="w-12 h-12 rounded object-cover"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setImage(null)}
-                      className="absolute -top-2 -right-2 p-1 bg-foreground text-background rounded-full hover:bg-foreground/80 transition-colors"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ) : (
-                  <label className="w-24 h-24 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground transition-colors">
-                    <ImagePlus className="h-6 w-6 text-muted-foreground mb-1" />
-                    <span className="text-xs text-muted-foreground">
-                      Télécharger
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                      disabled={isUploading}
-                    />
-                  </label>
-                )}
-
-                {/* Live Preview Card */}
-                <div className="flex-1 p-3 rounded-lg border border-border bg-muted/30">
-                  <p className="text-xs text-muted-foreground mb-2">Aperçu</p>
-                  <div className="flex gap-3">
-                    {image ? (
-                      <img
-                        src={image || "/placeholder.svg"}
-                        alt="Preview"
-                        className="w-12 h-12 rounded object-cover"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded bg-muted" />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate text-foreground">
-                        {nameEn || nameFr || nameAr || "Nom de l'article"}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {descriptionEn ||
-                          descriptionAr ||
-                          descriptionFr ||
-                          "Description"}
-                      </p>
-                      <p className="text-sm font-medium text-foreground mt-0.5">
-                        {price ? Number.parseFloat(price).toFixed(2) : "0.00"}{" "}
-                        EUR
-                      </p>
-                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded bg-muted" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm  text-foreground line-clamp-1">
+                      {nameEn || nameFr || nameAr || "Nom de l'article"}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2 ">
+                      {descriptionEn ||
+                        descriptionAr ||
+                        descriptionFr ||
+                        "Description"}
+                    </p>
+                    <p className="text-sm font-medium text-foreground mt-0.5">
+                      {price ? Number.parseFloat(price).toFixed(2) : "0.00"} EUR
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Category Select */}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="category">Catégorie</label>
-              <Select
-                value={selectedCategoryId}
-                onValueChange={setSelectedCategoryId}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selectionner une catégorie" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      {cat.nameEn ||
-                        cat.nameFr ||
-                        cat.nameAr ||
-                        "Unnamed Category"}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {/* Category Select */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="category">Catégorie</label>
+            <Select
+              value={selectedCategoryId}
+              onValueChange={setSelectedCategoryId}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selectionner une catégorie" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.nameEn ||
+                      cat.nameFr ||
+                      cat.nameAr ||
+                      "Unnamed Category"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Name */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="name">Nom de l&apos;article</label>
+            <Input
+              placeholder="Name (English)"
+              value={nameEn}
+              onChange={(e) => setNameEn(e.target.value)}
+              
+            />
+            <Input
+              placeholder="Nom (Français)"
+              value={nameFr}
+              onChange={(e) => setNameFr(e.target.value)}
+            />
+            <Input
+              placeholder="الاسم (العربية)"
+              dir="rtl"
+              value={nameAr}
+              onChange={(e) => setNameAr(e.target.value)}
+            />
+          </div>
+
+          {/* Description  */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="description">
+              Description{" "}
+              <span className="text-muted-foreground">(optionnel)</span>
+            </label>
+            <Textarea
+              placeholder="Description (English)"
+              value={descriptionEn}
+              onChange={(e) => setDescriptionEn(e.target.value)}
+              rows={3}
+            />
+            <Textarea
+              placeholder="Description (Français)"
+              value={descriptionFr}
+              onChange={(e) => setDescriptionFr(e.target.value)}
+              rows={3}
+            />
+            <Textarea
+              placeholder="الوصف (العربية)"
+              dir="rtl"
+              value={descriptionAr}
+              onChange={(e) => setDescriptionAr(e.target.value)}
+              rows={3}
+            />
+          </div>
+
+          {/* Price */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="price">Price (EUR)</label>
+            <div className="relative">
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+          </div>
+          {/* Sauces */}
+          <div className="flex flex-col gap-2">
+            <label>Sauces disponibles</label>
+            <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
+              {SAUCE_OPTIONS.map((sauce) => (
+                <label
+                  key={sauce.type}
+                  className="flex items-center gap-2 text-sm cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedSauces.has(sauce.type)}
+                    onChange={() => toggleSauce(sauce.type)}
+                    className="cursor-pointer"
+                  />
+                  {sauce.label}
+                </label>
+              ))}
             </div>
 
-            {/* Name */}
+            {/* Other Sauce Input */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="name">Nom de l&apos;article</label>
-              <Input
-                placeholder="Name (English)"
-                value={nameEn}
-                onChange={(e) => setNameEn(e.target.value)}
-              />
-              <Input
-                placeholder="Nom (Français)"
-                value={nameFr}
-                onChange={(e) => setNameFr(e.target.value)}
-              />
-              <Input
-                placeholder="الاسم (العربية)"
-                dir="rtl"
-                value={nameAr}
-                onChange={(e) => setNameAr(e.target.value)}
-              />
-            </div>
-
-            {/* Description  */}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="description">
-                Description{" "}
-                <span className="text-muted-foreground">(optionnel)</span>
-              </label>
-              <Textarea
-                placeholder="Description (English)"
-                value={descriptionEn}
-                onChange={(e) => setDescriptionEn(e.target.value)}
-              />
-              <Textarea
-                placeholder="Description (Français)"
-                value={descriptionFr}
-                onChange={(e) => setDescriptionFr(e.target.value)}
-              />
-              <Textarea
-                placeholder="الوصف (العربية)"
-                dir="rtl"
-                value={descriptionAr}
-                onChange={(e) => setDescriptionAr(e.target.value)}
-              />
-            </div>
-
-            {/* Price */}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="price">Price (EUR)</label>
-              <div className="relative">
-                <Input
-                  id="price"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  placeholder="0.00"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={hasOtherSauce}
+                  onChange={(e) => {
+                    setHasOtherSauce(e.target.checked);
+                    if (!e.target.checked) {
+                      setOtherSauce("");
+                    }
+                  }}
+                  className="cursor-pointer"
                 />
-              </div>
-            </div>
-            {/* Sauces */}
-            <div className="flex flex-col gap-2">
-              <label>Sauces disponibles</label>
-              <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
-                {SAUCE_OPTIONS.map((sauce) => (
-                  <label
-                    key={sauce.type}
-                    className="flex items-center gap-2 text-sm cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedSauces.has(sauce.type)}
-                      onChange={() => toggleSauce(sauce.type)}
-                      className="cursor-pointer"
-                    />
-                    {sauce.label}
-                  </label>
-                ))}
-              </div>
-
-              {/* Other Sauce Input */}
-              <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={hasOtherSauce}
-                    onChange={(e) => {
-                      setHasOtherSauce(e.target.checked);
-                      if (!e.target.checked) {
-                        setOtherSauce("");
-                      }
-                    }}
-                    className="cursor-pointer"
-                  />
-                  Autre sauce
-                </label>
-                {hasOtherSauce && (
-                  <Input
-                    placeholder="Nom de la sauce personnalisée (ex: Sauce Harissa)"
-                    value={otherSauce}
-                    onChange={(e) => setOtherSauce(e.target.value)}
-                    className="ml-6"
-                  />
-                )}
-              </div>
-            </div>
-
-            {/* Cheeses */}
-            <div className="flex flex-col gap-2">
-              <label>Fromages disponibles</label>
-              <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
-                {CHEESE_OPTIONS.map((cheese) => (
-                  <label
-                    key={cheese.type}
-                    className="flex items-center gap-2 text-sm cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedCheeses.has(cheese.type)}
-                      onChange={() => toggleCheese(cheese.type)}
-                      className="cursor-pointer"
-                    />
-                    {cheese.label}
-                  </label>
-                ))}
-              </div>
-
-              {/* Other Cheese Input */}
-              <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={hasOtherCheese}
-                    onChange={(e) => {
-                      setHasOtherCheese(e.target.checked);
-                      if (!e.target.checked) {
-                        setOtherCheese("");
-                      }
-                    }}
-                    className="cursor-pointer"
-                  />
-                  Autre fromage
-                </label>
-                {hasOtherCheese && (
-                  <Input
-                    placeholder="Nom du fromage personnalisé (ex: Comté affiné)"
-                    value={otherCheese}
-                    onChange={(e) => setOtherCheese(e.target.value)}
-                    className="ml-6"
-                  />
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label>Attributs</label>
-              <div className="grid grid-cols-2 gap-3">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={isChefRecommendation}
-                    onChange={(e) => setIsChefRecommendation(e.target.checked)}
-                  />
-                  Recommandé par le chef
-                </label>
-
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={isPopular}
-                    onChange={(e) => setIsPopular(e.target.checked)}
-                  />
-                  Populaire
-                </label>
-
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={isSpicy}
-                    onChange={(e) => setIsSpicy(e.target.checked)}
-                  />
-                  Épicé 🌶️
-                </label>
-
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={isVegetarian}
-                    onChange={(e) => setIsVegetarian(e.target.checked)}
-                  />
-                  Végétarien 🥬
-                </label>
-              </div>
+                Autre sauce
+              </label>
+              {hasOtherSauce && (
+                <Input
+                  placeholder="Nom de la sauce personnalisée (ex: Sauce Harissa)"
+                  value={otherSauce}
+                  onChange={(e) => setOtherSauce(e.target.value)}
+                  className="ml-6"
+                />
+              )}
             </div>
           </div>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              className="cursor-pointer"
-              onClick={onClose}
-            >
-              Annuler
-            </Button>
-            <Button
-              type="submit"
-              className="cursor-pointer"
-              disabled={
-                isUploading ||
-                !price ||
-                !selectedCategoryId ||
-                (!nameEn.trim() && !nameFr.trim() && !nameAr.trim())
-              }
-            >
-              {item ? "Enregistrer les modifications" : "Ajouter un article"}
-            </Button>
-          </DialogFooter>
-        </form>
+          {/* Cheeses */}
+          <div className="flex flex-col gap-2">
+            <label>Fromages disponibles</label>
+            <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
+              {CHEESE_OPTIONS.map((cheese) => (
+                <label
+                  key={cheese.type}
+                  className="flex items-center gap-2 text-sm cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCheeses.has(cheese.type)}
+                    onChange={() => toggleCheese(cheese.type)}
+                    className="cursor-pointer"
+                  />
+                  {cheese.label}
+                </label>
+              ))}
+            </div>
+
+            {/* Other Cheese Input */}
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={hasOtherCheese}
+                  onChange={(e) => {
+                    setHasOtherCheese(e.target.checked);
+                    if (!e.target.checked) {
+                      setOtherCheese("");
+                    }
+                  }}
+                  className="cursor-pointer"
+                />
+                Autre fromage
+              </label>
+              {hasOtherCheese && (
+                <Input
+                  placeholder="Nom du fromage personnalisé (ex: Comté affiné)"
+                  value={otherCheese}
+                  onChange={(e) => setOtherCheese(e.target.value)}
+                  className="ml-6"
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label>Attributs</label>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isChefRecommendation}
+                  onChange={(e) => setIsChefRecommendation(e.target.checked)}
+                />
+                Recommandé par le chef
+              </label>
+
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isPopular}
+                  onChange={(e) => setIsPopular(e.target.checked)}
+                />
+                Populaire
+              </label>
+
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isSpicy}
+                  onChange={(e) => setIsSpicy(e.target.checked)}
+                />
+                Épicé 🌶️
+              </label>
+
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isVegetarian}
+                  onChange={(e) => setIsVegetarian(e.target.checked)}
+                />
+                Végétarien 🥬
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            className="cursor-pointer"
+            onClick={onClose}
+          >
+            Annuler
+          </Button>
+          <Button
+            type="submit"
+            onClick={handleSubmit}
+            className="cursor-pointer"
+            disabled={
+              isUploading ||
+              !price ||
+              !selectedCategoryId ||
+              (!nameEn.trim() && !nameFr.trim() && !nameAr.trim())
+            }
+          >
+            {item ? "Enregistrer les modifications" : "Ajouter un article"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
