@@ -150,3 +150,24 @@ export function createSuccessResponse<T>(
     { status, headers }
   );
 }
+
+// Helper function to create error responses
+export function createErrorResponse(
+  statusCode: number,
+  code: string,
+  message: string,
+  headers?: HeadersInit,
+  details?: unknown
+): Response {
+  return Response.json(
+    {
+      success: false,
+      error: {
+        message,
+        code,
+        details,
+      },
+    },
+    { status: statusCode, headers }
+  );
+}

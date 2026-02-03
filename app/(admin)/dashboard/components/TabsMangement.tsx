@@ -6,9 +6,10 @@ import { MenuPage } from "./pages/MenuPage";
 import { OrdersPage } from "./pages/OrdersPage";
 import { QRCodePage } from "./pages/QRCodePage";
 import { RestaurantInfoPage } from "./pages/RestaurantInfoPage";
+// import { RatingsManagement } from "./RatingsManagement"; // Rating disabled
 
 interface Props {
-  activeTab: "dashboard" | "menu" | "categories" | "orders" | "qr" | "info";
+  activeTab: "dashboard" | "menu" | "categories" | "orders" | "qr" | "info" | "ratings";
   restaurantId: string;
 }
 
@@ -26,6 +27,8 @@ export function TabsMangement({ activeTab, restaurantId }: Props) {
       return <QRCodePage restaurantId={restaurantId} />;
     case "info":
       return <RestaurantInfoPage restaurantId={restaurantId} />;
+    // case "ratings": // Rating disabled
+    //   return <RatingsManagement restaurantId={restaurantId} />;
     default:
       return null;
   }

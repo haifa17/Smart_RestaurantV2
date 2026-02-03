@@ -43,7 +43,7 @@ export const Sidebar = ({
         `}
       >
         {/* Top Section */}
-        <div className="space-y-10 py-6 flex-1 overflow-y-auto">
+        <div className="space-y-10 py-6">
           <div className="flex flex-col items-center gap-2">
             <motion.div
               variants={pulseVariants}

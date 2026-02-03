@@ -2,12 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateOrderData, UpdateOrderData } from "@/lib/models/order";
 import { toast } from "react-toastify";
 
-export function useOrderMutations(id: string) {
+export function useOrderMutations(restaurantId: string) {
   const queryClient = useQueryClient();
 
   const createOrder = useMutation({
     mutationFn: async (data: CreateOrderData) => {
-      const res = await fetch(`/api/admin/restaurants/${id}/orders`, {
+      const res = await fetch(`/api/admin/restaurants/${restaurantId}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -17,9 +17,9 @@ export function useOrderMutations(id: string) {
       return json.data; // unwrap the 'data' property
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders", id] });
+      queryClient.invalidateQueries({ queryKey: ["orders", restaurantId] });
       queryClient.invalidateQueries({
-        queryKey: ["order-stats", id],
+        queryKey: ["order-stats", restaurantId],
       });
       toast.success("Commande créée avec succès");
     },
@@ -30,9 +30,9 @@ export function useOrderMutations(id: string) {
   });
 
   const updateOrder = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateOrderData }) => {
+    mutationFn: async ({ id: orderId, data }: { id: string; data: UpdateOrderData }) => {
       const res = await fetch(
-        `/api/admin/restaurants/${id}/orders/${id}`,
+        `/api/admin/restaurants/${restaurantId}/orders/${orderId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -44,9 +44,9 @@ export function useOrderMutations(id: string) {
       return json.data; // unwrap
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders", id] });
+      queryClient.invalidateQueries({ queryKey: ["orders", restaurantId] });
       queryClient.invalidateQueries({
-        queryKey: ["order-stats", id],
+        queryKey: ["order-stats", restaurantId],
       });
       toast.success("Commande mise à jour");
     },
@@ -57,9 +57,9 @@ export function useOrderMutations(id: string) {
   });
 
   const deleteOrder = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (orderId: string) => {
       const res = await fetch(
-        `/api/admin/restaurants/${id}/orders/${id}`,
+        `/api/admin/restaurants/${restaurantId}/orders/${orderId}`,
         {
           method: "DELETE",
         },
@@ -69,9 +69,9 @@ export function useOrderMutations(id: string) {
       return json.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders", id] });
+      queryClient.invalidateQueries({ queryKey: ["orders", restaurantId] });
       queryClient.invalidateQueries({
-        queryKey: ["order-stats", id],
+        queryKey: ["order-stats", restaurantId],
       });
       toast.success("Commande supprimée");
     },

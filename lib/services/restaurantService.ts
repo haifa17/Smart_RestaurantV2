@@ -19,6 +19,7 @@ export async function createRestaurantForUser(
 
         const restaurant = await prisma.restaurant.create({
             data: {
+                userId: clerkUserId,  // Store the Clerk user ID
                 name: restaurantName,
                 slug,
                 tagline: `Welcome to ${restaurantName}`,
@@ -26,7 +27,7 @@ export async function createRestaurantForUser(
         });
 
         console.log(
-            `✅ Restaurant created for user ${clerkUserId}:`,
+            ` Restaurant created for user ${clerkUserId}:`,
             restaurant.id
         );
 
@@ -37,7 +38,7 @@ export async function createRestaurantForUser(
         };
     } catch (error) {
         console.error(
-            `❌ Error creating restaurant for user ${clerkUserId}:`,
+            ` Error creating restaurant for user ${clerkUserId}:`,
             error
         );
         throw error;
@@ -66,10 +67,18 @@ export async function getOrCreateRestaurant(
                 id: true,
                 name: true,
                 slug: true,
+                userId: true,
             },
         });
 
         if (existingRestaurant) {
+            // Update userId if missing (for restaurants created before this field was added)
+            if (!existingRestaurant.userId) {
+                await prisma.restaurant.update({
+                    where: { id: existingRestaurant.id },
+                    data: { userId: clerkUserId },
+                });
+            }
             return existingRestaurant;
         }
 
@@ -77,7 +86,7 @@ export async function getOrCreateRestaurant(
         return createRestaurantForUser(clerkUserId, email, firstName);
     } catch (error) {
         console.error(
-            `❌ Error getting/creating restaurant for user ${clerkUserId}:`,
+            ` Error getting/creating restaurant for user ${clerkUserId}:`,
             error
         );
         throw error;

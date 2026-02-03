@@ -42,6 +42,7 @@ enum OrderType {
 
 model Restaurant {
   id          String     @id @default(cuid())
+  userId      String?    @unique
   slug        String     @unique
   name        String
   phone       String?
@@ -61,6 +62,7 @@ model Restaurant {
   categories Category[]
   menuItems  MenuItem[]
   orders     Order[]
+  ratings    Rating[]
 
   @@index([slug])
   @@index([isActive])
@@ -221,6 +223,7 @@ model Order {
   customer      Customer?            @relation(fields: [customerId], references: [id], onDelete: SetNull)
   items         OrderItem[]
   statusHistory OrderStatusHistory[]
+  rating        Rating?
 
   @@index([restaurantId, status, createdAt])
   @@index([customerId])
@@ -269,3 +272,38 @@ model OrderStatusHistory {
   @@index([orderId, createdAt])
   @@map("order_status_history")
 }
+
+// ==============================
+// RATING SYSTEM
+// ==============================
+
+model Rating {
+  id           String  @id @default(cuid())
+  restaurantId String
+  orderId      String? @unique // Optional: link to specific order
+
+  // Rating details
+  rating       Int     // 1-5 stars
+  comment      String? // Optional feedback text
+  customerName String? // Optional: for display
+
+  // What's being rated
+  foodRating    Int? // 1-5 for food quality
+  serviceRating Int? // 1-5 for service
+  ambianceRating Int? // 1-5 for ambiance/atmosphere
+
+  // Metadata
+  isPublic  Boolean @default(true) // Show on public menu page
+  isApproved Boolean @default(true) // Admin can hide inappropriate reviews
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  order      Order?     @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([restaurantId, isPublic, isApproved, createdAt])
+  @@index([restaurantId, rating])
+  @@map("ratings")
+}
+
