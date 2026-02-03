@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
                   sauceType: sauce.sauceType,
                   customName: sauce.customName,
                   isIncluded: sauce.isIncluded ?? true,
-                  extraCost: sauce.extraCost,
+                  // extraCost: sauce.extraCost,
                 })),
               },
             }
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
                   cheeseType: cheese.cheeseType,
                   customName: cheese.customName,
                   isIncluded: cheese.isIncluded ?? true,
-                  extraCost: cheese.extraCost,
+                  // extraCost: cheese.extraCost,
                 })),
               },
             }

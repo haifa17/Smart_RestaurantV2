@@ -87,7 +87,7 @@ export async function PATCH(
                   sauceType: sauce.sauceType,
                   customName: sauce.customName,
                   isIncluded: sauce.isIncluded ?? true,
-                  extraCost: sauce.extraCost,
+                  // extraCost: sauce.extraCost,
                 })),
               },
             }
