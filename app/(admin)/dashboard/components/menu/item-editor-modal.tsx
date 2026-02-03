@@ -18,8 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MenuItem } from "@/lib/models/menuItem";
+import {
+  MenuItem,
+  MenuItemCheese,
+  MenuItemInput,
+  MenuItemSauce,
+} from "@/lib/models/menuItem";
 import { Category } from "@/lib/models/category";
+import { CheeseType, SauceType } from "@/lib/ennum";
+import { CHEESE_OPTIONS, SAUCE_OPTIONS } from "./constants";
 
 interface ItemEditorModalProps {
   open: boolean;
@@ -27,7 +34,7 @@ interface ItemEditorModalProps {
   item: MenuItem | null;
   categoryId: string;
   categories: Category[];
-  onSave: (item: Omit<MenuItem, "id">) => void;
+  onSave: (item: Omit<MenuItemInput, "id">) => void;
   onUploadImage: (file: File, folder: "menu-items") => Promise<{ url: string }>;
   restaurantId: string;
 }
@@ -57,6 +64,19 @@ export function ItemEditorModal({
   const [isPopular, setIsPopular] = useState(false);
   const [isSpicy, setIsSpicy] = useState(false);
   const [isVegetarian, setIsVegetarian] = useState(false);
+  // Sauces state
+  const [selectedSauces, setSelectedSauces] = useState<Set<SauceType>>(
+    new Set(),
+  );
+  const [otherSauce, setOtherSauce] = useState("");
+  const [hasOtherSauce, setHasOtherSauce] = useState(false);
+
+  // Cheese state
+  const [selectedCheeses, setSelectedCheeses] = useState<Set<CheeseType>>(
+    new Set(),
+  );
+  const [otherCheese, setOtherCheese] = useState("");
+  const [hasOtherCheese, setHasOtherCheese] = useState(false);
   useEffect(() => {
     if (item) {
       setNameEn(item.nameEn || "");
@@ -73,6 +93,33 @@ export function ItemEditorModal({
       setIsPopular(item.isPopular ?? false);
       setIsSpicy(item.isSpicy ?? false);
       setIsVegetarian(item.isVegetarian ?? false);
+      // Load sauces
+      if (item.sauces) {
+        const sauceTypes = new Set<SauceType>();
+        item.sauces.forEach((sauce) => {
+          if (sauce.sauceType === SauceType.OTHER && sauce.customName) {
+            setHasOtherSauce(true);
+            setOtherSauce(sauce.customName);
+          } else {
+            sauceTypes.add(sauce.sauceType);
+          }
+        });
+        setSelectedSauces(sauceTypes);
+      }
+
+      // Load cheeses
+      if (item.cheeses) {
+        const cheeseTypes = new Set<CheeseType>();
+        item.cheeses.forEach((cheese) => {
+          if (cheese.cheeseType === CheeseType.OTHER && cheese.customName) {
+            setHasOtherCheese(true);
+            setOtherCheese(cheese.customName);
+          } else {
+            cheeseTypes.add(cheese.cheeseType);
+          }
+        });
+        setSelectedCheeses(cheeseTypes);
+      }
     } else {
       setNameEn("");
       setNameFr("");
@@ -87,9 +134,33 @@ export function ItemEditorModal({
       setIsPopular(false);
       setIsSpicy(false);
       setIsVegetarian(false);
+      setSelectedSauces(new Set());
+      setSelectedCheeses(new Set());
+      setHasOtherSauce(false);
+      setOtherSauce("");
+      setHasOtherCheese(false);
+      setOtherCheese("");
     }
   }, [item, categoryId, open]);
+  const toggleSauce = (sauceType: SauceType) => {
+    const newSet = new Set(selectedSauces);
+    if (newSet.has(sauceType)) {
+      newSet.delete(sauceType);
+    } else {
+      newSet.add(sauceType);
+    }
+    setSelectedSauces(newSet);
+  };
 
+  const toggleCheese = (cheeseType: CheeseType) => {
+    const newSet = new Set(selectedCheeses);
+    if (newSet.has(cheeseType)) {
+      newSet.delete(cheeseType);
+    } else {
+      newSet.add(cheeseType);
+    }
+    setSelectedCheeses(newSet);
+  };
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -107,7 +178,6 @@ export function ItemEditorModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (
       !price ||
       !selectedCategoryId ||
@@ -116,7 +186,42 @@ export function ItemEditorModal({
     ) {
       return;
     }
-
+    // Build sauces array
+    const sauces: Omit<
+      MenuItemSauce,
+      "id" | "menuItemId" | "createdAt" | "updatedAt"
+    >[] = [];
+    selectedSauces.forEach((sauceType) => {
+      sauces.push({
+        sauceType,
+        isIncluded: true,
+      });
+    });
+    if (hasOtherSauce && otherSauce.trim()) {
+      sauces.push({
+        sauceType: SauceType.OTHER,
+        customName: otherSauce.trim(),
+        isIncluded: true,
+      });
+    }
+    // Build cheeses array
+    const cheeses: Omit<
+      MenuItemCheese,
+      "id" | "menuItemId" | "createdAt" | "updatedAt"
+    >[] = [];
+    selectedCheeses.forEach((cheeseType) => {
+      cheeses.push({
+        cheeseType,
+        isIncluded: true,
+      });
+    });
+    if (hasOtherCheese && otherCheese.trim()) {
+      cheeses.push({
+        cheeseType: CheeseType.OTHER,
+        customName: otherCheese.trim(),
+        isIncluded: true,
+      });
+    }
     onSave({
       restaurantId,
       categoryId: selectedCategoryId,
@@ -138,6 +243,8 @@ export function ItemEditorModal({
       isPopular,
       isSpicy,
       isVegetarian,
+      sauces: sauces.length > 0 ? sauces : undefined,
+      cheeses: cheeses.length > 0 ? cheeses : undefined,
     });
   };
 
@@ -304,6 +411,99 @@ export function ItemEditorModal({
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 />
+              </div>
+            </div>
+            {/* Sauces */}
+            <div className="flex flex-col gap-2">
+              <label>Sauces disponibles</label>
+              <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
+                {SAUCE_OPTIONS.map((sauce) => (
+                  <label
+                    key={sauce.type}
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedSauces.has(sauce.type)}
+                      onChange={() => toggleSauce(sauce.type)}
+                      className="cursor-pointer"
+                    />
+                    {sauce.label}
+                  </label>
+                ))}
+              </div>
+
+              {/* Other Sauce Input */}
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={hasOtherSauce}
+                    onChange={(e) => {
+                      setHasOtherSauce(e.target.checked);
+                      if (!e.target.checked) {
+                        setOtherSauce("");
+                      }
+                    }}
+                    className="cursor-pointer"
+                  />
+                  Autre sauce
+                </label>
+                {hasOtherSauce && (
+                  <Input
+                    placeholder="Nom de la sauce personnalisée (ex: Sauce Harissa)"
+                    value={otherSauce}
+                    onChange={(e) => setOtherSauce(e.target.value)}
+                    className="ml-6"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Cheeses */}
+            <div className="flex flex-col gap-2">
+              <label>Fromages disponibles</label>
+              <div className="grid grid-cols-2 gap-2 p-3 rounded-lg border border-border bg-muted/30">
+                {CHEESE_OPTIONS.map((cheese) => (
+                  <label
+                    key={cheese.type}
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedCheeses.has(cheese.type)}
+                      onChange={() => toggleCheese(cheese.type)}
+                      className="cursor-pointer"
+                    />
+                    {cheese.label}
+                  </label>
+                ))}
+              </div>
+
+              {/* Other Cheese Input */}
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={hasOtherCheese}
+                    onChange={(e) => {
+                      setHasOtherCheese(e.target.checked);
+                      if (!e.target.checked) {
+                        setOtherCheese("");
+                      }
+                    }}
+                    className="cursor-pointer"
+                  />
+                  Autre fromage
+                </label>
+                {hasOtherCheese && (
+                  <Input
+                    placeholder="Nom du fromage personnalisé (ex: Comté affiné)"
+                    value={otherCheese}
+                    onChange={(e) => setOtherCheese(e.target.value)}
+                    className="ml-6"
+                  />
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../lib/api-client";
 import { toast } from "react-toastify";
+import { MenuItemCheeseInput, MenuItemSauceInput } from "@/lib/models/menuItem";
 
 export function useMenuItemMutations(restaurantId: string) {
   const queryClient = useQueryClient();
@@ -13,24 +14,22 @@ export function useMenuItemMutations(restaurantId: string) {
   const createMenuItem = useMutation({
     mutationFn: (data: {
       categoryId: string;
-
       nameEn?: string;
       nameFr?: string;
       nameAr?: string;
-
       descriptionEn?: string;
       descriptionFr?: string;
       descriptionAr?: string;
-
       price: number;
       image?: string | null;
-
       available?: boolean;
       isActive?: boolean;
       isChefRecommendation?: boolean;
       isPopular?: boolean;
       isSpicy?: boolean;
       isVegetarian?: boolean;
+      sauces?: MenuItemSauceInput[];
+      cheeses?: MenuItemCheeseInput[];
     }) => apiClient.createMenuItem({ restaurantId, ...data }),
     onSuccess: () => {
       invalidateCache();
@@ -67,6 +66,8 @@ export function useMenuItemMutations(restaurantId: string) {
         isPopular?: boolean;
         isSpicy?: boolean;
         isVegetarian?: boolean;
+        sauces?: MenuItemSauceInput[];
+        cheeses?: MenuItemCheeseInput[];
       };
     }) => apiClient.updateMenuItem(id, data),
     onSuccess: () => {

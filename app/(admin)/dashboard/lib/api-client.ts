@@ -1,5 +1,5 @@
 import { Category } from "@/lib/models/category";
-import { MenuItem } from "@/lib/models/menuItem";
+import { MenuItem, MenuItemInput } from "@/lib/models/menuItem";
 import { Restaurant } from "@/lib/models/restaurant";
 import { ApiResponse } from "@/lib/types";
 
@@ -119,11 +119,11 @@ export class AdminApiClient {
     return this.get<MenuItem[]>(`/menu-items?${params}`);
   }
 
-  createMenuItem(data: Omit<MenuItem, "id">) {
+  createMenuItem(data: Omit<MenuItemInput, "id">) {
     return this.post<MenuItem>("/menu-items", data);
   }
 
-  updateMenuItem(id: string, data: Partial<MenuItem>) {
+  updateMenuItem(id: string, data: Partial<MenuItemInput>) {
     return this.patch<MenuItem>(`/menu-items/${id}`, data);
   }
 

@@ -36,6 +36,38 @@ enum OrderType {
   TAKEAWAY
 }
 
+enum SauceType {
+  MUSTARD
+  SOY_SAUCE
+  MAYONNAISE
+  BARBECUE
+  KETCHUP
+  HOT_SAUCE
+  RANCH
+  HONEY_MUSTARD
+  SWEET_CHILI
+  GARLIC_AIOLI
+  OTHER
+
+  @@map("sauce_types")
+}
+
+// Cheese types enum
+enum CheeseType {
+  CHEDDAR
+  MOZZARELLA
+  PARMESAN
+  BLUE_CHEESE
+  GOAT_CHEESE
+  SWISS
+  FETA
+  CREAM_CHEESE
+  PROVOLONE
+  OTHER
+
+  @@map("cheese_types")
+}
+
 // ==============================
 // MODELS
 // ==============================
@@ -143,13 +175,54 @@ model MenuItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  restaurant Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[] @relation // ← Order items are optional (can be empty array)
+  restaurant Restaurant       @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  category   Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]      @relation // ← Order items are optional (can be empty array)
+  // New relations for sauces and cheese
+  sauces     MenuItemSauce[]
+  cheeses    MenuItemCheese[]
 
   @@index([restaurantId, categoryId, available, isActive])
   @@index([categoryId])
   @@map("menu_items")
+}
+
+// Junction table for menu item sauces
+model MenuItemSauce {
+  id         String    @id @default(cuid())
+  menuItemId String
+  sauceType  SauceType
+  customName String? // For when sauceType is OTHER
+  isIncluded Boolean   @default(false) // Is it included by default?
+  extraCost  Decimal?  @db.Decimal(10, 2) // Additional cost if any
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, sauceType, customName])
+  @@index([menuItemId])
+  @@map("menu_item_sauces")
+}
+
+// Junction table for menu item cheeses
+model MenuItemCheese {
+  id         String     @id @default(cuid())
+  menuItemId String
+  cheeseType CheeseType
+  customName String? // For when cheeseType is OTHER
+  isIncluded Boolean    @default(false) // Is it included by default?
+  extraCost  Decimal?   @db.Decimal(10, 2) // Additional cost if any
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, cheeseType, customName])
+  @@index([menuItemId])
+  @@map("menu_item_cheeses")
 }
 
 model User {

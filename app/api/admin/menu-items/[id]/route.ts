@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { prisma } from '@/lib/prsima-simple'
+import { prisma } from "@/lib/prsima-simple";
 import {
   handleApiError,
   createSuccessResponse,
@@ -16,7 +16,7 @@ export async function OPTIONS() {
 // GET /api/admin/menu-items/[id]
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await context.params;
@@ -37,12 +37,13 @@ export async function GET(
 // PATCH /api/admin/menu-items/[id]
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await context.params;
     const body = await request.json();
     const validatedData = menuItemUpdateSchema.parse(body);
+    const { sauces, cheeses, ...menuItemData } = validatedData;
 
     // Get menu item to find restaurantId for cache invalidation
     const existingItem = await prisma.menuItem.findUnique({
@@ -54,9 +55,55 @@ export async function PATCH(
       throw new ApiError(404, "NOT_FOUND", "Menu item not found");
     }
 
+    // ✅ If sauces are being updated, delete old ones first
+    if (sauces !== undefined) {
+      await prisma.menuItemSauce.deleteMany({
+        where: { menuItemId: id },
+      });
+    }
+
+    // ✅ If cheeses are being updated, delete old ones first
+    if (cheeses !== undefined) {
+      await prisma.menuItemCheese.deleteMany({
+        where: { menuItemId: id },
+      });
+    }
+
+    // ✅ Fixed: Wrap everything in 'data' property
     const menuItem = await prisma.menuItem.update({
       where: { id },
-      data: validatedData,
+      data: {
+        ...menuItemData,
+        // ✅ Create new sauces
+        sauces:
+          sauces && sauces.length > 0
+            ? {
+                create: sauces.map((sauce) => ({
+                  sauceType: sauce.sauceType,
+                  customName: sauce.customName,
+                  isIncluded: sauce.isIncluded ?? true,
+                  extraCost: sauce.extraCost,
+                })),
+              }
+            : undefined,
+
+        // ✅ Create new cheeses
+        cheeses:
+          cheeses && cheeses.length > 0
+            ? {
+                create: cheeses.map((cheese) => ({
+                  cheeseType: cheese.cheeseType,
+                  customName: cheese.customName,
+                  isIncluded: cheese.isIncluded ?? true,
+                  extraCost: cheese.extraCost,
+                })),
+              }
+            : undefined,
+      },
+      include: {
+        sauces: true,
+        cheeses: true,
+      },
     });
 
     // Invalidate customer menu cache
@@ -68,11 +115,10 @@ export async function PATCH(
     return handleApiError(error, addCorsHeaders());
   }
 }
-
 // DELETE /api/admin/menu-items/[id] - Soft delete
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await context.params;
@@ -102,7 +148,7 @@ export async function DELETE(
     return createSuccessResponse(
       { message: "Menu item deleted successfully" },
       200,
-      addCorsHeaders()
+      addCorsHeaders(),
     );
   } catch (error) {
     return handleApiError(error, addCorsHeaders());

@@ -1,24 +1,27 @@
-import { NextRequest } from 'next/server'
-import { createSuccessResponse, handleApiError } from '@/lib/api-error'
-import { menuItemCreateSchema } from '@/lib/dtos/menuItem'
-import { addCorsHeaders, handleOptions } from '@/lib/cors'
-import { prisma } from '@/lib/prsima-simple'
+import { NextRequest } from "next/server";
+import { createSuccessResponse, handleApiError } from "@/lib/api-error";
+import { menuItemCreateSchema } from "@/lib/dtos/menuItem";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+import { prisma } from "@/lib/prsima-simple";
 
 export async function OPTIONS() {
-  return handleOptions()
+  return handleOptions();
 }
 
 // GET /api/admin/menu-items?restaurantId=xxx
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams
-    const restaurantId = searchParams.get('restaurantId')
+    const searchParams = request.nextUrl.searchParams;
+    const restaurantId = searchParams.get("restaurantId");
 
     if (!restaurantId) {
       return Response.json(
-        { success: false, error: { message: 'restaurantId is required', code: 'MISSING_PARAM' } },
-        { status: 400, headers: addCorsHeaders() }
-      )
+        {
+          success: false,
+          error: { message: "restaurantId is required", code: "MISSING_PARAM" },
+        },
+        { status: 400, headers: addCorsHeaders() },
+      );
     }
 
     const menuItems = await prisma.menuItem.findMany({
@@ -26,33 +29,68 @@ export async function GET(request: NextRequest) {
         restaurantId,
         isActive: true,
       },
-      orderBy: {
-        createdAt: 'desc',
+      include: {
+        sauces: true,
+        cheeses: true,
       },
-    })
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-    return createSuccessResponse(menuItems, 200, addCorsHeaders())
+    return createSuccessResponse(menuItems, 200, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error, addCorsHeaders())
+    return handleApiError(error, addCorsHeaders());
   }
 }
 
 // POST /api/admin/menu-items
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const validatedData = menuItemCreateSchema.parse(body)
+    const body = await request.json();
+    const validatedData = menuItemCreateSchema.parse(body);
+    const { sauces, cheeses, ...menuItemData } = validatedData;
 
     const menuItem = await prisma.menuItem.create({
       data: {
-        ...validatedData,
-        available: validatedData.available ?? true,
-        isActive: validatedData.isActive ?? true,
-      },
-    })
+        ...menuItemData,
+        available: menuItemData.available ?? true,
+        isActive: menuItemData.isActive ?? true,
+        // ✅ Create related sauces
+        sauces:
+          sauces && sauces.length > 0
+            ? {
+                create: sauces.map((sauce) => ({
+                  sauceType: sauce.sauceType,
+                  customName: sauce.customName,
+                  isIncluded: sauce.isIncluded ?? true,
+                  extraCost: sauce.extraCost,
+                })),
+              }
+            : undefined,
 
-    return createSuccessResponse(menuItem, 201, addCorsHeaders())
+        // ✅ Create related cheeses
+        cheeses:
+          cheeses && cheeses.length > 0
+            ? {
+                create: cheeses.map((cheese) => ({
+                  cheeseType: cheese.cheeseType,
+                  customName: cheese.customName,
+                  isIncluded: cheese.isIncluded ?? true,
+                  extraCost: cheese.extraCost,
+                })),
+              }
+            : undefined,
+      },
+      // ✅ Include relations in response
+      include: {
+        sauces: true,
+        cheeses: true,
+      },
+    });
+
+    return createSuccessResponse(menuItem, 201, addCorsHeaders());
   } catch (error) {
-    return handleApiError(error, addCorsHeaders())
+    return handleApiError(error, addCorsHeaders());
   }
 }

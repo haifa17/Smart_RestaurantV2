@@ -1,5 +1,41 @@
 import z from "zod";
+const menuItemSauceInputSchema = z.object({
+  sauceType: z.enum([
+    "MUSTARD",
+    "SOY_SAUCE",
+    "MAYONNAISE",
+    "BARBECUE",
+    "KETCHUP",
+    "HOT_SAUCE",
+    "RANCH",
+    "HONEY_MUSTARD",
+    "SWEET_CHILI",
+    "GARLIC_AIOLI",
+    "OTHER",
+  ]),
+  customName: z.string().optional(),
+  isIncluded: z.boolean().optional(),
+  extraCost: z.number().optional(),
+});
 
+// Schema for cheese input
+const menuItemCheeseInputSchema = z.object({
+  cheeseType: z.enum([
+    "CHEDDAR",
+    "MOZZARELLA",
+    "PARMESAN",
+    "BLUE_CHEESE",
+    "GOAT_CHEESE",
+    "SWISS",
+    "FETA",
+    "CREAM_CHEESE",
+    "PROVOLONE",
+    "OTHER",
+  ]),
+  customName: z.string().optional(),
+  isIncluded: z.boolean().optional(),
+  extraCost: z.number().optional(),
+});
 export const menuItemCreateSchema = z
   .object({
     restaurantId: z.string(),
@@ -24,6 +60,8 @@ export const menuItemCreateSchema = z
     isPopular: z.boolean().default(false),
     isSpicy: z.boolean().default(false),
     isVegetarian: z.boolean().default(false),
+    sauces: z.array(menuItemSauceInputSchema).optional(),
+    cheeses: z.array(menuItemCheeseInputSchema).optional(),
   })
   .refine((data) => data.nameEn || data.nameFr || data.nameAr, {
     message: "At least one name (EN, FR, AR) is required",
@@ -51,4 +89,6 @@ export const menuItemUpdateSchema = z.object({
   isPopular: z.boolean().optional(),
   isSpicy: z.boolean().optional(),
   isVegetarian: z.boolean().optional(),
+  sauces: z.array(menuItemSauceInputSchema).optional(),
+  cheeses: z.array(menuItemCheeseInputSchema).optional(),
 });
