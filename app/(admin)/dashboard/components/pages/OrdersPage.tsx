@@ -7,11 +7,12 @@ import { OrderCard } from "../cards/OrderCard";
 import { useOrders } from "../../hooks/queries/useOrders";
 import { useOrderMutations } from "../../hooks/mutations/useOrderMutations";
 import { useMenuItems } from "../../hooks/queries/useMenuItems";
-import { Order, OrderStatus } from "@/lib/models/order";
+import { Order } from "@/lib/models/order";
 import { OrderEditor } from "../order/order-editor";
 import OrderDetailsDialog from "../order/order-details-dialog";
 import OrderStatusCards from "../order/order-status";
 import OrderTabs from "../order/OrderTabs";
+import { OrderStatus } from "@/lib/types";
 
 export function OrdersPage({ restaurantId }: { restaurantId: string }) {
   const { data: orders = [], isLoading } = useOrders(restaurantId);

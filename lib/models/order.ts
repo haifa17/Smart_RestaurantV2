@@ -1,14 +1,7 @@
 // lib/models/order.ts
 
-export type OrderStatus = 
-  | "PENDING"
-  | "CONFIRMED"
-  | "PREPARING"
-  | "READY"
-  | "COMPLETED"
-  | "CANCELLED";
-
-export type OrderType = "DINE_IN" | "TAKEAWAY";
+import { OrderStatus, OrderType } from "../types";
+import { OrderItem } from "./OrderItem";
 
 export interface Order {
   id: string;
@@ -38,17 +31,7 @@ export interface Order {
   statusHistory?: OrderStatusHistory[];
 }
 
-export interface OrderItem {
-  id: string;
-  orderId: string;
-  menuItemId?: string;
-  name: string;
-  price: number;
-  quantity: number;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 export interface Customer {
   id: string;
@@ -96,46 +79,3 @@ export interface UpdateOrderData {
   isPaid?: boolean;
 }
 
-export const ORDER_STATUS_CONFIG: Record<
-  OrderStatus,
-  { label: string; color: string; bgColor: string }
-> = {
-  PENDING: {
-    label: "En attente",
-    color: "text-yellow-700",
-    bgColor: "bg-yellow-100",
-  },
-  CONFIRMED: {
-    label: "Confirmé",
-    color: "text-blue-700",
-    bgColor: "bg-blue-100",
-  },
-  PREPARING: {
-    label: "En préparation",
-    color: "text-purple-700",
-    bgColor: "bg-purple-100",
-  },
-  READY: {
-    label: "Prêt",
-    color: "text-green-700",
-    bgColor: "bg-green-100",
-  },
-  COMPLETED: {
-    label: "Terminé",
-    color: "text-gray-700",
-    bgColor: "bg-gray-100",
-  },
-  CANCELLED: {
-    label: "Annulé",
-    color: "text-red-700",
-    bgColor: "bg-red-100",
-  },
-};
-
-export const ORDER_TYPE_CONFIG: Record<
-  OrderType,
-  { label: string; icon: string }
-> = {
-  DINE_IN: { label: "Sur place", icon: "🍽️" },
-  TAKEAWAY: { label: "À emporter", icon: "📦" },
-};

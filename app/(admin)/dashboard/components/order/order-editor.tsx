@@ -16,12 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateOrderData, OrderType } from "@/lib/models/order";
+import { CreateOrderData } from "@/lib/models/order";
 import { Plus, Minus, Trash2, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { MenuItem } from "@/lib/models/menuItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "react-toastify";
+import { OrderType } from "@/lib/types";
 
 interface OrderEditorProps {
   open: boolean;

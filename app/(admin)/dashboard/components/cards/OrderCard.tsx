@@ -1,7 +1,5 @@
 import {
   Order,
-  ORDER_STATUS_CONFIG,
-  ORDER_TYPE_CONFIG,
 } from "@/lib/models/order";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import { ORDER_STATUS_CONFIG, ORDER_TYPE_CONFIG } from "@/lib/utils";
 
 interface OrderCardProps {
   order: Order;

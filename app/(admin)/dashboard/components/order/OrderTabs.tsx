@@ -6,7 +6,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Order, OrderStatus } from "@/lib/models/order";
+import { Order } from "@/lib/models/order";
+import { OrderStatus } from "@/lib/types";
 import { Filter } from "lucide-react";
 import { toast } from "react-toastify";
 

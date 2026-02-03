@@ -8,6 +8,22 @@ interface PageProps {
     slug: string;
   }>;
 }
+// Type for order item with sauces and cheeses
+interface OrderItemInput {
+  menuItemId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  notes?: string;
+  selectedSauces?: Array<{
+    sauceType: string;
+    customName?: string;
+  }>;
+  selectedCheeses?: Array<{
+    cheeseType: string;
+    customName?: string;
+  }>;
+}
 
 /* ===============================
    CORS PREFLIGHT
@@ -18,10 +34,7 @@ export const OPTIONS = handleOptions;
 /* ===============================
    CREATE PUBLIC ORDER
    =============================== */
-export async function POST(
-  req: NextRequest,
-  { params }: PageProps
-) {
+export async function POST(req: NextRequest, { params }: PageProps) {
   try {
     const { slug } = await params;
     const data = await req.json();
@@ -38,7 +51,7 @@ export async function POST(
       return createSuccessResponse(
         { message: "Restaurant not found" },
         404,
-        addCorsHeaders()
+        addCorsHeaders(),
       );
     }
 
@@ -75,12 +88,14 @@ export async function POST(
         notes: data.notes,
 
         items: {
-          create: data.items.map((item: any) => ({
+          create: data.items.map((item: OrderItemInput) => ({
             menuItemId: item.menuItemId,
             name: item.name,
             price: item.price,
             quantity: item.quantity,
             notes: item.notes,
+            selectedSauces: item.selectedSauces || [],
+            selectedCheeses: item.selectedCheeses || [],
           })),
         },
 

@@ -1,8 +1,6 @@
 import { Card } from "@/components/ui/card";
 import {
   Order,
-  ORDER_STATUS_CONFIG,
-  ORDER_TYPE_CONFIG,
 } from "@/lib/models/order";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
@@ -10,6 +8,7 @@ import { fr } from "date-fns/locale";
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTab } from "@/components/contexts/TabContext";
+import { ORDER_STATUS_CONFIG, ORDER_TYPE_CONFIG } from "@/lib/utils";
 
 interface Props {
   orders: Order[];
