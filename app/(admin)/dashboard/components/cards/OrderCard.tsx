@@ -1,6 +1,4 @@
-import {
-  Order,
-} from "@/lib/models/order";
+import { Order } from "@/lib/models/order";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -114,13 +112,36 @@ export function OrderCard({
             )}
           </div>
 
-          {/* Items Summary */}
-          <div className="text-sm">
-            <p className="text-muted-foreground">
+          {/* Items List */}
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">
               {order.items.length} article{order.items.length > 1 ? "s" : ""}
             </p>
-            <p className="font-semibold text-lg mt-1">
-              {Number(order.total).toFixed(2)} EUR
+            <div className="space-y-2">
+              {order.items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center p-2 border rounded"
+                >
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Quantité: {item.quantity}
+                    </p>
+                    {item.notes && (
+                      <p className="text-xs text-muted-foreground italic">
+                        {item.notes}
+                      </p>
+                    )}
+                  </div>
+                  <p className="font-medium">
+                    {(item.price * item.quantity).toFixed(2)} EUR
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="font-semibold text-lg mt-3">
+              Total: {Number(order.total).toFixed(2)} EUR
             </p>
           </div>
 
