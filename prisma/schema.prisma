@@ -254,7 +254,7 @@ model Customer {
 
 model Order {
   id           String  @id @default(cuid())
-  orderNumber  String  @unique // e.g., "ORD-20260126-001"
+  orderNumber  String? @unique
   restaurantId String
   customerId   String? // Optional: for walk-in customers without registration
 
@@ -315,9 +315,9 @@ model OrderItem {
   quantity Int
 
   // Customization
-  notes String? // Special instructions (e.g., "no onions", "extra spicy")
-  selectedSauces  Json?  // Array of selected sauce types and custom names
-  selectedCheeses Json?  // Array of selected cheese types and custom names
+  notes           String? // Special instructions (e.g., "no onions", "extra spicy")
+  selectedSauces  Json? // Array of selected sauce types and custom names
+  selectedCheeses Json? // Array of selected cheese types and custom names
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

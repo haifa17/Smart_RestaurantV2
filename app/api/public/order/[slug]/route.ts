@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, { params }: PageProps) {
     const { slug } = await params;
     const data = await req.json();
 
-    // 1️⃣ Find restaurant by slug
+    // 1️⃣ Find restaurant
     const restaurant = await prisma.restaurant.findFirst({
       where: {
         slug,
@@ -48,108 +48,67 @@ export async function POST(req: NextRequest, { params }: PageProps) {
       );
     }
 
-    // 2️⃣ Create order with retry logic for race conditions
-    const maxRetries = 5;
-    let order;
+    // 2️⃣ Create order safely using DB id
+    const order = await prisma.$transaction(async (tx) => {
+      // Create order WITHOUT orderNumber
+      const createdOrder = await tx.order.create({
+        data: {
+          restaurantId: restaurant.id,
+          customerName: data.customerName,
+          customerPhone: data.customerPhone,
+          type: data.type,
+          status: "PENDING",
+          tableNumber: data.tableNumber,
+          subtotal: data.subtotal,
+          tax: data.tax,
+          discount: data.discount,
+          total: data.total,
+          notes: data.notes,
 
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-      try {
-        const now = new Date();
-        const startOfDay = new Date(now.setHours(0, 0, 0, 0));
-        const dateStr = startOfDay.toISOString().split("T")[0].replace(/-/g, "");
+          items: {
+            create: data.items.map((item: OrderItemInput) => ({
+              menuItemId: item.menuItemId,
+              name: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              notes: item.notes,
+              selectedSauces: item.selectedSauces || [],
+              selectedCheeses: item.selectedCheeses || [],
+            })),
+          },
 
-        // Use transaction to ensure atomicity
-        order = await prisma.$transaction(async (tx) => {
-          // Count within transaction for consistency
-          const orderCount = await tx.order.count({
-            where: {
-              restaurantId: restaurant.id,
-              createdAt: {
-                gte: startOfDay,
-              },
-            },
-          });
-
-          const orderNumber = `ORD-${dateStr}-${String(orderCount + 1).padStart(3, "0")}`;
-
-          // Create order with all related data
-          return await tx.order.create({
-            data: {
-              orderNumber,
-              restaurantId: restaurant.id,
-              customerName: data.customerName,
-              customerPhone: data.customerPhone,
-              type: data.type,
+          statusHistory: {
+            create: {
               status: "PENDING",
-              tableNumber: data.tableNumber,
-              subtotal: data.subtotal,
-              tax: data.tax,
-              discount: data.discount,
-              total: data.total,
-              notes: data.notes,
-
-              items: {
-                create: data.items.map((item: OrderItemInput) => ({
-                  menuItemId: item.menuItemId,
-                  name: item.name,
-                  price: item.price,
-                  quantity: item.quantity,
-                  notes: item.notes,
-                  selectedSauces: item.selectedSauces || [],
-                  selectedCheeses: item.selectedCheeses || [],
-                })),
-              },
-
-              statusHistory: {
-                create: {
-                  status: "PENDING",
-                  notes: "Order created from public menu",
-                  changedBy: "PUBLIC",
-                },
-              },
+              notes: "Order created from public menu",
+              changedBy: "PUBLIC",
             },
-            include: {
-              items: true,
-            },
-          });
-        });
+          },
+        },
+        include: {
+          items: true,
+        },
+      });
 
-        // ✅ Success - break out of retry loop
-        break;
+      // Generate UNIQUE orderNumber from DB id
+      const dateStr = new Date()
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, "");
 
-      } catch (error: any) {
-        // Check if it's a unique constraint violation (duplicate orderNumber)
-        // Handle both Prisma error code (P2002) and driver adapter error code (DUPLICATE_ENTRY)
-        const isPrismaError = error.code === 'P2002';
-        const isDriverError = error.code === 'DUPLICATE_ENTRY';
-        const isDuplicateError = isPrismaError || isDriverError ||
-                                 error.message?.includes('already exists') ||
-                                 error.message?.includes('duplicate');
-        const hasRetriesLeft = attempt < maxRetries - 1;
+      const orderNumber = `ORD-${dateStr}-${String(
+        createdOrder.id
+      ).padStart(6, "0")}`;
 
-        if (isDuplicateError && hasRetriesLeft) {
-          // Log the retry attempt
-          console.log(`Order number collision detected, retrying... (attempt ${attempt + 1}/${maxRetries})`);
-
-          // Exponential backoff: wait longer with each retry
-          await new Promise(resolve => setTimeout(resolve, 50 * (attempt + 1)));
-
-          // Continue to next iteration
-          continue;
-        }
-
-        // If it's not a duplicate error, or we're out of retries, throw it
-        throw error;
-      }
-    }
-
-    // Safety check: ensure order was created
-    if (!order) {
-      throw new Error("Failed to create order after multiple attempts");
-    }
+      // Update order with orderNumber
+      return await tx.order.update({
+        where: { id: createdOrder.id },
+        data: { orderNumber },
+        include: { items: true },
+      });
+    });
 
     return createSuccessResponse(order, 201, addCorsHeaders());
-
   } catch (error) {
     console.error("Public order error:", error);
     return handleApiError(error, addCorsHeaders());
