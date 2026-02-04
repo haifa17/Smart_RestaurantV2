@@ -29,23 +29,56 @@ export default function CustomSignInPage() {
       });
 
       if (result.status === "complete") {
-        // ✅ Set the active session before redirecting
+        // ✅ Définir la session active avant la redirection
         await setActive({
           session: result.createdSessionId,
         });
 
         router.replace("/dashboard");
       } else if (result.status === "needs_first_factor") {
-        setError("Please verify your login method.");
+        setError("Veuillez vérifier votre méthode de connexion.");
       } else {
-        setError("Login incomplete.");
+        setError("Connexion incomplète.");
       }
     } catch (err: any) {
-      setError(
-        err.errors?.[0]?.longMessage ||
-          err.message ||
-          "Invalid email or password",
-      );
+      // Gestion des erreurs spécifiques de Clerk
+      if (err.errors && err.errors.length > 0) {
+        const clerkError = err.errors[0];
+
+        // Mapper les codes d'erreur Clerk vers des messages en français
+        switch (clerkError.code) {
+          case "form_identifier_not_found":
+            setError("Aucun compte n'existe avec cet email.");
+            break;
+          case "form_password_incorrect":
+            setError("Mot de passe incorrect.");
+            break;
+          case "form_identifier_exists":
+            setError("Un compte existe déjà avec cet email.");
+            break;
+          case "too_many_attempts":
+            setError("Trop de tentatives. Veuillez réessayer plus tard.");
+            break;
+          case "network_error":
+            setError("Erreur réseau. Vérifiez votre connexion internet.");
+            break;
+          default:
+            // Utiliser le message long de Clerk si disponible, sinon le message par défaut
+            setError(
+              clerkError.longMessage ||
+                clerkError.message ||
+                "Une erreur est survenue lors de la connexion.",
+            );
+        }
+      } else if (err.message) {
+        // Erreurs générales
+        setError(err.message);
+      } else {
+        setError("Email ou mot de passe invalide.");
+      }
+
+      // Log l'erreur complète pour le débogage (à retirer en production)
+      console.error("Erreur de connexion:", err);
     } finally {
       setLoading(false);
     }
