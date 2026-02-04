@@ -136,12 +136,6 @@ export default function CustomSignInPage() {
               <input
                 type="email"
                 id="email"
-                name="email"
-                autoComplete="email"
-                inputMode="email"
-                autoCapitalize="none" // Added - prevents auto-caps
-                autoCorrect="off" // Added - disables autocorrect
-                spellCheck="false" // Added - disables spellche
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -161,11 +155,9 @@ export default function CustomSignInPage() {
                 type="password"
                 id="password"
                 value={password}
-                name="password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="**********"
-                autoComplete="current-password"
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
               />
             </div>
