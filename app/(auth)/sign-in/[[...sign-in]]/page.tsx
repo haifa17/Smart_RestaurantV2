@@ -27,6 +27,13 @@ export default function CustomSignInPage() {
         identifier: email,
         password,
       });
+      // 🔍 SHOW STATUS ON SCREEN
+      if (result.status !== "complete") {
+        setError(
+          `DEBUG - Status: ${result.status}, SessionId: ${result.createdSessionId ? "exists" : "missing"}`,
+        );
+        return;
+      }
       console.log("Sign in result status:", result.status);
       console.log("Full result:", result);
       if (result.status === "complete") {
