@@ -37,29 +37,48 @@ export default function CustomSignInPage() {
       console.log("Sign in result status:", result.status);
       console.log("Full result:", result);
       if (result.status === "complete") {
-        // ✅ Définir la session active avant la redirection
-        await setActive({
-          session: result.createdSessionId,
-        });
-
-        router.replace("/dashboard");
+        await setActive({ session: result.createdSessionId });
+        window.location.href = "/dashboard";
       } else if (result.status === "needs_first_factor") {
-        // Try to complete the first factor automatically
-        const completeResult = await signIn.attemptFirstFactor({
+        const firstFactorResult = await signIn.attemptFirstFactor({
           strategy: "password",
           password: password,
         });
 
-        if (completeResult.status === "complete") {
-          await setActive({
-            session: completeResult.createdSessionId,
-          });
-          router.replace("/dashboard");
+        if (firstFactorResult.status === "complete") {
+          await setActive({ session: firstFactorResult.createdSessionId });
+          window.location.href = "/dashboard";
         } else {
-          setError(`État de connexion: ${completeResult.status}`);
+          setError(`Échec: ${firstFactorResult.status}`);
+        }
+      } else if (result.status === "needs_second_factor") {
+        // ✅ THIS IS YOUR ISSUE - Handle second factor
+        // Check what second factors are available
+        const secondFactors = result.supportedSecondFactors;
+
+        if (secondFactors && secondFactors.length > 0) {
+          // If phone_code or totp is available, you need to show a 2FA input
+          setError(
+            "Authentification à deux facteurs requise. Veuillez utiliser Google Sign-In ou désactiver 2FA.",
+          );
+        } else {
+          // No second factors configured but status says needs it - skip it
+          try {
+            // Try to set the session anyway if createdSessionId exists
+            if (result.createdSessionId) {
+              await setActive({ session: result.createdSessionId });
+              window.location.href = "/dashboard";
+            } else {
+              setError("Session manquante. Veuillez réessayer.");
+            }
+          } catch (e) {
+            setError(
+              "Impossible de compléter la connexion. Utilisez Google Sign-In.",
+            );
+          }
         }
       } else {
-        setError("Connexion incomplète.");
+        setError(`État inattendu: ${result.status}`);
       }
     } catch (err: any) {
       // Gestion des erreurs spécifiques de Clerk
