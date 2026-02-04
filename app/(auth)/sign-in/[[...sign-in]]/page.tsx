@@ -27,7 +27,8 @@ export default function CustomSignInPage() {
         identifier: email,
         password,
       });
-
+      console.log("Sign in result status:", result.status);
+      console.log("Full result:", result);
       if (result.status === "complete") {
         // ✅ Définir la session active avant la redirection
         await setActive({
@@ -36,7 +37,20 @@ export default function CustomSignInPage() {
 
         router.replace("/dashboard");
       } else if (result.status === "needs_first_factor") {
-        setError("Veuillez vérifier votre méthode de connexion.");
+        // Try to complete the first factor automatically
+        const completeResult = await signIn.attemptFirstFactor({
+          strategy: "password",
+          password: password,
+        });
+
+        if (completeResult.status === "complete") {
+          await setActive({
+            session: completeResult.createdSessionId,
+          });
+          router.replace("/dashboard");
+        } else {
+          setError(`État de connexion: ${completeResult.status}`);
+        }
       } else {
         setError("Connexion incomplète.");
       }
