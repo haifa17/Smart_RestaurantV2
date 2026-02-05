@@ -18,36 +18,35 @@ export default function SignInPage() {
 
       {/* Right side - Clerk SignIn Component */}
       <div className="flex flex-1 justify-center items-center p-8 bg-gray-50">
-        <SignIn
-          appearance={{
-            elements: {
-              rootBox: "w-full max-w-md",
-              card: "bg-white shadow-lg rounded-xl",
-              headerTitle: "text-2xl font-bold text-gray-800",
-              headerSubtitle: "text-gray-600",
-              formButtonPrimary:
-                "bg-slate-900 hover:bg-slate-900/90 text-white",
-              footerActionLink: "text-blue-600 hover:underline",
-              formFieldInput:
-                "border-gray-300 focus:ring-blue-500 focus:border-blue-500",
-              dividerLine: "bg-gray-300",
-              dividerText: "text-gray-400",
-              socialButtonsBlockButton: "border-gray-300 hover:bg-gray-50",
-              socialButtonsBlockButtonText: "text-gray-700",
-              // Hide the "Secured by Clerk" badge
-              footerAction: "hidden",
-              footerActionText: "hidden",
-            },
-            layout: {
-              // Hide development mode warning
-              showOptionalFields: false,
-            },
-          }}
-          routing="path"
-          path="/sign-in"
-          signUpUrl="/sign-up"
-          redirectUrl="/dashboard"
-        />
+        <div className="[&_.cl-socialButtons]:hidden [&_.cl-dividerRow]:hidden">
+          <SignIn
+            appearance={{
+              elements: {
+                rootBox: "w-full max-w-md",
+                card: "bg-white shadow-lg rounded-xl",
+                headerTitle: "text-2xl font-bold text-gray-800",
+                headerSubtitle: "text-gray-600",
+                formButtonPrimary:
+                  "bg-slate-900 hover:bg-slate-900/90 text-white",
+                footerActionLink: "text-blue-600 hover:underline",
+                formFieldInput:
+                  "border-gray-300 focus:ring-blue-500 focus:border-blue-500",
+                dividerLine: "bg-gray-300",
+                dividerText: "text-gray-400",
+                // Hide these elements
+                footerAction: "hidden",
+                footerActionText: "hidden",
+              },
+              layout: {
+                showOptionalFields: false,
+              },
+            }}
+            routing="path"
+            path="/sign-in"
+            signUpUrl="/sign-up"
+            redirectUrl="/dashboard"
+          />
+        </div>
       </div>
     </div>
   );

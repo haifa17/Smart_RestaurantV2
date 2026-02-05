@@ -156,3 +156,12 @@
 .font-serif {
   font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
+
+/* Hide Clerk footer and development mode */
+.cl-footer,
+.cl-footerAction,
+.cl-footerActionText,
+.cl-footerActionLink,
+.cl-internal-b3fm6y {
+  display: none !important;
+}

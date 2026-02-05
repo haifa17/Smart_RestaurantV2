@@ -145,13 +145,13 @@ export default function SignUpForm({
 
       <div id="clerk-captcha"></div>
 
-      <button
+      {/* <button
         onClick={handleGoogleSignUp}
         className="w-full bg-white cursor-pointer border border-gray-300 py-2 rounded-md flex items-center justify-center hover:bg-gray-50 transition"
       >
         <img src="/google-icon.png" alt="Google" className="w-5 h-5 mr-2" />
         Se connecter avec Google
-      </button>
+      </button> */}
       <p className="mt-6 text-sm text-gray-500 text-center">
         Vous avez un compte ?{" "}
         <Link
