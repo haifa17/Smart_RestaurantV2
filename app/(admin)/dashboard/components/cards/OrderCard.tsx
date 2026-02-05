@@ -109,6 +109,12 @@ export function OrderCard({
               <p>
                 <span className="font-medium">Tél:</span> {order.customerPhone}
               </p>
+            )}{" "}
+            {order.customerAddress && (
+              <p>
+                <span className="font-medium">Address:</span>{" "}
+                {order.customerAddress}
+              </p>
             )}
           </div>
 
@@ -140,7 +146,7 @@ export function OrderCard({
                 </div>
               ))}
             </div>
-             <p className="font-bold text-red-500 text-md mt-3">
+            <p className="font-bold text-red-500 text-md mt-3">
               Notes: {order.notes}
             </p>
             <p className="font-semibold text-lg mt-3">

@@ -5,9 +5,7 @@ import { useTab } from "@/components/contexts/TabContext";
 import { TabsMangement } from "./TabsMangement";
 import { LoadingSpinner } from "@/components/Loading";
 import { useMyRestaurant } from "../hooks/mutations/useMyRestaurantMutation";
-import { OrderNotificationBell } from "./notifications/OrderNotificationBell";
 import { NotificationPermissionPrompt } from "./notifications/NotificationPermissionPrompt";
-import { OrderNotificationProvider } from "@/lib/contexts/OrderNotificationContext";
 
 export default function DashboardClient() {
   const { activeTab, setActiveTab } = useTab();
@@ -71,25 +69,17 @@ export default function DashboardClient() {
     );
   }
 
-  const handleOrderClick = () => {
-    // Navigate to orders tab when clicking a notification
-    setActiveTab("orders");
-  };
 
   return (
-    <OrderNotificationProvider
-      restaurantId={restaurant.restaurantId}
-      onNotificationClick={handleOrderClick}
-    >
+    <>
       {/* Notification Permission Prompt - Shows on first visit */}
       <NotificationPermissionPrompt />
-
       <div className="p-8">
         <TabsMangement
           activeTab={activeTab}
           restaurantId={restaurant.restaurantId}
         />
       </div>
-    </OrderNotificationProvider>
+    </>
   );
 }

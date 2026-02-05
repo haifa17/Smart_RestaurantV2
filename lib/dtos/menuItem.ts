@@ -62,7 +62,7 @@ export const menuItemCreateSchema = z
     isVegetarian: z.boolean().default(false),
     sauces: z.array(menuItemSauceInputSchema).optional(),
     cheeses: z.array(menuItemCheeseInputSchema).optional(),
-     supplements: z.array(menuItemSupplementInputSchema).optional(),
+    supplements: z.array(menuItemSupplementInputSchema).optional(),
   })
   .refine((data) => data.nameEn || data.nameFr || data.nameAr, {
     message: "At least one name (EN, FR, AR) is required",
@@ -86,5 +86,5 @@ export const menuItemUpdateSchema = z.object({
   isVegetarian: z.boolean().optional(),
   sauces: z.array(menuItemSauceInputSchema).optional(),
   cheeses: z.array(menuItemCheeseInputSchema).optional(),
-   supplements: z.array(menuItemSupplementInputSchema).optional(),
+  supplements: z.array(menuItemSupplementInputSchema).optional(),
 });
