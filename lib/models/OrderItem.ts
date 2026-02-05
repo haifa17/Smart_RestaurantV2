@@ -1,3 +1,5 @@
+import { SelectedSupplement } from "../types";
+
 export interface SelectedSauce {
   sauceType: string;
   customName?: string;
@@ -21,4 +23,5 @@ export interface OrderItem {
   updatedAt: string;
   selectedSauces?: SelectedSauce[];
   selectedCheeses?: SelectedCheese[];
+  selectedSupplements?: SelectedSupplement[];
 }

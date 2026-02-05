@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { OrderStatus, OrderType } from "./types";
+import { OrderStatus, OrderType, SelectedSupplement, SUPPLEMENT_OPTIONS, SupplementCategory, SupplementOption, SupplementType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -62,4 +62,27 @@ export const ORDER_TYPE_CONFIG: Record<
   DINE_IN: { label: "Sur place", icon: "🍽️" },
   TAKEAWAY: { label: "À emporter", icon: "📦" },
   DELIVERY: { label: "Livraison", icon: " " },
+};
+// Helper function to get supplement label
+export const getSupplementLabel = (supplement: SelectedSupplement): string => {
+  if (supplement.customName) return supplement.customName;
+  const option = SUPPLEMENT_OPTIONS.find((opt) => opt.type === supplement.supplementType);
+  return option?.label || supplement.supplementType;
+};
+
+// Helper to get supplement price
+export const getSupplementPrice = (supplementType: SupplementType): number => {
+  const option = SUPPLEMENT_OPTIONS.find((opt) => opt.type === supplementType);
+  return option?.price || 0;
+};
+
+// Group supplements by category for UI
+export const getSupplementsByCategory = () => {
+  return SUPPLEMENT_OPTIONS.reduce((acc, supplement) => {
+    if (!acc[supplement.category]) {
+      acc[supplement.category] = [];
+    }
+    acc[supplement.category].push(supplement);
+    return acc;
+  }, {} as Record<SupplementCategory, SupplementOption[]>);
 };

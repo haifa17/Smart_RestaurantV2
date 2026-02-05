@@ -30,10 +30,15 @@ import { Card } from "@/components/ui/card";
 import { MenuItem } from "@/lib/models/menuItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "react-toastify";
-import { OrderType } from "@/lib/types";
+import { OrderType, SelectedSupplement, SupplementType } from "@/lib/types";
 import { SelectedCheese, SelectedSauce } from "@/lib/models/OrderItem";
 import { CheeseType, SauceType } from "@/lib/ennum";
 import { CHEESE_OPTIONS, SAUCE_OPTIONS } from "../menu/constants";
+import {
+  getSupplementLabel,
+  getSupplementPrice,
+  getSupplementsByCategory,
+} from "@/lib/utils";
 
 interface OrderEditorProps {
   open: boolean;
@@ -48,6 +53,7 @@ interface CartItem {
   notes?: string;
   selectedSauces?: SelectedSauce[];
   selectedCheeses?: SelectedCheese[];
+  selectedSupplements?: SelectedSupplement[]; // ← Added
 }
 
 export function OrderEditor({
@@ -99,9 +105,17 @@ export function OrderEditor({
           customName: cheese.customName,
           isIncluded: true,
         })) || [];
+      const selectedSupplements: SelectedSupplement[] = [];
+
       setCart([
         ...cart,
-        { menuItem, quantity: 1, selectedSauces, selectedCheeses },
+        {
+          menuItem,
+          quantity: 1,
+          selectedSauces,
+          selectedCheeses,
+          selectedSupplements,
+        },
       ]);
     }
   };
@@ -122,10 +136,15 @@ export function OrderEditor({
     setCart(cart.filter((item) => item.menuItem.id !== menuItemId));
   };
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + Number(item.menuItem.price) * item.quantity,
-    0,
-  );
+  // Calculate subtotal including supplements
+  const subtotal = cart.reduce((sum, item) => {
+    const itemPrice = Number(item.menuItem.price) * item.quantity;
+    const supplementsPrice = (item.selectedSupplements || []).reduce(
+      (suppSum, supp) => suppSum + supp.price * supp.quantity,
+      0,
+    );
+    return sum + itemPrice + supplementsPrice;
+  }, 0);
   // Toggle existing sauce in the cart item
   const toggleSauceInclusion = (menuItemId: string, sauceIndex: number) => {
     setCart(
@@ -240,6 +259,98 @@ export function OrderEditor({
       }),
     );
   };
+  // Add a supplement to cart item
+  const addSupplementToItem = (
+    menuItemId: string,
+    supplementType: SupplementType,
+  ) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        // Check if supplement already exists
+        const existingIndex = (item.selectedSupplements || []).findIndex(
+          (s) => s.supplementType === supplementType,
+        );
+
+        if (existingIndex >= 0) {
+          // Increment quantity if exists
+          const newSupplements = [...(item.selectedSupplements || [])];
+          newSupplements[existingIndex] = {
+            ...newSupplements[existingIndex],
+            quantity: newSupplements[existingIndex].quantity + 1,
+          };
+          return { ...item, selectedSupplements: newSupplements };
+        } else {
+          // Add new supplement
+          const price = getSupplementPrice(supplementType);
+          const newSupplements = [
+            ...(item.selectedSupplements || []),
+            {
+              supplementType,
+              quantity: 1,
+              price,
+            },
+          ];
+          return { ...item, selectedSupplements: newSupplements };
+        }
+      }),
+    );
+  };
+
+  // Update supplement quantity
+  const updateSupplementQuantity = (
+    menuItemId: string,
+    supplementIndex: number,
+    delta: number,
+  ) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newSupplements = [...(item.selectedSupplements || [])];
+        const newQuantity = Math.max(
+          0,
+          newSupplements[supplementIndex].quantity + delta,
+        );
+
+        if (newQuantity === 0) {
+          // Remove supplement if quantity is 0
+          return {
+            ...item,
+            selectedSupplements: newSupplements.filter(
+              (_, idx) => idx !== supplementIndex,
+            ),
+          };
+        }
+
+        newSupplements[supplementIndex] = {
+          ...newSupplements[supplementIndex],
+          quantity: newQuantity,
+        };
+
+        return { ...item, selectedSupplements: newSupplements };
+      }),
+    );
+  };
+
+  // Remove supplement completely
+  const removeSupplementFromItem = (
+    menuItemId: string,
+    supplementIndex: number,
+  ) => {
+    setCart(
+      cart.map((item) => {
+        if (item.menuItem.id !== menuItemId) return item;
+
+        const newSupplements = (item.selectedSupplements || []).filter(
+          (_, idx) => idx !== supplementIndex,
+        );
+        return { ...item, selectedSupplements: newSupplements };
+      }),
+    );
+  };
+
   // const tax = subtotal * 0.1; // 10% tax
   const tax = 0;
   const total = subtotal + tax;
@@ -261,6 +372,7 @@ export function OrderEditor({
         notes: item.notes,
         selectedSauces: item.selectedSauces?.filter((s) => s.isIncluded),
         selectedCheeses: item.selectedCheeses?.filter((c) => c.isIncluded),
+        selectedSupplements: item.selectedSupplements || [],
       })),
       subtotal,
       tax,
@@ -311,6 +423,8 @@ export function OrderEditor({
       (cheese) => !existingCheeseTypes.has(cheese.type),
     );
   };
+  // Group supplements by category for better UX
+  const supplementsByCategory = getSupplementsByCategory();
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-auto">
@@ -402,6 +516,17 @@ export function OrderEditor({
                     const availableSauces = getAvailableSauces(item);
                     const availableCheeses = getAvailableCheeses(item);
 
+                    // Calculate item total including supplements
+                    const itemBasePrice = Number(item.menuItem.price);
+                    const supplementsTotal = (
+                      item.selectedSupplements || []
+                    ).reduce(
+                      (sum, supp) => sum + supp.price * supp.quantity,
+                      0,
+                    );
+                    const itemTotal =
+                      (itemBasePrice + supplementsTotal) * item.quantity;
+
                     return (
                       <div
                         key={item.menuItem.id}
@@ -431,9 +556,18 @@ export function OrderEditor({
                                 )}
                               </Button>
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                              {Number(item.menuItem.price).toFixed(2)} EUR
-                            </p>
+                            <div className="text-xs text-muted-foreground">
+                              <p>Base: {itemBasePrice.toFixed(2)} EUR</p>
+                              {supplementsTotal > 0 && (
+                                <p className="text-orange-600">
+                                  Suppléments: +{supplementsTotal.toFixed(2)}{" "}
+                                  EUR
+                                </p>
+                              )}
+                              <p className="font-semibold">
+                                Total: {itemTotal.toFixed(2)} EUR
+                              </p>
+                            </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
@@ -629,6 +763,131 @@ export function OrderEditor({
                                   </SelectContent>
                                 </Select>
                               )}
+                            </div>
+
+                            {/* ============================================ */}
+                            {/* SUPPLEMENTS SECTION - NEW */}
+                            {/* ============================================ */}
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs font-semibold">
+                                  Suppléments:
+                                </p>
+                              </div>
+
+                              {/* Current Supplements */}
+                              {item.selectedSupplements &&
+                              item.selectedSupplements.length > 0 ? (
+                                <div className="space-y-1 mb-2">
+                                  {item.selectedSupplements.map(
+                                    (supplement, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-center justify-between gap-2 text-xs p-1 rounded hover:bg-muted bg-orange-50 border border-orange-200"
+                                      >
+                                        <div className="flex-1">
+                                          <p className="font-medium">
+                                            {getSupplementLabel(supplement)}
+                                          </p>
+                                          <p className="text-orange-600">
+                                            {supplement.price.toFixed(2)} EUR ×{" "}
+                                            {supplement.quantity} ={" "}
+                                            {(
+                                              supplement.price *
+                                              supplement.quantity
+                                            ).toFixed(2)}{" "}
+                                            EUR
+                                          </p>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <Button
+                                            size="icon"
+                                            variant="outline"
+                                            className="h-6 w-6"
+                                            onClick={() =>
+                                              updateSupplementQuantity(
+                                                item.menuItem.id,
+                                                idx,
+                                                -1,
+                                              )
+                                            }
+                                          >
+                                            <Minus className="h-3 w-3" />
+                                          </Button>
+                                          <span className="w-6 text-center">
+                                            {supplement.quantity}
+                                          </span>
+                                          <Button
+                                            size="icon"
+                                            variant="outline"
+                                            className="h-6 w-6"
+                                            onClick={() =>
+                                              updateSupplementQuantity(
+                                                item.menuItem.id,
+                                                idx,
+                                                1,
+                                              )
+                                            }
+                                          >
+                                            <Plus className="h-3 w-3" />
+                                          </Button>
+                                          <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-6 w-6 text-red-600"
+                                            onClick={() =>
+                                              removeSupplementFromItem(
+                                                item.menuItem.id,
+                                                idx,
+                                              )
+                                            }
+                                          >
+                                            <X className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground mb-2">
+                                  Aucun supplément sélectionné
+                                </p>
+                              )}
+
+                              {/* Add Supplement Dropdown - Grouped by Category */}
+                              <Select
+                                onValueChange={(value) =>
+                                  addSupplementToItem(
+                                    item.menuItem.id,
+                                    value as SupplementType,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="h-8 text-xs">
+                                  <SelectValue placeholder="+ Ajouter un supplément" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Object.entries(supplementsByCategory).map(
+                                    ([category, supplements]) => (
+                                      <div key={category}>
+                                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                                          {category}
+                                        </div>
+                                        {supplements.map((supplement) => (
+                                          <SelectItem
+                                            key={supplement.type}
+                                            value={supplement.type}
+                                          >
+                                            {supplement.label} (+
+                                            {supplement.price.toFixed(2)} EUR)
+                                          </SelectItem>
+                                        ))}
+                                      </div>
+                                    ),
+                                  )}
+                                </SelectContent>
+                              </Select>
                             </div>
 
                             {/* Item Notes */}

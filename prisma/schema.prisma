@@ -69,6 +69,51 @@ enum CheeseType {
   @@map("cheese_types")
 }
 
+enum SupplementCategory {
+  VIANDE
+  FROMAGE
+  LEGUME
+  OEUF
+  AUTRE
+
+  @@map("supplement_categories")
+}
+
+enum SupplementType {
+  // Viandes
+  TENDERS
+  CORDON_BLEU
+  STEAK
+  STEAK_FARCI
+  ESCALOPE
+  CURRY
+  CUISSE_POULET_DESOSSEE
+  TANDOORI
+  KEBAB
+  KEFTA
+  POULET_FUME
+  BACON
+  JAMBON
+
+  // Fromages (supplémentaires)
+  CHEDDAR
+  BOURSIN
+  CHEVRE
+  MOZZARELLA
+  RACLETTE
+  REBLOCHON
+
+  // Oeuf
+  OEUF
+
+  // Légumes (if needed later)
+  // TOMATE
+  // OIGNON
+  // etc.
+
+  @@map("supplement_types")
+}
+
 // ==============================
 // MODELS
 // ==============================
@@ -176,12 +221,13 @@ model MenuItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  restaurant Restaurant       @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  category   Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]      @relation // ← Order items are optional (can be empty array)
+  restaurant  Restaurant           @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  category    Category             @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]          @relation // ← Order items are optional (can be empty array)
   // New relations for sauces and cheese
-  sauces     MenuItemSauce[]
-  cheeses    MenuItemCheese[]
+  sauces      MenuItemSauce[]
+  cheeses     MenuItemCheese[]
+  supplements MenuItemSupplement[]
 
   @@index([restaurantId, categoryId, available, isActive])
   @@index([categoryId])
@@ -224,6 +270,26 @@ model MenuItemCheese {
   @@unique([menuItemId, cheeseType, customName])
   @@index([menuItemId])
   @@map("menu_item_cheeses")
+}
+
+model MenuItemSupplement {
+  id             String             @id @default(cuid())
+  menuItemId     String
+  supplementType SupplementType
+  category       SupplementCategory
+  customName     String? // For custom supplements
+  price          Decimal            @db.Decimal(10, 2) // Price of the supplement
+  isAvailable    Boolean            @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, supplementType])
+  @@index([menuItemId])
+  @@index([category])
+  @@map("menu_item_supplements")
 }
 
 model User {
@@ -316,9 +382,10 @@ model OrderItem {
   quantity Int
 
   // Customization
-  notes           String? // Special instructions (e.g., "no onions", "extra spicy")
-  selectedSauces  Json? // Array of selected sauce types and custom names
-  selectedCheeses Json? // Array of selected cheese types and custom names
+  notes               String? // Special instructions (e.g., "no onions", "extra spicy")
+  selectedSauces      Json? // Array of selected sauce types and custom names
+  selectedCheeses     Json? // Array of selected cheese types and custom names
+  selectedSupplements Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

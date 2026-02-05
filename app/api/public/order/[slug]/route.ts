@@ -23,6 +23,12 @@ interface OrderItemInput {
     cheeseType: string;
     customName?: string;
   }>;
+  selectedSupplements?: Array<{
+    supplementType: string;
+    customName?: string;
+    quantity: number;
+    price: number;
+  }>;
 }
 
 export const OPTIONS = handleOptions;
@@ -75,6 +81,7 @@ export async function POST(req: NextRequest, { params }: PageProps) {
               notes: item.notes,
               selectedSauces: item.selectedSauces || [],
               selectedCheeses: item.selectedCheeses || [],
+              selectedSupplements: item.selectedSupplements || [],
             })),
           },
 

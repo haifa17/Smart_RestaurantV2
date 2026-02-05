@@ -71,6 +71,12 @@ export interface CreateOrderData {
       cheeseType: string;
       customName?: string;
     }>;
+    selectedSupplements?: Array<{
+      supplementType: string;
+      customName?: string;
+      quantity: number;
+      price: number;
+    }>;
   }[];
   subtotal: number;
   tax: number;
