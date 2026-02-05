@@ -29,6 +29,22 @@ export interface MenuItemCheeseInput {
   isIncluded?: boolean;
   extraCost?: number;
 }
+export interface MenuItemSupplement extends BaseModel {
+  menuItemId: string;
+  name: string;
+  category: string;
+  price: number;
+  isAvailable: boolean;
+  updatedAt?: string;
+}
+
+// Input type for creating/updating supplements (without id)
+export interface MenuItemSupplementInput {
+  name: string;
+  category: string;
+  price: number;
+  isAvailable: boolean;
+}
 export interface MenuItem extends BaseModel {
   restaurantId: string;
   categoryId: string;
@@ -49,8 +65,10 @@ export interface MenuItem extends BaseModel {
   updatedAt?: string;
   sauces?: MenuItemSauce[];
   cheeses?: MenuItemCheese[];
+  supplements?: MenuItemSupplement[];
 }
-export interface MenuItemInput extends Omit<MenuItem, 'id' | 'sauces' | 'cheeses'> {
-  sauces?: MenuItemSauceInput[];   // ← Input type without IDs
-  cheeses?: MenuItemCheeseInput[]; // ← Input type without IDs
+export interface MenuItemInput extends Omit<MenuItem, 'id' | 'sauces' | 'cheeses' | 'supplements'> {
+  sauces?: MenuItemSauceInput[];
+  cheeses?: MenuItemCheeseInput[];
+  supplements?: MenuItemSupplementInput[]; // ← NEW FIELD
 }

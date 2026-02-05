@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
       include: {
         sauces: true,
         cheeses: true,
+        supplements: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -49,8 +50,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = menuItemCreateSchema.parse(body);
-    const { sauces, cheeses, ...menuItemData } = validatedData;
-
+    const { sauces, cheeses, supplements, ...menuItemData } = validatedData; // ✅ Extract supplements
     const menuItem = await prisma.menuItem.create({
       data: {
         ...menuItemData,
@@ -86,11 +86,27 @@ export async function POST(request: NextRequest) {
               },
             }
           : {}),
+
+        // ✅ NEW: Create related supplements only if array has items
+        ...(supplements && supplements.length > 0
+          ? {
+              supplements: {
+                create: supplements.map((supplement) => ({
+                  name: supplement.name,
+                  category: supplement.category,
+                  price: supplement.price,
+                  isAvailable: supplement.isAvailable ?? true,
+                })),
+              },
+            }
+          : {}),
       },
+
       // ✅ Include relations in response
       include: {
         sauces: true,
         cheeses: true,
+        supplements: true,
       },
     });
 

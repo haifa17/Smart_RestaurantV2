@@ -25,6 +25,7 @@ export async function GET(
       include: {
         sauces: true,
         cheeses: true,
+        supplements: true,
       },
     });
 
@@ -47,8 +48,7 @@ export async function PATCH(
     const { id } = await context.params;
     const body = await request.json();
     const validatedData = menuItemUpdateSchema.parse(body);
-    const { sauces, cheeses, ...menuItemData } = validatedData;
-
+    const { sauces, cheeses, supplements, ...menuItemData } = validatedData;
     // Get menu item to find restaurantId for cache invalidation
     const existingItem = await prisma.menuItem.findUnique({
       where: { id },
@@ -72,7 +72,11 @@ export async function PATCH(
         where: { menuItemId: id },
       });
     }
-
+    if (supplements !== undefined) {
+      await prisma.menuItemSupplement.deleteMany({
+        where: { menuItemId: id },
+      });
+    }
     // ✅ Fixed: Wrap everything in 'data' property
     const menuItem = await prisma.menuItem.update({
       where: { id },
@@ -107,10 +111,23 @@ export async function PATCH(
               },
             }
           : {}),
+        ...(supplements !== undefined && supplements.length > 0
+          ? {
+              supplements: {
+                create: supplements.map((supplement) => ({
+                  name: supplement.name,
+                  category: supplement.category,
+                  price: supplement.price,
+                  isAvailable: supplement.isAvailable ?? true,
+                })),
+              },
+            }
+          : {}),
       },
       include: {
         sauces: true,
         cheeses: true,
+        supplements: true,
       },
     });
 

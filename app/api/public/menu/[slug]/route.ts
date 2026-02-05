@@ -46,7 +46,8 @@ export async function GET(req: NextRequest, { params }: PageProps) {
       },
       include: {
         sauces: true,
-        cheeses: true, 
+        cheeses: true,
+        supplements: true,
       },
       // orderBy: { order: "asc" },
     });

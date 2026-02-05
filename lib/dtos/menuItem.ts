@@ -36,32 +36,33 @@ const menuItemCheeseInputSchema = z.object({
   isIncluded: z.boolean().optional(),
   extraCost: z.number().optional(),
 });
+const menuItemSupplementInputSchema = z.object({
+  name: z.string().min(1).max(200),
+  category: z.string().min(1).max(100),
+  price: z.number().nonnegative().max(999999.99),
+  isAvailable: z.boolean().default(true),
+});
 export const menuItemCreateSchema = z
   .object({
     restaurantId: z.string(),
     categoryId: z.string(),
-
     nameEn: z.string().min(1).max(200).optional(),
     nameFr: z.string().min(1).max(200).optional(),
     nameAr: z.string().min(1).max(200).optional(),
-
     descriptionEn: z.string().max(500).optional(),
     descriptionFr: z.string().max(500).optional(),
     descriptionAr: z.string().max(500).optional(),
-
     price: z.number().positive().max(999999.99),
-
     image: z.string().url().nullable().optional(),
-
     available: z.boolean().default(true),
     isActive: z.boolean().default(true),
-
     isChefRecommendation: z.boolean().default(false),
     isPopular: z.boolean().default(false),
     isSpicy: z.boolean().default(false),
     isVegetarian: z.boolean().default(false),
     sauces: z.array(menuItemSauceInputSchema).optional(),
     cheeses: z.array(menuItemCheeseInputSchema).optional(),
+     supplements: z.array(menuItemSupplementInputSchema).optional(),
   })
   .refine((data) => data.nameEn || data.nameFr || data.nameAr, {
     message: "At least one name (EN, FR, AR) is required",
@@ -69,26 +70,21 @@ export const menuItemCreateSchema = z
 
 export const menuItemUpdateSchema = z.object({
   categoryId: z.string().optional(),
-
   nameEn: z.string().min(1).max(200).optional(),
   nameFr: z.string().min(1).max(200).optional(),
   nameAr: z.string().min(1).max(200).optional(),
-
   descriptionEn: z.string().max(500).optional(),
   descriptionFr: z.string().max(500).optional(),
   descriptionAr: z.string().max(500).optional(),
-
   price: z.number().positive().max(999999.99).optional(),
-
   image: z.string().url().nullable().optional(),
-
   available: z.boolean().optional(),
   isActive: z.boolean().optional(),
-
   isChefRecommendation: z.boolean().optional(),
   isPopular: z.boolean().optional(),
   isSpicy: z.boolean().optional(),
   isVegetarian: z.boolean().optional(),
   sauces: z.array(menuItemSauceInputSchema).optional(),
   cheeses: z.array(menuItemCheeseInputSchema).optional(),
+   supplements: z.array(menuItemSupplementInputSchema).optional(),
 });

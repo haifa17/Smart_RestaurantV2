@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState, useEffect } from "react";
-import { ImagePlus, X, Loader2 } from "lucide-react";
+import { ImagePlus, X, Loader2, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,7 +38,17 @@ interface ItemEditorModalProps {
   onUploadImage: (file: File, folder: "menu-items") => Promise<{ url: string }>;
   restaurantId: string;
 }
+interface SupplementItem {
+  id: string; // Temporary ID for frontend management
+  name: string;
+  price: string; // String for input, will convert to number on save
+}
 
+interface SupplementCategory {
+  id: string; // Temporary ID for frontend management
+  name: string;
+  items: SupplementItem[];
+}
 export function ItemEditorModal({
   open,
   onClose,
@@ -77,6 +87,11 @@ export function ItemEditorModal({
   );
   const [otherCheese, setOtherCheese] = useState("");
   const [hasOtherCheese, setHasOtherCheese] = useState(false);
+  const [supplementCategories, setSupplementCategories] = useState<
+    SupplementCategory[]
+  >([]);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   useEffect(() => {
     if (item) {
@@ -121,6 +136,34 @@ export function ItemEditorModal({
         });
         setSelectedCheeses(cheeseTypes);
       }
+      // Load supplements - group by category
+      // Assuming item.supplements is an array from the database
+      if (item.supplements && item.supplements.length > 0) {
+        // Group supplements by category (you might need to adjust based on your data structure)
+        const categoriesMap = new Map<string, SupplementItem[]>();
+
+        item.supplements.forEach((supp: any) => {
+          const category = supp.category || "Suppléments";
+          if (!categoriesMap.has(category)) {
+            categoriesMap.set(category, []);
+          }
+          categoriesMap.get(category)!.push({
+            id: supp.id || `temp-${Date.now()}-${Math.random()}`,
+            name: supp.name,
+            price: supp.price.toString(),
+          });
+        });
+
+        const loadedCategories: SupplementCategory[] = Array.from(
+          categoriesMap.entries(),
+        ).map(([name, items], index) => ({
+          id: `cat-${index}`,
+          name,
+          items,
+        }));
+
+        setSupplementCategories(loadedCategories);
+      }
     } else {
       setNameEn("");
       setNameFr("");
@@ -143,6 +186,83 @@ export function ItemEditorModal({
       setOtherCheese("");
     }
   }, [item, categoryId, open]);
+  const addSupplementCategory = () => {
+    const trimmedName = newCategoryName.trim();
+    if (!trimmedName) return;
+
+    const newCategory: SupplementCategory = {
+      id: `cat-${Date.now()}`,
+      name: trimmedName,
+      items: [],
+    };
+
+    setSupplementCategories([...supplementCategories, newCategory]);
+    setNewCategoryName("");
+    setShowAddCategory(false);
+  };
+
+  const removeSupplementCategory = (categoryId: string) => {
+    setSupplementCategories(
+      supplementCategories.filter((cat) => cat.id !== categoryId),
+    );
+  };
+
+  const addSupplementItem = (categoryId: string) => {
+    setSupplementCategories(
+      supplementCategories.map((cat) => {
+        if (cat.id === categoryId) {
+          return {
+            ...cat,
+            items: [
+              ...cat.items,
+              {
+                id: `item-${Date.now()}-${Math.random()}`,
+                name: "",
+                price: "",
+              },
+            ],
+          };
+        }
+        return cat;
+      }),
+    );
+  };
+
+  const updateSupplementItem = (
+    categoryId: string,
+    itemId: string,
+    field: "name" | "price",
+    value: string,
+  ) => {
+    setSupplementCategories(
+      supplementCategories.map((cat) => {
+        if (cat.id === categoryId) {
+          return {
+            ...cat,
+            items: cat.items.map((item) =>
+              item.id === itemId ? { ...item, [field]: value } : item,
+            ),
+          };
+        }
+        return cat;
+      }),
+    );
+  };
+
+  const removeSupplementItem = (categoryId: string, itemId: string) => {
+    setSupplementCategories(
+      supplementCategories.map((cat) => {
+        if (cat.id === categoryId) {
+          return {
+            ...cat,
+            items: cat.items.filter((item) => item.id !== itemId),
+          };
+        }
+        return cat;
+      }),
+    );
+  };
+
   const toggleSauce = (sauceType: SauceType) => {
     const newSet = new Set(selectedSauces);
     if (newSet.has(sauceType)) {
@@ -223,6 +343,29 @@ export function ItemEditorModal({
         isIncluded: true,
       });
     }
+    // Build supplements array - flatten categories and items
+    const supplements: Array<{
+      name: string;
+      category: string;
+      price: number;
+      isAvailable: boolean;
+    }> = [];
+
+    supplementCategories.forEach((category) => {
+      category.items.forEach((item) => {
+        if (item.name.trim() && item.price) {
+          const priceNum = parseFloat(item.price);
+          if (!isNaN(priceNum) && priceNum >= 0) {
+            supplements.push({
+              name: item.name.trim(),
+              category: category.name,
+              price: priceNum,
+              isAvailable: true,
+            });
+          }
+        }
+      });
+    });
     onSave({
       restaurantId,
       categoryId: selectedCategoryId,
@@ -242,6 +385,7 @@ export function ItemEditorModal({
       isVegetarian,
       sauces,
       cheeses,
+      supplements,
     });
   };
 
@@ -355,7 +499,6 @@ export function ItemEditorModal({
               placeholder="Name (English)"
               value={nameEn}
               onChange={(e) => setNameEn(e.target.value)}
-              
             />
             <Input
               placeholder="Nom (Français)"
@@ -505,6 +648,161 @@ export function ItemEditorModal({
               )}
             </div>
           </div>
+          {/* ============================================ */}
+          {/* SUPPLEMENTS SECTION - NEW */}
+          {/* ============================================ */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <label>Suppléments disponibles</label>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setShowAddCategory(true)}
+                className="cursor-pointer"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Ajouter une catégorie
+              </Button>
+            </div>
+
+            {/* Add Category Input */}
+            {showAddCategory && (
+              <div className="flex gap-2 p-3 rounded-lg border border-border bg-blue-50">
+                <Input
+                  placeholder="Nom de la catégorie (ex: Viandes, Fromages, etc.)"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addSupplementCategory();
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={addSupplementCategory}
+                  className="cursor-pointer"
+                >
+                  Ajouter
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setShowAddCategory(false);
+                    setNewCategoryName("");
+                  }}
+                  className="cursor-pointer"
+                >
+                  Annuler
+                </Button>
+              </div>
+            )}
+
+            {/* Supplement Categories */}
+            {supplementCategories.length > 0 && (
+              <div className="space-y-4">
+                {supplementCategories.map((category) => (
+                  <div
+                    key={category.id}
+                    className="p-4 rounded-lg border border-border bg-muted/30"
+                  >
+                    {/* Category Header */}
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-semibold text-sm">{category.name}</h4>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => addSupplementItem(category.id)}
+                          className="cursor-pointer"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Ajouter un article
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => removeSupplementCategory(category.id)}
+                          className="cursor-pointer text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Supplement Items */}
+                    {category.items.length > 0 ? (
+                      <div className="space-y-2">
+                        {category.items.map((item) => (
+                          <div key={item.id} className="flex gap-2 items-start">
+                            <Input
+                              placeholder="Nom (ex: Bacon)"
+                              value={item.name}
+                              onChange={(e) =>
+                                updateSupplementItem(
+                                  category.id,
+                                  item.id,
+                                  "name",
+                                  e.target.value,
+                                )
+                              }
+                              className="flex-1"
+                            />
+                            <Input
+                              placeholder="Prix (EUR)"
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              value={item.price}
+                              onChange={(e) =>
+                                updateSupplementItem(
+                                  category.id,
+                                  item.id,
+                                  "price",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-32"
+                            />
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              onClick={() =>
+                                removeSupplementItem(category.id, item.id)
+                              }
+                              className="cursor-pointer text-red-600 hover:text-red-700"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">
+                        Aucun article dans cette catégorie
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {supplementCategories.length === 0 && !showAddCategory && (
+              <p className="text-sm text-muted-foreground italic p-3 rounded-lg border border-border bg-muted/30">
+                Aucun supplément configuré. Cliquez sur "Ajouter une catégorie"
+                pour commencer.
+              </p>
+            )}
+          </div>
+
           <div className="flex flex-col gap-2">
             <label>Attributs</label>
             <div className="grid grid-cols-2 gap-3">
