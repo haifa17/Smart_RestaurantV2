@@ -129,7 +129,7 @@ export function OrderCard({
                       Quantité: {item.quantity}
                     </p>
                     {item.notes && (
-                      <p className="text-xs text-muted-foreground italic">
+                      <p className="text-sm text-blue-500 font-bold italic">
                         {item.notes}
                       </p>
                     )}
@@ -140,6 +140,9 @@ export function OrderCard({
                 </div>
               ))}
             </div>
+             <p className="font-bold text-red-500 text-md mt-3">
+              Notes: {order.notes}
+            </p>
             <p className="font-semibold text-lg mt-3">
               Total: {Number(order.total).toFixed(2)} EUR
             </p>
