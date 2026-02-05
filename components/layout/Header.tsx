@@ -1,13 +1,24 @@
 "use client";
-import {
-  SignedIn,
-  useUser,
-} from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import UserAvatarMenu from "./UserAvatarMenu";
 import { Menu } from "lucide-react";
+import { OrderNotificationBell } from "@/app/(admin)/dashboard/components/notifications/OrderNotificationBell";
+import { useTab } from "../contexts/TabContext";
 
-const Header = ({ onMenuClick }: { onMenuClick: () => void }) => {
+const Header = ({
+  onMenuClick,
+  showNotifications = false,
+}: {
+  onMenuClick: () => void;
+  showNotifications?: boolean;
+}) => {
   const { user } = useUser();
+  const { setActiveTab } = useTab();
+
+  const handleOrderClick = () => {
+    setActiveTab("orders");
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-white flex flex-row justify-between md:justify-end items-center px-4 py-6 gap-4 shadow">
       {/* Hamburger only mobile */}
@@ -20,6 +31,11 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void }) => {
 
       <SignedIn>
         <div className="flex items-center gap-3">
+          {/* Notification Bell - only show when restaurant is loaded */}
+          {showNotifications && (
+            <OrderNotificationBell onOrderClick={handleOrderClick} />
+          )}
+
           {user && (
             <div className="text-sm font-medium">
               <p>

@@ -76,8 +76,7 @@ export function OrderNotificationBell({
         className={cn(
           "relative p-3 rounded-full bg-linear-to-r from-blue-500 to-blue-700 text-white",
           isAnimating && "animate-bounce",
-          hasUnreadNotifications && "text-orange-500 shadow  ",
-          
+          hasUnreadNotifications && "text-orange-500 shadow",
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -97,149 +96,155 @@ export function OrderNotificationBell({
         )}
       </Button>
 
-      {/* Notification Dropdown */}
+      {/* Backdrop */}
       {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:bg-transparent"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-          {/* Dropdown Panel */}
-          <Card className="absolute right-0 top-12  z-50 shadow-lg border-2 border-orange-200">
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-orange-500" />
-                <h3 className="font-semibold">Nouvelles Commandes</h3>
-                {unreadCount > 0 && (
-                  <Badge
-                    variant="secondary"
-                    className="bg-orange-100 text-orange-700"
-                  >
-                    {unreadCount} nouvelle{unreadCount > 1 ? "s" : ""}
-                  </Badge>
-                )}
-              </div>
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={toggleMute}
-                  title={isMuted ? "Activer le son" : "Désactiver le son"}
-                >
-                  {isMuted ? (
-                    <VolumeX className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <Volume2 className="h-4 w-4 text-green-500" />
-                  )}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Notifications List */}
-            <ScrollArea className="max-h-[400px]">
-              {notifications.length === 0 ? (
-                <div className="p-8 text-center text-muted-foreground">
-                  <Bell className="h-12 w-12 mx-auto mb-3 opacity-20" />
-                  <p>Aucune notification</p>
-                  <p className="text-sm">
-                    Les nouvelles commandes apparaîtront ici
-                  </p>
-                </div>
+      {/* Notification Panel - Sidebar style on mobile, dropdown on desktop */}
+      <Card
+        className={cn(
+          "fixed bg-white shadow-lg z-50 transition-transform duration-300 ease-in-out border-2 border-orange-200",
+          // Mobile: Full-height sidebar from right
+          "top-0 right-0 h-full w-80 max-w-[85vw] rounded-none",
+          // Desktop: Dropdown
+          "lg:absolute lg:top-12 lg:right-0 lg:h-auto lg:max-h-[calc(100vh-120px)] lg:w-xl lg:rounded-lg",
+          isOpen
+            ? "translate-x-0 lg:translate-x-0 lg:opacity-100 lg:scale-100"
+            : "translate-x-full lg:translate-x-0 lg:opacity-0 lg:pointer-events-none lg:scale-95",
+        )}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white lg:rounded-t-lg z-10">
+          <div className="flex items-center gap-2">
+            <Bell className="h-4 w-4 text-orange-500" />
+            <h3 className="font-semibold">Nouvelles Commandes</h3>
+            {unreadCount > 0 && (
+              <Badge
+                variant="secondary"
+                className="bg-orange-100 text-orange-700"
+              >
+                {unreadCount} nouvelle{unreadCount > 1 ? "s" : ""}
+              </Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={toggleMute}
+              title={isMuted ? "Activer le son" : "Désactiver le son"}
+            >
+              {isMuted ? (
+                <VolumeX className="h-4 w-4 text-muted-foreground" />
               ) : (
-                <div className="divide-y">
-                  {notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      className={cn(
-                        "p-4 cursor-pointer transition-colors hover:bg-muted/50",
-                        !notification.isRead &&
-                          "bg-orange-50 dark:bg-orange-950/20",
-                      )}
-                      onClick={() => handleNotificationClick(notification.id)}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            {!notification.isRead && (
-                              <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-                            )}
-                            <p className="font-medium truncate">
-                              Commande #{notification.orderNumber}
-                            </p>
-                          </div>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {notification.customerName}
-                          </p>
-                          <div className="flex items-center justify-between mt-1">
-                            <span className="text-sm font-semibold text-green-600">
-                              {notification.total.toFixed(2)} €
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(notification.timestamp, {
-                                addSuffix: true,
-                                locale: fr,
-                              })}
-                            </span>
-                          </div>
-                        </div>
+                <Volume2 className="h-4 w-4 text-green-500" />
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setIsOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Notifications List */}
+        <ScrollArea className="h-[calc(100vh-140px)] lg:max-h-[400px]">
+          {notifications.length === 0 ? (
+            <div className="p-8 text-center text-muted-foreground">
+              <Bell className="h-12 w-12 mx-auto mb-3 opacity-20" />
+              <p>Aucune notification</p>
+              <p className="text-sm">
+                Les nouvelles commandes apparaîtront ici
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y">
+              {notifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  className={cn(
+                    "p-4 cursor-pointer transition-colors hover:bg-muted/50",
+                    !notification.isRead &&
+                      "bg-orange-50 dark:bg-orange-950/20",
+                  )}
+                  onClick={() => handleNotificationClick(notification.id)}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
                         {!notification.isRead && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 shrink-0"
-                            onClick={(e) =>
-                              handleAcceptOrder(e, notification.id)
-                            }
-                            title="Confirmer la commande"
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
+                          <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
                         )}
+                        <p className="font-medium truncate">
+                          Commande #{notification.orderNumber}
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {notification.customerName}
+                      </p>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-sm font-semibold text-green-600">
+                          {notification.total.toFixed(2)} €
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {formatDistanceToNow(notification.timestamp, {
+                            addSuffix: true,
+                            locale: fr,
+                          })}
+                        </span>
                       </div>
                     </div>
-                  ))}
+                    {!notification.isRead && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0"
+                        onClick={(e) => handleAcceptOrder(e, notification.id)}
+                        title="Confirmer la commande"
+                      >
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              )}
-            </ScrollArea>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
 
-            {/* Footer Actions */}
-            {notifications.length > 0 && (
-              <div className="flex items-center justify-between p-3 border-t bg-muted/30">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs"
-                  onClick={markAllAsRead}
-                  disabled={unreadCount === 0}
-                >
-                  <CheckCheck className="h-3 w-3 mr-1" />
-                  Tout marquer comme lu
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-destructive hover:text-destructive"
-                  onClick={clearNotifications}
-                >
-                  Effacer tout
-                </Button>
-              </div>
-            )}
-          </Card>
-        </>
-      )}
+        {/* Footer Actions */}
+        {notifications.length > 0 && (
+          <div className="flex items-center justify-between p-3 border-t bg-muted/30 sticky bottom-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs"
+              onClick={markAllAsRead}
+              disabled={unreadCount === 0}
+            >
+              <CheckCheck className="h-3 w-3 mr-1" />
+              Tout marquer comme lu
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-destructive hover:text-destructive"
+              onClick={clearNotifications}
+            >
+              Effacer tout
+            </Button>
+          </div>
+        )}
+      </Card>
 
       {/* Persistent Banner for Unread Notifications */}
       {hasUnreadNotifications && !isOpen && (

@@ -85,10 +85,6 @@ export default function DashboardClient() {
       <NotificationPermissionPrompt />
 
       <div className="p-8">
-        {/* Notification Bell - Fixed Position */}
-        <div className="fixed top-6 right-60  z-50">
-          <OrderNotificationBell onOrderClick={handleOrderClick} />
-        </div>
         <TabsMangement
           activeTab={activeTab}
           restaurantId={restaurant.restaurantId}
