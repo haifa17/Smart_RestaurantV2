@@ -1,9 +1,9 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 import { OrderStatus, OrderType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 /**
@@ -13,10 +13,10 @@ export function generateSlug(text: string): string {
   return text
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-')      // Replace spaces with hyphens
-    .replace(/-+/g, '-')       // Replace multiple hyphens with single
-    .replace(/^-|-$/g, '');    // Remove leading/trailing hyphens
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single
+    .replace(/^-|-$/g, ""); // Remove leading/trailing hyphens
 }
 
 export const ORDER_STATUS_CONFIG: Record<
@@ -61,4 +61,5 @@ export const ORDER_TYPE_CONFIG: Record<
 > = {
   DINE_IN: { label: "Sur place", icon: "🍽️" },
   TAKEAWAY: { label: "À emporter", icon: "📦" },
+  DELIVERY: { label: "Livraison", icon: " " },
 };

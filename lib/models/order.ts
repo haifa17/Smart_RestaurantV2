@@ -10,6 +10,7 @@ export interface Order {
   customerId?: string;
   customerName?: string;
   customerPhone?: string;
+  customerAddress?: string;
   type: OrderType;
   status: OrderStatus;
   tableNumber?: string;

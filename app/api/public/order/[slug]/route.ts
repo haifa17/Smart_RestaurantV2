@@ -56,6 +56,7 @@ export async function POST(req: NextRequest, { params }: PageProps) {
           restaurantId: restaurant.id,
           customerName: data.customerName,
           customerPhone: data.customerPhone,
+          customerAddress: data.customerAddress,
           type: data.type,
           status: "PENDING",
           tableNumber: data.tableNumber,
@@ -91,14 +92,12 @@ export async function POST(req: NextRequest, { params }: PageProps) {
       });
 
       // Generate UNIQUE orderNumber from DB id
-      const dateStr = new Date()
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, "");
+      const dateStr = new Date().toISOString().split("T")[0].replace(/-/g, "");
 
-      const orderNumber = `ORD-${dateStr}-${String(
-        createdOrder.id
-      ).padStart(6, "0")}`;
+      const orderNumber = `ORD-${dateStr}-${String(createdOrder.id).padStart(
+        6,
+        "0",
+      )}`;
 
       // Update order with orderNumber
       return await tx.order.update({

@@ -11,4 +11,4 @@ export type ApiResponse<T> =
   | "COMPLETED"
   | "CANCELLED";
 
-export type OrderType = "DINE_IN" | "TAKEAWAY";
+export type OrderType = "DINE_IN" | "TAKEAWAY" |"DELIVERY";

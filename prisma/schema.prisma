@@ -34,6 +34,7 @@ enum OrderStatus {
 enum OrderType {
   DINE_IN
   TAKEAWAY
+  DELIVERY
 }
 
 enum SauceType {
@@ -259,13 +260,13 @@ model Order {
   customerId   String? // Optional: for walk-in customers without registration
 
   // Customer info (for walk-ins without customer record)
-  customerName  String?
-  customerPhone String?
-
+  customerName    String?
+  customerPhone   String?
+  customerAddress String?
   // Order Details
-  type        OrderType
-  status      OrderStatus @default(PENDING)
-  tableNumber String? // For dine-in orders
+  type            OrderType
+  status          OrderStatus @default(PENDING)
+  tableNumber     String? // For dine-in orders
 
   // Pricing
   subtotal Decimal @db.Decimal(10, 2)
