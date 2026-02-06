@@ -66,7 +66,7 @@ export function RecentOrdersList({ orders, restaurantId }: Props) {
               >
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-medium">{order.orderNumber}</p>
+                    <p className="font-medium">Order.{order.orderNumber.toString().slice(-3)}</p>
                     <Badge
                       className={`${statusConfig.bgColor} ${statusConfig.color} text-xs`}
                       variant="secondary"

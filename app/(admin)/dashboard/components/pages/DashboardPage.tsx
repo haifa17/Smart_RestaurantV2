@@ -57,7 +57,7 @@ export function DashboardPage({ restaurantId }: Props) {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard
           title="Total des catégories"
           value={stats.totalCategories}
@@ -89,7 +89,7 @@ export function DashboardPage({ restaurantId }: Props) {
         <h2 className="text-lg font-semibold text-foreground mb-4">
           Actions rapides
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           <QuickActionCard
             title="Nouvelle commande"
             description="Créer une nouvelle commande"
