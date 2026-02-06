@@ -163,6 +163,9 @@ export function ItemEditorModal({
         }));
 
         setSupplementCategories(loadedCategories);
+      } else {
+        // Reset supplements if item has none
+        setSupplementCategories([]);
       }
     } else {
       setNameEn("");
@@ -184,6 +187,7 @@ export function ItemEditorModal({
       setOtherSauce("");
       setHasOtherCheese(false);
       setOtherCheese("");
+      setSupplementCategories([]);
     }
   }, [item, categoryId, open]);
   const addSupplementCategory = () => {
