@@ -223,6 +223,7 @@ export function useOrderNotifications({
   const browserNotificationRef = useRef<Notification | null>(null);
   const lastOrderCountRef = useRef<number>(0);
   const lastOrderIdsRef = useRef<Set<string>>(new Set());
+  const isInitialLoadRef = useRef<boolean>(true);
   const [notifications, setNotifications] = useState<OrderNotification[]>([]);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -419,11 +420,39 @@ export function useOrderNotifications({
         );
 
         // Only notify for new orders after initial load
-        if (lastOrderIdsRef.current.size > 0 && newOrders.length > 0) {
+        if (!isInitialLoadRef.current && newOrders.length > 0) {
           newOrders.forEach((order) => {
             addNotification(order);
           });
         }
+
+        // Auto-mark notifications as read if their orders are no longer PENDING
+        const pendingOrderIds = new Set(
+          orders.filter((o) => o.status === "PENDING").map((o) => o.id),
+        );
+        setNotifications((prev) => {
+          const updatedNotifications = prev.map((notification) => {
+            // If the order is no longer pending, mark notification as read
+            if (!pendingOrderIds.has(notification.id) && !notification.isRead) {
+              return { ...notification, isRead: true };
+            }
+            return notification;
+          });
+
+          // Check if there are still unread notifications
+          const stillHasUnread = updatedNotifications.some((n) => !n.isRead);
+          setHasUnreadNotifications(stillHasUnread);
+
+          // Stop sound if no more unread notifications
+          if (!stillHasUnread) {
+            stopRepeatingSound();
+          }
+
+          return updatedNotifications;
+        });
+
+        // Mark initial load as complete
+        isInitialLoadRef.current = false;
 
         // Update refs
         lastOrderCountRef.current = orders.length;
